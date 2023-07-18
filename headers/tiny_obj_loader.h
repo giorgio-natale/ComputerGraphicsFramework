@@ -431,7 +431,7 @@ struct callback_t {
   // triangle, 4 for quad)
   // 0 will be passed for undefined index in index_t members.
   void (*index_cb)(void *user_data, index_t *indices, int num_indices);
-  // `_name` material _name, `material_id` = the array index of material_t[]. -1
+  // `name` material name, `material_id` = the array index of material_t[]. -1
   // if
   // a material not found in .mtl
   void (*usemtl_cb)(void *user_data, const char *name, int material_id);
@@ -632,10 +632,10 @@ void LoadMtl(std::map<std::string, int> *material_map,
              std::string *warning, std::string *err);
 
 ///
-/// Parse texture _name and texture option for custom texture parameter through
+/// Parse texture name and texture option for custom texture parameter through
 /// material::unknown_parameter
 ///
-/// @param[out] texname Parsed texture _name
+/// @param[out] texname Parsed texture name
 /// @param[out] texopt Parsed texopt
 /// @param[in] linebuf Input string
 ///
@@ -1992,7 +1992,7 @@ void LoadMtl(std::map<std::string, int> *material_map,
       has_d = false;
       has_tr = false;
 
-      // set new mtl _name
+      // set new mtl name
       token += 7;
       {
         std::stringstream sstr;
@@ -2154,7 +2154,7 @@ void LoadMtl(std::map<std::string, int> *material_map,
       continue;
     }
 
-    // PBR: anisotropy _eulerVector
+    // PBR: anisotropy rotation
     if ((0 == strncmp(token, "anisor", 6)) && IS_SPACE(token[6])) {
       token += 7;
       material.anisotropy_rotation = parseReal(&token);
@@ -2774,7 +2774,7 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
       continue;
     }
 
-    // group _name
+    // group name
     if (token[0] == 'g' && IS_SPACE((token[1]))) {
       // flush previous face group.
       bool ret = exportGroupsToShape(&shape, prim_group, tags, material, name,
@@ -2804,7 +2804,7 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
         // 'g' with empty names
         if (warn) {
           std::stringstream ss;
-          ss << "Empty group _name. line: " << line_num << "\n";
+          ss << "Empty group name. line: " << line_num << "\n";
           (*warn) += ss.str();
           name = "";
         }
@@ -2814,7 +2814,7 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
 
         // tinyobjloader does not support multiple groups for a primitive.
         // Currently we concatinate multiple group names with a space to get
-        // single group _name.
+        // single group name.
 
         for (size_t i = 2; i < names.size(); i++) {
           ss << " " << names[i];
@@ -2826,7 +2826,7 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
       continue;
     }
 
-    // object _name
+    // object name
     if (token[0] == 'o' && IS_SPACE((token[1]))) {
       // flush previous face group.
       bool ret = exportGroupsToShape(&shape, prim_group, tags, material, name,
@@ -2842,7 +2842,7 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
       prim_group.clear();
       shape = shape_t();
 
-      // @todo { multiple object _name? }
+      // @todo { multiple object name? }
       token += 2;
       std::stringstream ss;
       ss << token;
@@ -3190,7 +3190,7 @@ bool LoadObjWithCallback(std::istream &inStream, const callback_t &callback,
       continue;
     }
 
-    // group _name
+    // group name
     if (token[0] == 'g' && IS_SPACE((token[1]))) {
       names.clear();
 
@@ -3220,9 +3220,9 @@ bool LoadObjWithCallback(std::istream &inStream, const callback_t &callback,
       continue;
     }
 
-    // object _name
+    // object name
     if (token[0] == 'o' && IS_SPACE((token[1]))) {
-      // @todo { multiple object _name? }
+      // @todo { multiple object name? }
       token += 2;
 
       std::stringstream ss;
@@ -3243,9 +3243,9 @@ bool LoadObjWithCallback(std::istream &inStream, const callback_t &callback,
       token += 2;
       std::stringstream ss;
       ss << token;
-      tag._name = ss.str();
+      tag.name = ss.str();
 
-      token += tag._name.size() + 1;
+      token += tag.name.size() + 1;
 
       tag_sizes ts = parseTagTriple(&token);
 
