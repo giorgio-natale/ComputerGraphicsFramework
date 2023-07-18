@@ -15,6 +15,14 @@ struct UniformBlock {
 	alignas(16) glm::mat4 mvpMat;
 };
 
+struct GlobalUniformBlock{
+    alignas(16) glm::mat4 vpMat;
+};
+
+struct EntityTransformUniformBlock{
+    alignas(16) glm::mat4 mMat;
+};
+
 // The vertices data structures
 // Example
 struct Vertex {
@@ -34,10 +42,10 @@ class SimpleCube : public BaseProject {
 	float Ar;
 
 	// Descriptor Layouts ["classes" of what will be passed to the shaders]
-	DescriptorSetLayout DSL;
+	DescriptorSetLayout globalSetLayout, textureSetLayout, transformSetLayout;
 
 	// Vertex formats
-	VertexDescriptor VD;
+	VertexDescriptor simpleVertexDescriptor;
 
 	// Pipelines [Shader couples]
 	Pipeline P;
@@ -45,14 +53,15 @@ class SimpleCube : public BaseProject {
 	// Models, textures and Descriptors (values assigned to the uniforms)
 	// Please note that Model objects depends on the corresponding vertex structure
 	// Models
-	Model<Vertex> M1, M2;
+	Model<Vertex> cubeModel;
 	// Descriptor sets
-	DescriptorSet DS;
+	DescriptorSet globalSet, cubeTextureSet, cubeTransformSet;
 	// Textures
-	Texture T;
+	Texture cubeTexture;
 	
 	// C++ storage for uniform variables
-	UniformBlock ubo;
+	GlobalUniformBlock gubo;
+    EntityTransformUniformBlock tubo;
 
 	// Other application parameters
 
@@ -66,9 +75,9 @@ class SimpleCube : public BaseProject {
 		initialBackgroundColor = {0.0f, 0.005f, 0.01f, 1.0f};
 		
 		// Descriptor pool sizes
-		uniformBlocksInPool = 1;
-		texturesInPool = 1;
-		setsInPool = 1;
+		uniformBlocksInPool = 100;
+		texturesInPool = 100;
+		setsInPool = 100;
 		
 		Ar = (float)windowWidth / (float)windowHeight;
 	}
@@ -82,19 +91,37 @@ class SimpleCube : public BaseProject {
 	// Here you also create your Descriptor set layouts and load the shaders for the pipelines
 	void localInit() {
 		// Descriptor Layouts [what will be passed to the shaders]
-		DSL.init(this, {
+		globalSetLayout.init(this, {
 					// this array contains the bindings:
 					// first  element : the binding number
 					// second element : the type of element (buffer or texture)
 					//                  using the corresponding Vulkan constant
 					// third  element : the pipeline stage where it will be used
 					//                  using the corresponding Vulkan constant
-					{0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL_GRAPHICS},
-					{1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT}
+					{0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT}
 				});
+        textureSetLayout.init(this, {
+                // this array contains the bindings:
+                // first  element : the binding number
+                // second element : the type of element (buffer or texture)
+                //                  using the corresponding Vulkan constant
+                // third  element : the pipeline stage where it will be used
+                //                  using the corresponding Vulkan constant
+                {0, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT}
+        });
+
+        transformSetLayout.init(this, {
+                // this array contains the bindings:
+                // first  element : the binding number
+                // second element : the type of element (buffer or texture)
+                //                  using the corresponding Vulkan constant
+                // third  element : the pipeline stage where it will be used
+                //                  using the corresponding Vulkan constant
+                {0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT}
+        });
 
 		// Vertex descriptors
-		VD.init(this, {
+		simpleVertexDescriptor.init(this, {
 				  // this array contains the bindings
 				  // first  element : the binding number
 				  // second element : the stride of this binging
@@ -133,7 +160,7 @@ class SimpleCube : public BaseProject {
 		// Third and fourth parameters are respectively the vertex and fragment shaders
 		// The last array, is a vector of pointer to the layouts of the sets that will
 		// be used in this pipeline. The first element will be set 0, and so on..
-		P.init(this, &VD, "shaders/ShaderVert.spv", "shaders/ShaderFrag.spv", {&DSL});
+		P.init(this, &simpleVertexDescriptor, "shaders/ShaderVert.spv", "shaders/ShaderFrag.spv", {&globalSetLayout, &textureSetLayout, &transformSetLayout});
 
 		// Models, textures and Descriptors (values assigned to the uniforms)
 
@@ -141,17 +168,11 @@ class SimpleCube : public BaseProject {
 		// The second parameter is the pointer to the vertex definition for this model
 		// The third parameter is the file name
 		// The last is a constant specifying the file type: currently only OBJ or GLTF
-		M1.init(this,   &VD, "Models/Cube.obj", OBJ);
-
-		// Creates a mesh with direct enumeration of vertices and indices
-		M2.vertices = {{{-3,-1,-3}, {0.0f,0.0f}}, {{-3,-1,3}, {0.0f,1.0f}},
-					    {{3,-1,-3}, {1.0f,0.0f}}, {{3,-1,3}, {1.0f,1.0f}}};
-		M2.indices = {0, 1, 2,    1, 3, 2};
-		M2.initMesh(this, &VD);
+		cubeModel.init(this, &simpleVertexDescriptor, "Models/Cube.obj", OBJ);
 		
 		// Create the textures
 		// The second parameter is the file name
-		T.init(this,   "textures/Checker.png");
+		cubeTexture.init(this,"textures/Checker.png");
 		
 		// Init local variables
 	}
@@ -162,16 +183,21 @@ class SimpleCube : public BaseProject {
 		P.create();
 
 		// Here you define the data set
-		DS.init(this, &DSL, {
+		globalSet.init(this, &globalSetLayout, {
 		// the second parameter, is a pointer to the Uniform Set Layout of this set
 		// the last parameter is an array, with one element per binding of the set.
 		// first  elmenet : the binding number
 		// second element : UNIFORM or TEXTURE (an enum) depending on the type
 		// third  element : only for UNIFORMs, the size of the corresponding C++ object. For texture, just put 0
 		// fourth element : only for TEXTUREs, the pointer to the corresponding texture object. For uniforms, use nullptr
-					{0, UNIFORM, sizeof(UniformBlock), nullptr},
-					{1, TEXTURE, 0, &T}
-				});
+					{0, UNIFORM, sizeof(GlobalUniformBlock)}
+        });
+        cubeTextureSet.init(this, &textureSetLayout, {
+                {0, TEXTURE, 0, &cubeTexture}
+        });
+        cubeTransformSet.init(this, &transformSetLayout, {
+                {0, UNIFORM, sizeof(EntityTransformUniformBlock)}
+        });
 	}
 
 	// Here you destroy your pipelines and Descriptor Sets!
@@ -181,7 +207,9 @@ class SimpleCube : public BaseProject {
 		P.cleanup();
 
 		// Cleanup datasets
-		DS.cleanup();
+		globalSet.cleanup();
+        cubeTextureSet.cleanup();
+        cubeTransformSet.cleanup();
 	}
 
 	// Here you destroy all the Models, Texture and Desc. Set Layouts you created!
@@ -190,14 +218,16 @@ class SimpleCube : public BaseProject {
 	// methods: .cleanup() recreates them, while .destroy() delete them completely
 	void localCleanup() {
 		// Cleanup textures
-		T.cleanup();
+		cubeTexture.cleanup();
 		
 		// Cleanup models
-		M1.cleanup();
-		M2.cleanup();
-		
+		cubeModel.cleanup();
+
 		// Cleanup descriptor set layouts
-		DSL.cleanup();
+		globalSetLayout.cleanup();
+        textureSetLayout.cleanup();
+        transformSetLayout.cleanup();
+
 		
 		// Destroies the pipelines
 		P.destroy();		
@@ -213,7 +243,10 @@ class SimpleCube : public BaseProject {
 		// For a pipeline object, this command binds the corresponing pipeline to the command buffer passed in its parameter
 
 		// binds the data set
-		DS.bind(commandBuffer, P, 0, currentImage);
+		globalSet.bind(commandBuffer, P, 0, currentImage);
+        cubeTextureSet.bind(commandBuffer, P, 1, currentImage);
+        cubeTransformSet.bind(commandBuffer, P, 2, currentImage);
+
 		// For a Dataset object, this command binds the corresponing dataset
 		// to the command buffer and pipeline passed in its first and second parameters.
 		// The third parameter is the number of the set being bound
@@ -222,19 +255,15 @@ class SimpleCube : public BaseProject {
 		// of the current image in the swap chain, passed in its last parameter
 					
 		// binds the model
-		M1.bind(commandBuffer);
+		cubeModel.bind(commandBuffer);
 		// For a Model object, this command binds the corresponing index and vertex buffer
 		// to the command buffer passed in its parameter
 		
 		// record the drawing command in the command buffer
 		vkCmdDrawIndexed(commandBuffer,
-				static_cast<uint32_t>(M1.indices.size()), 1, 0, 0, 0);
+				static_cast<uint32_t>(cubeModel.indices.size()), 1, 0, 0, 0);
 		// the second parameter is the number of indexes to be drawn. For a Model object,
 		// this can be retrieved with the .indices.size() method.
-
-		M2.bind(commandBuffer);
-		vkCmdDrawIndexed(commandBuffer,
-				static_cast<uint32_t>(M2.indices.size()), 1, 0, 0, 0);
 	}
 
 	// Here is where you update the uniforms.
@@ -247,7 +276,7 @@ class SimpleCube : public BaseProject {
 		
 		// Integration with the timers and the controllers
 		float deltaT;
-		glm::vec3 m = glm::vec3(0.0f), r = glm::vec3(0.0f);
+		auto m = glm::vec3(0.0f), r = glm::vec3(0.0f);
 		bool fire = false;
 		getSixAxis(deltaT, m, r, fire);
 		// getSixAxis() is defined in Starter.hpp in the base class.
@@ -275,8 +304,10 @@ class SimpleCube : public BaseProject {
 
 
 		glm::mat4 World = glm::mat4(1);		
-		ubo.mvpMat = Prj * View * World;
-		DS.map(currentImage, &ubo, sizeof(ubo), 0);
+		gubo.vpMat = Prj * View;
+        tubo.mMat = World;
+		globalSet.map(currentImage, &gubo, sizeof(gubo), 0);
+        cubeTransformSet.map(currentImage, &tubo, sizeof(tubo), 0);
 		// the .map() method of a DataSet object, requires the current image of the swap chain as first parameter
 		// the second parameter is the pointer to the C++ data structure to transfer to the GPU
 		// the third parameter is its size

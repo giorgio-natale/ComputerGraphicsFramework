@@ -2001,9 +2001,9 @@ void Model<Vert>::loadModelOBJ(std::string file) {
 	}
 	
 	std::cout << "Building\n";	
-//	std::cout << "Position " << VD->Position.hasIt << "," << VD->Position.offset << "\n";	
-//	std::cout << "UV " << VD->UV.hasIt << "," << VD->UV.offset << "\n";	
-//	std::cout << "Normal " << VD->Normal.hasIt << "," << VD->Normal.offset << "\n";	
+//	std::cout << "Position " << simpleVertexDescriptor->Position.hasIt << "," << simpleVertexDescriptor->Position.offset << "\n";
+//	std::cout << "UV " << simpleVertexDescriptor->UV.hasIt << "," << simpleVertexDescriptor->UV.offset << "\n";
+//	std::cout << "Normal " << simpleVertexDescriptor->Normal.hasIt << "," << simpleVertexDescriptor->Normal.offset << "\n";
 	for (const auto& shape : shapes) {
 		for (const auto& index : shape.mesh.indices) {
 			Vert vertex{};
