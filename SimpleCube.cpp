@@ -10,10 +10,6 @@
 //        vec4  : alignas(16)
 //        mat3  : alignas(16)
 //        mat4  : alignas(16)
-// Example:
-struct UniformBlock {
-	alignas(16) glm::mat4 mvpMat;
-};
 
 struct GlobalUniformBlock{
     alignas(16) glm::mat4 vpMat;
@@ -54,6 +50,8 @@ class SimpleCube : public BaseProject {
 	// Please note that Model objects depends on the corresponding vertex structure
 	// Models
 	Model<Vertex> cubeModel;
+    BaseModel* baseModel = &cubeModel;
+
 	// Descriptor sets
 	DescriptorSet globalSet, cubeTextureSet, cubeTransformSet;
 	// Textures
@@ -75,9 +73,9 @@ class SimpleCube : public BaseProject {
 		initialBackgroundColor = {0.0f, 0.005f, 0.01f, 1.0f};
 		
 		// Descriptor pool sizes
-		uniformBlocksInPool = 100;
-		texturesInPool = 100;
-		setsInPool = 100;
+		uniformBlocksInPool = 10000;
+		texturesInPool = 10000;
+		setsInPool = 10000;
 		
 		Ar = (float)windowWidth / (float)windowHeight;
 	}
@@ -221,7 +219,7 @@ class SimpleCube : public BaseProject {
 		cubeTexture.cleanup();
 		
 		// Cleanup models
-		cubeModel.cleanup();
+		baseModel->cleanup();
 
 		// Cleanup descriptor set layouts
 		globalSetLayout.cleanup();
@@ -255,13 +253,13 @@ class SimpleCube : public BaseProject {
 		// of the current image in the swap chain, passed in its last parameter
 					
 		// binds the model
-		cubeModel.bind(commandBuffer);
+		baseModel->bind(commandBuffer);
 		// For a Model object, this command binds the corresponing index and vertex buffer
 		// to the command buffer passed in its parameter
 		
 		// record the drawing command in the command buffer
 		vkCmdDrawIndexed(commandBuffer,
-				static_cast<uint32_t>(cubeModel.indices.size()), 1, 0, 0, 0);
+				baseModel->getVertexCount(), 1, 0, 0, 0);
 		// the second parameter is the number of indexes to be drawn. For a Model object,
 		// this can be retrieved with the .indices.size() method.
 	}
