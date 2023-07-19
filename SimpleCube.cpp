@@ -40,16 +40,16 @@ class SimpleCube : public BaseProject {
 	float Ar;
 
 	// Descriptor Layouts ["classes" of what will be passed to the shaders]
-	DescriptorSetLayout globalSetLayout, textureSetLayout, transformSetLayout;
+	DescriptorSetLayout globalSetLayout, transformSetLayout;
 
 	// Pipelines [Shader couples]
 	Pipeline P;
 
 
 	// Descriptor sets
-	DescriptorSet globalSet, cubeTextureSet, cubeTransformSet;
+	DescriptorSet globalSet, cubeTransformSet;
 	// Textures
-	Texture cubeTexture;
+
 	
 	// C++ storage for uniform variables
 	GlobalUniformBlock gubo;
@@ -94,15 +94,6 @@ class SimpleCube : public BaseProject {
 					//                  using the corresponding Vulkan constant
 					{0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT}
 				});
-        textureSetLayout.init(this, {
-                // this array contains the bindings:
-                // first  element : the binding number
-                // second element : the type of element (buffer or texture)
-                //                  using the corresponding Vulkan constant
-                // third  element : the pipeline stage where it will be used
-                //                  using the corresponding Vulkan constant
-                {0, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT}
-        });
 
         transformSetLayout.init(this, {
                 // this array contains the bindings:
@@ -120,7 +111,7 @@ class SimpleCube : public BaseProject {
 		// Third and fourth parameters are respectively the vertex and fragment shaders
 		// The last array, is a vector of pointer to the layouts of the sets that will
 		// be used in this pipeline. The first element will be set 0, and so on..
-		P.init(this, &gameEngine->getAllVertexDescriptors().find(fmwk::VERTEX)->second, "shaders/ShaderVert.spv", "shaders/ShaderFrag.spv", {&globalSetLayout, &textureSetLayout, &transformSetLayout});
+		P.init(this, &gameEngine->getAllVertexDescriptors().find(fmwk::VERTEX)->second, "shaders/ShaderVert.spv", "shaders/ShaderFrag.spv", {&globalSetLayout, &gameEngine->getTextureDescriptorSetLayout(), &transformSetLayout});
 
 		// Models, textures and Descriptors (values assigned to the uniforms)
 
@@ -139,7 +130,8 @@ class SimpleCube : public BaseProject {
 
 		// Create the textures
 		// The second parameter is the file name
-		cubeTexture.init(this,"textures/Checker.png");
+        gameEngine->addTexture("cubeTexture", "textures/Checker.png");
+		//cubeTexture.init(this,"textures/Checker.png");
 		
 		// Init local variables
 	}
@@ -159,9 +151,6 @@ class SimpleCube : public BaseProject {
 		// fourth element : only for TEXTUREs, the pointer to the corresponding texture object. For uniforms, use nullptr
 					{0, UNIFORM, sizeof(GlobalUniformBlock)}
         });
-        cubeTextureSet.init(this, &textureSetLayout, {
-                {0, TEXTURE, 0, &cubeTexture}
-        });
         cubeTransformSet.init(this, &transformSetLayout, {
                 {0, UNIFORM, sizeof(EntityTransformUniformBlock)}
         });
@@ -175,7 +164,7 @@ class SimpleCube : public BaseProject {
 
 		// Cleanup datasets
 		globalSet.cleanup();
-        cubeTextureSet.cleanup();
+        fmwk::GameEngine::getInstance()->getBoundTextureByName("cubeTexture").textureSet.cleanup();
         cubeTransformSet.cleanup();
 	}
 
@@ -184,8 +173,9 @@ class SimpleCube : public BaseProject {
 	// You also have to destroy the pipelines: since they need to be rebuilt, they have two different
 	// methods: .cleanup() recreates them, while .destroy() delete them completely
 	void localCleanup() {
+        auto gameEngine = fmwk::GameEngine::getInstance();
 		// Cleanup textures
-		cubeTexture.cleanup();
+		gameEngine->getBoundTextureByName("cubeTexture").texture.cleanup();
 		
 		// Cleanup models
 		//baseModel->cleanup();
@@ -193,7 +183,7 @@ class SimpleCube : public BaseProject {
 
 		// Cleanup descriptor set layouts
 		globalSetLayout.cleanup();
-        textureSetLayout.cleanup();
+        gameEngine->getTextureDescriptorSetLayout().cleanup();
         transformSetLayout.cleanup();
 
 		
@@ -213,7 +203,7 @@ class SimpleCube : public BaseProject {
 
 		// binds the data set
 		globalSet.bind(commandBuffer, P, 0, currentImage);
-        cubeTextureSet.bind(commandBuffer, P, 1, currentImage);
+        gameEngine->getBoundTextureByName("cubeTexture").textureSet.bind(commandBuffer, P, 1, currentImage);
         cubeTransformSet.bind(commandBuffer, P, 2, currentImage);
 
 		// For a Dataset object, this command binds the corresponing dataset

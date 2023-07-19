@@ -163,4 +163,20 @@ namespace fmwk {
     std::unordered_map<VertexType, VertexDescriptor> &GameEngine::getAllVertexDescriptors() {
         return _modelSystem.getAllVertexDescriptors();
     }
+
+    void GameEngine::addTexture(const std::string &name, const std::string &fileName) {
+        _textureSystem.addTexture(name, fileName);
+    }
+
+    BoundTexture &GameEngine::getBoundTextureByName(const std::string &name) {
+        return _textureSystem.getBoundTextureByName(name);
+    }
+
+    DescriptorSetLayout &GameEngine::getTextureDescriptorSetLayout() {
+        return _textureSystem.getTextureDescriptorSetLayout();
+    }
+
+    void GameEngine::bootTextureSystem() {
+        _textureSystem.bootSystem();
+    }
 } // fmwk

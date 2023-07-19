@@ -19,6 +19,7 @@
 //#include "systems/ModelSystem.h"
 #include "../Starter.hpp"
 #include "systems/ModelSystem.h"
+#include "systems/TextureSystem.h"
 
 namespace fmwk {
 
@@ -31,6 +32,7 @@ namespace fmwk {
         void setWindow(GLFWwindow* window) override{
             _window = window;
         }
+        void bootTextureSystem();
 
         void addEntity(std::unique_ptr<Entity> entity) override;
         void logicUpdate() override;
@@ -38,8 +40,12 @@ namespace fmwk {
         std::vector<Entity*> getAllEntities() override;
         void addModel(std::string const& name, VertexType vertexType, std::string const& fileName);
         BaseModel& getModelByName(std::string const& name);
-        //TODO: remove this
+        void addTexture(std::string const& name, std::string const& fileName);
+        BoundTexture& getBoundTextureByName(std::string const& name);
+
+        //TODO: remove these
         std::unordered_map<VertexType, VertexDescriptor>& getAllVertexDescriptors();
+        DescriptorSetLayout& getTextureDescriptorSetLayout();
 
         void handleInputs(float &deltaT, glm::vec3 &m, glm::vec3 &r, bool &fire) override;
         void windowResizeCallback(GLFWwindow* _window, int width, int height) override;
@@ -47,7 +53,7 @@ namespace fmwk {
         float getAspectRatio() override;
 
     private:
-        explicit GameEngine(BaseProject* bp):_window(nullptr), _modelSystem(ModelSystem(bp)){
+        explicit GameEngine(BaseProject* bp):_window(nullptr), _modelSystem(ModelSystem(bp)), _textureSystem(TextureSystem(bp)){
             _bp = bp;
         };
         BaseProject* _bp;
@@ -56,6 +62,7 @@ namespace fmwk {
         std::pair<int, int> _windowSize = {800, 600};
         std::map<std::string, std::unique_ptr<Entity>> _entities;
         ModelSystem _modelSystem;
+        TextureSystem _textureSystem;
 
         glm::vec3 _r = {0,0,0}, _m = {0,0,0};
         float _deltaTime = 0;
