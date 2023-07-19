@@ -30,10 +30,10 @@
 
 
 #include <tiny_gltf.h>
+#include <vulkan/vulkan.h>
 
-#define GLFW_INCLUDE_VULKAN
+//#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
-#include "framework/GameEngine.h"
 
 
 struct QueueFamilyIndices {
@@ -120,6 +120,8 @@ public:
     virtual void cleanup() = 0;
     virtual void bind(VkCommandBuffer commandBuffer) = 0;
     virtual uint32_t getVertexCount() = 0;
+    virtual void init(BaseProject *bp, VertexDescriptor *VD, std::string file, ModelType MT) = 0;
+    virtual ~BaseModel(){};
 };
 
 template <class Vert>
@@ -139,12 +141,13 @@ class Model : public BaseModel{
 	void loadModelGLTF(std::string file);
 	void createIndexBuffer();
 	void createVertexBuffer();
-    uint32_t getVertexCount();
+    uint32_t getVertexCount() override;
 
-	void init(BaseProject *bp, VertexDescriptor *VD, std::string file, ModelType MT);
+	void init(BaseProject *bp, VertexDescriptor *VD, std::string file, ModelType MT) override;
 	void initMesh(BaseProject *bp, VertexDescriptor *VD);
-	void cleanup();
-  	void bind(VkCommandBuffer commandBuffer);
+	void cleanup() override;
+  	void bind(VkCommandBuffer commandBuffer) override;
+    ~Model() override = default;
 };
 
 struct Texture {
@@ -255,15 +258,7 @@ class BaseProject {
 	friend class DescriptorSet;
 public:
 	virtual void setWindowParameters() = 0;
-    void run() {
-    	windowResizable = GLFW_FALSE;
-
-    	setWindowParameters();
-        initWindow();
-        initVulkan();
-        mainLoop();
-        cleanup();
-    }
+    void run();
 
 protected:
 	uint32_t windowWidth;

@@ -7,7 +7,7 @@
 #define TINYGLTF_NO_INCLUDE_STB_IMAGE
 
 #include "Starter.hpp"
-
+#include "framework/GameEngine.h"
 
 
 const int MAX_FRAMES_IN_FLIGHT = 2;
@@ -85,6 +85,17 @@ void PrintVkError( VkResult result ) {
         }
     }
     std::cout << "Error: " << result << ", " << meaning << "\n";
+}
+
+void BaseProject::run() {
+
+    windowResizable = GLFW_FALSE;
+    fmwk::GameEngine::createInstance(this);
+    setWindowParameters();
+    initWindow();
+    initVulkan();
+    mainLoop();
+    cleanup();
 }
 
 void BaseProject::initWindow() {

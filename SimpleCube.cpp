@@ -1,6 +1,8 @@
 // This has been adapted from the Vulkan tutorial
 
 #include "Starter.hpp"
+#include "framework/GameEngine.h"
+#include "framework/MeshComponent.h"
 
 // The uniform buffer objects data structures
 // Remember to use the correct alignas(...) value
@@ -40,17 +42,9 @@ class SimpleCube : public BaseProject {
 	// Descriptor Layouts ["classes" of what will be passed to the shaders]
 	DescriptorSetLayout globalSetLayout, textureSetLayout, transformSetLayout;
 
-	// Vertex formats
-	VertexDescriptor simpleVertexDescriptor;
-
 	// Pipelines [Shader couples]
 	Pipeline P;
 
-	// Models, textures and Descriptors (values assigned to the uniforms)
-	// Please note that Model objects depends on the corresponding vertex structure
-	// Models
-	Model<Vertex> cubeModel;
-    BaseModel* baseModel = &cubeModel;
 
 	// Descriptor sets
 	DescriptorSet globalSet, cubeTextureSet, cubeTransformSet;
@@ -88,6 +82,8 @@ class SimpleCube : public BaseProject {
 	// Here you load and setup all your Vulkan Models and Texutures.
 	// Here you also create your Descriptor set layouts and load the shaders for the pipelines
 	void localInit() {
+
+        auto gameEngine = fmwk::GameEngine::getInstance();
 		// Descriptor Layouts [what will be passed to the shaders]
 		globalSetLayout.init(this, {
 					// this array contains the bindings:
@@ -118,47 +114,13 @@ class SimpleCube : public BaseProject {
                 {0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT}
         });
 
-		// Vertex descriptors
-		simpleVertexDescriptor.init(this, {
-				  // this array contains the bindings
-				  // first  element : the binding number
-				  // second element : the stride of this binging
-				  // third  element : whether this parameter change per vertex or per instance
-				  //                  using the corresponding Vulkan constant
-				  {0, sizeof(Vertex), VK_VERTEX_INPUT_RATE_VERTEX}
-				}, {
-				  // this array contains the location
-				  // first  element : the binding number
-				  // second element : the location number
-				  // third  element : the offset of this element in the memory record
-				  // fourth element : the data type of the element
-				  //                  using the corresponding Vulkan constant
-				  // fifth  elmenet : the size in byte of the element
-				  // sixth  element : a constant defining the element usage
-				  //                   POSITION - a vec3 with the position
-				  //                   NORMAL   - a vec3 with the normal vector
-				  //                   UV       - a vec2 with a UV coordinate
-				  //                   COLOR    - a vec4 with a RGBA color
-				  //                   TANGENT  - a vec4 with the tangent vector
-				  //                   OTHER    - anything else
-				  //
-				  // ***************** DOUBLE CHECK ********************
-				  //    That the Vertex data structure you use in the "offsetoff" and
-				  //	in the "sizeof" in the previous array, refers to the correct one,
-				  //	if you have more than one vertex format!
-				  // ***************************************************
-				  {0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, pos),
-				         sizeof(glm::vec3), POSITION},
-				  {0, 1, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, UV),
-				         sizeof(glm::vec2), UV}
-				});
 
 		// Pipelines [Shader couples]
 		// The second parameter is the pointer to the vertex definition
 		// Third and fourth parameters are respectively the vertex and fragment shaders
 		// The last array, is a vector of pointer to the layouts of the sets that will
 		// be used in this pipeline. The first element will be set 0, and so on..
-		P.init(this, &simpleVertexDescriptor, "shaders/ShaderVert.spv", "shaders/ShaderFrag.spv", {&globalSetLayout, &textureSetLayout, &transformSetLayout});
+		P.init(this, &gameEngine->getAllVertexDescriptors().find(fmwk::VERTEX)->second, "shaders/ShaderVert.spv", "shaders/ShaderFrag.spv", {&globalSetLayout, &textureSetLayout, &transformSetLayout});
 
 		// Models, textures and Descriptors (values assigned to the uniforms)
 
@@ -166,8 +128,15 @@ class SimpleCube : public BaseProject {
 		// The second parameter is the pointer to the vertex definition for this model
 		// The third parameter is the file name
 		// The last is a constant specifying the file type: currently only OBJ or GLTF
-		cubeModel.init(this, &simpleVertexDescriptor, "Models/Cube.obj", OBJ);
-		
+        gameEngine->addModel("myCube", fmwk::VERTEX, "Models/Cube.obj");
+		//cubeModel.init(this, &simpleVertexDescriptor, "Models/Cube.obj", OBJ);
+
+        auto cubeEntity = std::make_unique<fmwk::Entity>("myCubeEntity");
+        auto modelComponent = std::make_unique<fmwk::MeshComponent>("Mesh", gameEngine->getModelByName("myCube"));
+        cubeEntity->addComponent(std::move(modelComponent));
+        gameEngine->addEntity(std::move(cubeEntity));
+
+
 		// Create the textures
 		// The second parameter is the file name
 		cubeTexture.init(this,"textures/Checker.png");
@@ -219,7 +188,8 @@ class SimpleCube : public BaseProject {
 		cubeTexture.cleanup();
 		
 		// Cleanup models
-		baseModel->cleanup();
+		//baseModel->cleanup();
+        fmwk::GameEngine::getInstance()->getModelByName("myCube").cleanup();
 
 		// Cleanup descriptor set layouts
 		globalSetLayout.cleanup();
@@ -236,6 +206,7 @@ class SimpleCube : public BaseProject {
 	// with their buffers and textures
 	
 	void populateCommandBuffer(VkCommandBuffer commandBuffer, int currentImage) {
+        auto gameEngine = fmwk::GameEngine::getInstance();
 		// binds the pipeline
 		P.bind(commandBuffer);
 		// For a pipeline object, this command binds the corresponing pipeline to the command buffer passed in its parameter
@@ -253,13 +224,16 @@ class SimpleCube : public BaseProject {
 		// of the current image in the swap chain, passed in its last parameter
 					
 		// binds the model
-		baseModel->bind(commandBuffer);
+		//baseModel->bind(commandBuffer);
+        dynamic_cast<fmwk::MeshComponent&>(gameEngine->getEntityByName("myCubeEntity").getComponentByName("Mesh")).getModel().bind(commandBuffer);
+        //fmwk::GameEngine::getInstance()->getModelByName("myCube").bind(commandBuffer);
+
 		// For a Model object, this command binds the corresponing index and vertex buffer
 		// to the command buffer passed in its parameter
 		
 		// record the drawing command in the command buffer
 		vkCmdDrawIndexed(commandBuffer,
-				baseModel->getVertexCount(), 1, 0, 0, 0);
+                         fmwk::GameEngine::getInstance()->getModelByName("myCube").getVertexCount(), 1, 0, 0, 0);
 		// the second parameter is the number of indexes to be drawn. For a Model object,
 		// this can be retrieved with the .indices.size() method.
 	}

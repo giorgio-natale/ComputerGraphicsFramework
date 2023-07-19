@@ -14,36 +14,48 @@
 #include <stdexcept>
 #include <algorithm>
 #include "Entity.h"
+#include "GameEngineApi.h"
+
+//#include "systems/ModelSystem.h"
+#include "../Starter.hpp"
+#include "systems/ModelSystem.h"
 
 namespace fmwk {
 
-    class GameEngine{
+    class GameEngine:GameEngineApi{
     public:
         GameEngine(GameEngine &other) = delete;
         void operator=(const GameEngine &) = delete;
         static GameEngine* getInstance();
-        void setWindow(GLFWwindow* window){
+        static void createInstance(BaseProject* bp);
+        void setWindow(GLFWwindow* window) override{
             _window = window;
         }
 
-        void addEntity(std::unique_ptr<Entity> entity);
-        void logicUpdate();
-        Entity& getEntityByName(const std::string& name);
-        std::vector<Entity*> getAllEntities();
+        void addEntity(std::unique_ptr<Entity> entity) override;
+        void logicUpdate() override;
+        Entity& getEntityByName(const std::string& name) override;
+        std::vector<Entity*> getAllEntities() override;
+        void addModel(std::string const& name, VertexType vertexType, std::string const& fileName);
+        BaseModel& getModelByName(std::string const& name);
+        //TODO: remove this
+        std::unordered_map<VertexType, VertexDescriptor>& getAllVertexDescriptors();
 
-        void handleInputs(float &deltaT, glm::vec3 &m, glm::vec3 &r, bool &fire);
-        void windowResizeCallback(GLFWwindow* _window, int width, int height);
-        std::pair<int, int> getWindowSize();
-        float getAspectRatio();
+        void handleInputs(float &deltaT, glm::vec3 &m, glm::vec3 &r, bool &fire) override;
+        void windowResizeCallback(GLFWwindow* _window, int width, int height) override;
+        std::pair<int, int> getWindowSize() override;
+        float getAspectRatio() override;
 
     private:
-        GameEngine(){
-            _window = nullptr;
+        explicit GameEngine(BaseProject* bp):_window(nullptr), _modelSystem(ModelSystem(bp)){
+            _bp = bp;
         };
+        BaseProject* _bp;
         static GameEngine* _instance;
         GLFWwindow* _window;
         std::pair<int, int> _windowSize = {800, 600};
         std::map<std::string, std::unique_ptr<Entity>> _entities;
+        ModelSystem _modelSystem;
 
         glm::vec3 _r = {0,0,0}, _m = {0,0,0};
         float _deltaTime = 0;

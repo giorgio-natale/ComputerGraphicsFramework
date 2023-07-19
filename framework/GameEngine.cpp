@@ -7,10 +7,17 @@
 namespace fmwk {
     GameEngine* GameEngine::_instance= nullptr;
 
+    void GameEngine::createInstance(BaseProject *bp){
+        if(_instance != nullptr){
+            throw std::runtime_error("Cannot initialize game engine twice");
+        }
+        _instance = new GameEngine(bp);
+    }
+
     GameEngine *GameEngine::getInstance()
     {
         if(_instance==nullptr){
-            _instance = new GameEngine();
+            throw std::runtime_error("Cannot obtain GameEngine instance if GameEngine has not been created");
         }
         return _instance;
     }
@@ -143,5 +150,17 @@ namespace fmwk {
                 component->postUpdate();
             });
         });
+    }
+
+    void GameEngine::addModel(const std::string &name, VertexType vertexType, const std::string &fileName) {
+        _modelSystem.addModel(name, vertexType, fileName);
+    }
+
+    BaseModel &GameEngine::getModelByName(const std::string &name) {
+        return _modelSystem.getModelByName(name);
+    }
+
+    std::unordered_map<VertexType, VertexDescriptor> &GameEngine::getAllVertexDescriptors() {
+        return _modelSystem.getAllVertexDescriptors();
     }
 } // fmwk
