@@ -3,6 +3,8 @@
 #include "Starter.hpp"
 #include "framework/GameEngine.h"
 #include "framework/MeshComponent.h"
+#include "framework/TextureComponent.h"
+
 
 // The uniform buffer objects data structures
 // Remember to use the correct alignas(...) value
@@ -120,18 +122,17 @@ class SimpleCube : public BaseProject {
 		// The third parameter is the file name
 		// The last is a constant specifying the file type: currently only OBJ or GLTF
         gameEngine->addModel("myCube", fmwk::VERTEX, "Models/Cube.obj");
+        gameEngine->addTexture("cubeTexture", "textures/Checker.png");
 		//cubeModel.init(this, &simpleVertexDescriptor, "Models/Cube.obj", OBJ);
 
         auto cubeEntity = std::make_unique<fmwk::Entity>("myCubeEntity");
         auto modelComponent = std::make_unique<fmwk::MeshComponent>("Mesh", gameEngine->getModelByName("myCube"));
+        auto textureComponent = std::make_unique<fmwk::TextureComponent>("Texture", gameEngine->getBoundTextureByName("cubeTexture"));
         cubeEntity->addComponent(std::move(modelComponent));
+        cubeEntity->addComponent(std::move(textureComponent));
+
         gameEngine->addEntity(std::move(cubeEntity));
 
-
-		// Create the textures
-		// The second parameter is the file name
-        gameEngine->addTexture("cubeTexture", "textures/Checker.png");
-		//cubeTexture.init(this,"textures/Checker.png");
 		
 		// Init local variables
 	}
@@ -197,35 +198,21 @@ class SimpleCube : public BaseProject {
 	
 	void populateCommandBuffer(VkCommandBuffer commandBuffer, int currentImage) {
         auto gameEngine = fmwk::GameEngine::getInstance();
+        auto& cube = gameEngine->getEntityByName("myCubeEntity");
 		// binds the pipeline
 		P.bind(commandBuffer);
-		// For a pipeline object, this command binds the corresponing pipeline to the command buffer passed in its parameter
 
 		// binds the data set
 		globalSet.bind(commandBuffer, P, 0, currentImage);
-        gameEngine->getBoundTextureByName("cubeTexture").textureSet.bind(commandBuffer, P, 1, currentImage);
+        dynamic_cast<fmwk::TextureComponent&>(cube.getComponentByName("Texture")).getBoundTexture().textureSet.bind(commandBuffer, P, 1, currentImage);
         cubeTransformSet.bind(commandBuffer, P, 2, currentImage);
 
-		// For a Dataset object, this command binds the corresponing dataset
-		// to the command buffer and pipeline passed in its first and second parameters.
-		// The third parameter is the number of the set being bound
-		// As described in the Vulkan tutorial, a different dataset is required for each image in the swap chain.
-		// This is done automatically in file Starter.hpp, however the command here needs also the index
-		// of the current image in the swap chain, passed in its last parameter
-					
-		// binds the model
-		//baseModel->bind(commandBuffer);
-        dynamic_cast<fmwk::MeshComponent&>(gameEngine->getEntityByName("myCubeEntity").getComponentByName("Mesh")).getModel().bind(commandBuffer);
-        //fmwk::GameEngine::getInstance()->getModelByName("myCube").bind(commandBuffer);
 
-		// For a Model object, this command binds the corresponing index and vertex buffer
-		// to the command buffer passed in its parameter
-		
-		// record the drawing command in the command buffer
+        dynamic_cast<fmwk::MeshComponent&>(cube.getComponentByName("Mesh")).getModel().bind(commandBuffer);
+
 		vkCmdDrawIndexed(commandBuffer,
                          fmwk::GameEngine::getInstance()->getModelByName("myCube").getVertexCount(), 1, 0, 0, 0);
-		// the second parameter is the number of indexes to be drawn. For a Model object,
-		// this can be retrieved with the .indices.size() method.
+
 	}
 
 	// Here is where you update the uniforms.
