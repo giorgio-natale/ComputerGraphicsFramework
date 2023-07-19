@@ -156,11 +156,11 @@ namespace fmwk {
         _modelSystem.addModel(name, vertexType, fileName);
     }
 
-    BaseModel &GameEngine::getModelByName(const std::string &name) {
+    TModel &GameEngine::getModelByName(const std::string &name) {
         return _modelSystem.getModelByName(name);
     }
 
-    std::unordered_map<VertexType, VertexDescriptor> &GameEngine::getAllVertexDescriptors() {
+    std::unordered_map<VertexType, std::pair<VertexDescriptor, std::string>>& GameEngine::getAllVertexDescriptors(){
         return _modelSystem.getAllVertexDescriptors();
     }
 

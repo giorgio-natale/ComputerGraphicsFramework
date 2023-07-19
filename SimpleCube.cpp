@@ -113,7 +113,7 @@ class SimpleCube : public BaseProject {
 		// Third and fourth parameters are respectively the vertex and fragment shaders
 		// The last array, is a vector of pointer to the layouts of the sets that will
 		// be used in this pipeline. The first element will be set 0, and so on..
-		P.init(this, &gameEngine->getAllVertexDescriptors().find(fmwk::VERTEX)->second, "shaders/ShaderVert.spv", "shaders/ShaderFrag.spv", {&globalSetLayout, &gameEngine->getTextureDescriptorSetLayout(), &transformSetLayout});
+		P.init(this, &gameEngine->getAllVertexDescriptors().find(fmwk::VERTEX)->second.first, "shaders/ShaderVert.spv", "shaders/ShaderFrag.spv", {&globalSetLayout, &gameEngine->getTextureDescriptorSetLayout(), &transformSetLayout});
 
 		// Models, textures and Descriptors (values assigned to the uniforms)
 
@@ -180,7 +180,7 @@ class SimpleCube : public BaseProject {
 		
 		// Cleanup models
 		//baseModel->cleanup();
-        fmwk::GameEngine::getInstance()->getModelByName("myCube").cleanup();
+        fmwk::GameEngine::getInstance()->getModelByName("myCube").getTypedModel().cleanup();
 
 		// Cleanup descriptor set layouts
 		globalSetLayout.cleanup();
@@ -208,10 +208,10 @@ class SimpleCube : public BaseProject {
         cubeTransformSet.bind(commandBuffer, P, 2, currentImage);
 
 
-        dynamic_cast<fmwk::MeshComponent&>(cube.getComponentByName("Mesh")).getModel().bind(commandBuffer);
+        dynamic_cast<fmwk::MeshComponent &>(cube.getComponentByName("Mesh")).getModel().getTypedModel().bind(commandBuffer);
 
 		vkCmdDrawIndexed(commandBuffer,
-                         fmwk::GameEngine::getInstance()->getModelByName("myCube").getVertexCount(), 1, 0, 0, 0);
+                         fmwk::GameEngine::getInstance()->getModelByName("myCube").getTypedModel().getVertexCount(), 1, 0, 0, 0);
 
 	}
 

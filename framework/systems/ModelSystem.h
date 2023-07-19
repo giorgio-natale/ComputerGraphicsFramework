@@ -23,20 +23,30 @@ namespace fmwk {
     };
     enum VertexType{VERTEX, VERTEX_WITH_NORMAL};
 
+    class TModel{
+    private:
+        std::unique_ptr<BaseModel> _model;
+        VertexType _type;
+    public:
+        TModel(std::unique_ptr<BaseModel> model, VertexType type);
+        VertexType getType();
+        BaseModel& getTypedModel();
+    };
+
     class ModelSystem {
     private:
         BaseProject *_bp;
-        std::unordered_map<VertexType, VertexDescriptor> _vertexDescriptors;
-        std::unordered_map<std::string, std::unique_ptr<BaseModel>> _models;
+        std::unordered_map<VertexType, std::pair<VertexDescriptor, std::string>> _vertexDescriptors;
+        std::unordered_map<std::string, TModel> _models;
 
     public:
         explicit ModelSystem(BaseProject *bp);
 
         void addModel(std::string const& name, VertexType vertexType, std::string const& fileName);
 
-        BaseModel& getModelByName(std::string const& name);
+        TModel& getModelByName(std::string const& name);
 
-        std::unordered_map<VertexType, VertexDescriptor>& getAllVertexDescriptors();
+        std::unordered_map<VertexType, std::pair<VertexDescriptor, std::string>>& getAllVertexDescriptors();
 
     };
 

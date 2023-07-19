@@ -7,15 +7,16 @@
 
 #include "../Starter.hpp"
 #include "Component.h"
+#include "systems/ModelSystem.h"
 
 namespace fmwk {
 
     class MeshComponent : public Component{
     private:
-        BaseModel& _model;
+        TModel& _model;
     public:
-        MeshComponent(std::string const& name, BaseModel& model);
-        [[nodiscard]] BaseModel& getModel() const;
+        MeshComponent(std::string const& name, TModel& model);
+        [[nodiscard]] TModel& getModel() const;
     };
 
 } // fmwk

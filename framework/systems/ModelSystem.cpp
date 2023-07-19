@@ -20,7 +20,7 @@ namespace fmwk {
                    }
         );
 
-        _vertexDescriptors.insert({VERTEX, vd});
+        _vertexDescriptors.insert({VERTEX, {vd, "shaders/ShaderVert.spv"}});
 
 
         vd.init(
@@ -35,7 +35,7 @@ namespace fmwk {
                }
         );
 
-        _vertexDescriptors.insert({VERTEX, vd});
+        _vertexDescriptors.insert({VERTEX, {vd, "shaders/ShaderVert.spv"}});
 
     }
 
@@ -63,20 +63,32 @@ namespace fmwk {
                 break;
         }
 
-        model->init(_bp, &_vertexDescriptors.find(vertexType)->second, fileName, modelType);
-        _models.insert({name, std::move(model)});
+        model->init(_bp, &_vertexDescriptors.find(vertexType)->second.first, fileName, modelType);
+        _models.insert({name, TModel(std::move(model), vertexType)});
 
     }
 
-    BaseModel& ModelSystem::getModelByName(std::string const& name){
+    TModel& ModelSystem::getModelByName(std::string const& name){
         auto itr = _models.find(name);
         if (itr == _models.end())
             throw std::runtime_error("Could not find model with name '" + name + "'");
-        return *(_models.find(name)->second);
+        return _models.find(name)->second;
     }
 
-    std::unordered_map<VertexType, VertexDescriptor>& ModelSystem::getAllVertexDescriptors(){
+    std::unordered_map<VertexType, std::pair<VertexDescriptor, std::string>>& ModelSystem::getAllVertexDescriptors(){
         return _vertexDescriptors;
     }
 
+    TModel::TModel(std::unique_ptr<BaseModel> model, VertexType type) {
+        _model = std::move(model);
+        _type = type;
+    }
+
+    VertexType TModel::getType() {
+        return _type;
+    }
+
+    BaseModel &TModel::getTypedModel() {
+        return *_model;
+    }
 } // fmwk

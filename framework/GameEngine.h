@@ -39,12 +39,12 @@ namespace fmwk {
         Entity& getEntityByName(const std::string& name) override;
         std::vector<Entity*> getAllEntities() override;
         void addModel(std::string const& name, VertexType vertexType, std::string const& fileName);
-        BaseModel& getModelByName(std::string const& name);
+        TModel& getModelByName(std::string const& name);
         void addTexture(std::string const& name, std::string const& fileName);
         BoundTexture& getBoundTextureByName(std::string const& name);
 
         //TODO: remove these
-        std::unordered_map<VertexType, VertexDescriptor>& getAllVertexDescriptors();
+        std::unordered_map<VertexType, std::pair<VertexDescriptor, std::string>>& getAllVertexDescriptors();
         DescriptorSetLayout& getTextureDescriptorSetLayout();
 
         void handleInputs(float &deltaT, glm::vec3 &m, glm::vec3 &r, bool &fire) override;
