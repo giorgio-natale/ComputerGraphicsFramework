@@ -20,6 +20,8 @@
 #include "../Starter.hpp"
 #include "systems/ModelSystem.h"
 #include "systems/TextureSystem.h"
+#include "systems/MaterialSystem.h"
+#include "systems/RenderSystem.h"
 
 namespace fmwk {
 
@@ -33,6 +35,8 @@ namespace fmwk {
             _window = window;
         }
         void bootTextureSystem();
+        void bootMaterialSystem();
+        void bootRenderSystem();
 
         void addEntity(std::unique_ptr<Entity> entity) override;
         void logicUpdate() override;
@@ -51,9 +55,12 @@ namespace fmwk {
         void windowResizeCallback(GLFWwindow* _window, int width, int height) override;
         std::pair<int, int> getWindowSize() override;
         float getAspectRatio() override;
+        void updateGraphicResources(int currentImage);
+        void renderFrame(VkCommandBuffer commandBuffer, int currentImage);
 
     private:
-        explicit GameEngine(BaseProject* bp):_window(nullptr), _modelSystem(ModelSystem(bp)), _textureSystem(TextureSystem(bp)){
+        explicit GameEngine(BaseProject* bp):_window(nullptr), _modelSystem(ModelSystem(bp)), _textureSystem(TextureSystem(bp)),
+                                             _materialSystem(MaterialSystem(bp)), _renderSystem(RenderSystem(bp)){
             _bp = bp;
         };
         BaseProject* _bp;
@@ -63,6 +70,13 @@ namespace fmwk {
         std::map<std::string, std::unique_ptr<Entity>> _entities;
         ModelSystem _modelSystem;
         TextureSystem _textureSystem;
+        MaterialSystem _materialSystem;
+        RenderSystem _renderSystem;
+
+        //utils
+        std::vector<Component*> getAllComponents();
+        void provisionResources(const std::vector<Component*>& components);
+
 
         glm::vec3 _r = {0,0,0}, _m = {0,0,0};
         float _deltaTime = 0;

@@ -13,9 +13,11 @@ namespace fmwk {
         explicit Component(std::string const& name);
         [[nodiscard]] std::string getName() const;
         void setParent(Entity* parentEntity);
+        Entity const* getParent();
         void removeParent();
         virtual void update(){};
         virtual void postUpdate(){};
+        [[nodiscard]] virtual bool isProvisioned() const {return true;};
         virtual ~Component();
         Component (const Component&) = delete;
         Component& operator= (const Component&) = delete;

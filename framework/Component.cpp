@@ -32,4 +32,8 @@ namespace fmwk {
         return _parentEntity;
     }
 
+    Entity const*Component::getParent() {
+        return _parentEntity;
+    }
+
 } // fmwk

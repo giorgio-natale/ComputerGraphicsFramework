@@ -3,6 +3,8 @@
 //
 
 #include "GameEngine.h"
+#include "MaterialComponent.h"
+#include "MeshComponent.h"
 
 namespace fmwk {
     GameEngine* GameEngine::_instance= nullptr;
@@ -179,4 +181,64 @@ namespace fmwk {
     void GameEngine::bootTextureSystem() {
         _textureSystem.bootSystem();
     }
+    void GameEngine::bootMaterialSystem() {
+        _materialSystem.bootSystem();
+    }
+    void GameEngine::bootRenderSystem(){
+        _renderSystem.bootSystem(_textureSystem.getTextureDescriptorSetLayout(), _modelSystem.getAllVertexDescriptors(), _materialSystem.getAllEffects());
+    }
+
+    void GameEngine::provisionResources(const std::vector<Component *>& components) {
+        for(Component* component : components){
+            if(!component->isProvisioned()){
+                if(auto* materialComponent = dynamic_cast<MaterialComponent*>(component)){
+                    DescriptorSet descriptorSet;
+                    DescriptorSetLayout& dsl = _materialSystem.getEffectByType(materialComponent->getEffectType()).layout;
+                    auto* meshComponent = dynamic_cast<MeshComponent*>(&materialComponent->getParent()->getComponentByName("Mesh"));
+                    if(!meshComponent){
+                        throw std::runtime_error("Cannot cast to a Mesh component while provisioning resources");
+                    }
+                    VertexType vertexType = meshComponent->getModel().getType();
+                    Pipeline& pipeline = _renderSystem.getPipeline(vertexType, materialComponent->getEffectType());
+                    descriptorSet.init(_bp, &dsl, materialComponent->getDescriptorSetClaim());
+                    materialComponent->provision(descriptorSet, &pipeline);
+                }else{
+                    throw std::runtime_error("Provision of component '" + component->getName() + "' not implemented");
+                }
+            }
+        }
+    }
+
+    void GameEngine::updateGraphicResources(int currentImage) {
+
+        for(Component* component : getAllComponents()){
+            if(auto* materialComponent = dynamic_cast<MaterialComponent*>(component)){
+                materialComponent->updateDescriptorSet(currentImage);
+            }
+        }
+    }
+
+    void GameEngine::renderFrame(VkCommandBuffer commandBuffer, int currentImage) {
+        std::vector<Entity*> entities = getAllEntities();
+        Pipeline* oldPipeline = nullptr;
+        BaseModel* oldModel = nullptr;
+        DescriptorSet* globalDescriptorSet = &_renderSystem.getGlobalDescriptorSet();
+        DescriptorSet* oldTextureDescriptorSet = nullptr;
+        DescriptorSet* oldMaterialDescriptorSet = nullptr;
+        DescriptorSet* oldEntityTransformDescriptorSet = nullptr;
+
+
+
+    }
+
+    std::vector<Component *> GameEngine::getAllComponents() {
+        std::vector<Component*> components;
+        for(Entity* entity : getAllEntities()){
+            for(Component* component : entity->getAllComponents())
+                components.push_back(component);
+        }
+        return components;
+    }
+
+
 } // fmwk

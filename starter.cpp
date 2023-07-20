@@ -135,6 +135,8 @@ void BaseProject::initVulkan() {
     createDescriptorPool();
 
     fmwk::GameEngine::getInstance()->bootTextureSystem();
+    fmwk::GameEngine::getInstance()->bootMaterialSystem();
+    fmwk::GameEngine::getInstance()->bootRenderSystem();
     localInit();
     pipelinesAndDescriptorSetsInit();
 
