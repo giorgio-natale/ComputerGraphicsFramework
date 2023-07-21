@@ -11,11 +11,11 @@
 
 namespace fmwk {
 
+    //TODO: maybe group this definition and in general descriptor set creation in a separate module
     typedef std::vector<DescriptorSetElement> DescriptorSetClaim;
 
     class MaterialComponent : public Component{
     private:
-        DescriptorSet _descriptorSet;
         Pipeline* _pipeline;
         EffectType _effectType;
         bool _alreadyProvisioned;
@@ -24,8 +24,12 @@ namespace fmwk {
         virtual void updateDescriptorSet(int currentImage) = 0;
         virtual DescriptorSetClaim getDescriptorSetClaim() = 0;
         void provision(DescriptorSet descriptorSet, Pipeline* pipeline);
+        DescriptorSet& getDescriptorSet();
         [[nodiscard]] bool isProvisioned() const override;
         EffectType getEffectType();
+        [[nodiscard]] Pipeline* getPipeline() const;
+    protected:
+        DescriptorSet _descriptorSet;
     };
 
 } // fmwk

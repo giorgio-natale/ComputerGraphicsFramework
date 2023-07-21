@@ -57,6 +57,7 @@ namespace fmwk {
         float getAspectRatio() override;
         void updateGraphicResources(int currentImage);
         void renderFrame(VkCommandBuffer commandBuffer, int currentImage);
+        void provisionResources();
 
     private:
         explicit GameEngine(BaseProject* bp):_window(nullptr), _modelSystem(ModelSystem(bp)), _textureSystem(TextureSystem(bp)),
@@ -75,7 +76,6 @@ namespace fmwk {
 
         //utils
         std::vector<Component*> getAllComponents();
-        void provisionResources(const std::vector<Component*>& components);
 
 
         glm::vec3 _r = {0,0,0}, _m = {0,0,0};

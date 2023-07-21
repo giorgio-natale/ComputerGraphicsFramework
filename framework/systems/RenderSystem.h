@@ -8,6 +8,7 @@
 #include "../../Starter.hpp"
 #include "ModelSystem.h"
 #include "MaterialSystem.h"
+#include "../Camera.h"
 
 namespace std{
     template <>
@@ -43,6 +44,8 @@ namespace fmwk {
                 );
         Pipeline& getPipeline(VertexType vertexType, EffectType effectType);
         DescriptorSet& getGlobalDescriptorSet();
+        DescriptorSetLayout& getModelDescriptorSetLayout();
+        void updateGlobalDescriptor(Camera* cameraComponent, int currentImage);
     };
 
 } // fmwk

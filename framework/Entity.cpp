@@ -57,4 +57,11 @@ namespace fmwk {
                               });
         return components;
     }
+
+    bool Entity::hasComponent(const std::string &name) const {
+        auto components = getAllComponents();
+        return std::any_of(components.begin(),
+                           components.end(),
+                           [name](Component* component){return component->getName()==name;});
+    }
 } // fmwk

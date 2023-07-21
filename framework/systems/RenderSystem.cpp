@@ -24,6 +24,7 @@ namespace fmwk {
                                                       vertexVal.second,
                                                       effectVal.shaderName,
                                                       {&_globalDescriptorSetLayout, &_textureDescriptorSetLayout, &effectVal.layout, &_modelDescriptorSetLayout});
+                insertedPipelineIterator->second.create();
             }
         }
 
@@ -36,6 +37,16 @@ namespace fmwk {
 
     DescriptorSet &RenderSystem::getGlobalDescriptorSet() {
         return _globalDescriptorSet;
+    }
+
+    DescriptorSetLayout &RenderSystem::getModelDescriptorSetLayout() {
+        return _modelDescriptorSetLayout;
+    }
+
+    void RenderSystem::updateGlobalDescriptor(Camera* cameraComponent, int currentImage) {
+        GlobalUniformBlock gubo{};
+        gubo.vpMat = cameraComponent->getProjectionMatrix() * cameraComponent->getViewMatrix();
+        _globalDescriptorSet.map(currentImage, &gubo, sizeof(gubo), 0);
     }
 
 } // fmwk

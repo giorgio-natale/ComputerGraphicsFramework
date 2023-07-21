@@ -9,8 +9,14 @@
 #include <glm/gtc/quaternion.hpp>
 #include "Component.h"
 #include "utils.h"
+#include "../Starter.hpp"
+#include "MaterialComponent.h"
 
 namespace fmwk {
+    struct EntityTransformUniformBlock{
+        alignas(16) glm::mat4 mMat;
+    };
+
     class Transform : public Component{
     public:
         Transform(const std::string &name, const glm::vec3 &position, const EulerVector &eulerVector,
@@ -36,6 +42,12 @@ namespace fmwk {
         void rotate(glm::vec3 const& deltaAngles);
         void rotate(glm::quat const& deltaQuaternion);
 
+        void updateDescriptorSet(int currentImage);
+        void provision(DescriptorSet descriptorSet);
+        DescriptorSet& getDescriptorSet();
+        [[nodiscard]] bool isProvisioned() const override;
+
+
     private:
         glm::vec3 _position;
         EulerVector _eulerVector;
@@ -44,6 +56,9 @@ namespace fmwk {
         mutable bool _areMatricesCoherent;
         mutable glm::mat4 _worldMatrix = I;
         mutable glm::mat4 _inverseWorldMatrix = I;
+
+        DescriptorSet _descriptorSet;
+        bool _alreadyProvisioned;
 
         void computeMatrices() const;
     };

@@ -3,6 +3,8 @@
 //
 
 #include "Transform.h"
+
+#include <utility>
 #include "utils.h"
 
 namespace fmwk {
@@ -13,6 +15,7 @@ namespace fmwk {
         _areMatricesCoherent = false;
         _worldMatrix = getWorldMatrix();
         _inverseWorldMatrix = getInverseWorldMatrix();
+        _alreadyProvisioned = false;
     }
 
     Transform::Transform(const std::string &name, const glm::vec3 &position, const glm::quat &quaternion,
@@ -98,7 +101,24 @@ namespace fmwk {
         _areMatricesCoherent = true;
     }
 
+    void Transform::provision(DescriptorSet descriptorSet) {
+        _descriptorSet = std::move(descriptorSet);
+        _alreadyProvisioned = true;
+    }
 
+    void Transform::updateDescriptorSet(int currentImage) {
+        EntityTransformUniformBlock ubo{};
+        ubo.mMat = _worldMatrix;
+        _descriptorSet.map(currentImage, &ubo, sizeof(ubo), 0);
+    }
+
+    DescriptorSet &Transform::getDescriptorSet() {
+        return _descriptorSet;
+    }
+
+    bool Transform::isProvisioned() const {
+        return _alreadyProvisioned;
+    }
 
 
 } // fmwk

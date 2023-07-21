@@ -5,6 +5,7 @@
 #include "GameEngine.h"
 #include "MaterialComponent.h"
 #include "MeshComponent.h"
+#include "TextureComponent.h"
 
 namespace fmwk {
     GameEngine* GameEngine::_instance= nullptr;
@@ -188,7 +189,8 @@ namespace fmwk {
         _renderSystem.bootSystem(_textureSystem.getTextureDescriptorSetLayout(), _modelSystem.getAllVertexDescriptors(), _materialSystem.getAllEffects());
     }
 
-    void GameEngine::provisionResources(const std::vector<Component *>& components) {
+    void GameEngine::provisionResources() {
+        auto components = getAllComponents();
         for(Component* component : components){
             if(!component->isProvisioned()){
                 if(auto* materialComponent = dynamic_cast<MaterialComponent*>(component)){
@@ -202,6 +204,11 @@ namespace fmwk {
                     Pipeline& pipeline = _renderSystem.getPipeline(vertexType, materialComponent->getEffectType());
                     descriptorSet.init(_bp, &dsl, materialComponent->getDescriptorSetClaim());
                     materialComponent->provision(descriptorSet, &pipeline);
+                }else if(auto* transform = dynamic_cast<Transform*>(component)){
+                    DescriptorSet descriptorSet;
+                    DescriptorSetLayout& dsl = _renderSystem.getModelDescriptorSetLayout();
+                    descriptorSet.init(_bp, &dsl, {{0, UNIFORM, sizeof(EntityTransformUniformBlock)}});
+                    transform->provision(descriptorSet);
                 }else{
                     throw std::runtime_error("Provision of component '" + component->getName() + "' not implemented");
                 }
@@ -211,9 +218,13 @@ namespace fmwk {
 
     void GameEngine::updateGraphicResources(int currentImage) {
 
+        auto* cameraComponent = dynamic_cast<Camera*>(&getEntityByName("Camera").getComponentByName("Camera"));
+        _renderSystem.updateGlobalDescriptor(cameraComponent, currentImage);
         for(Component* component : getAllComponents()){
             if(auto* materialComponent = dynamic_cast<MaterialComponent*>(component)){
                 materialComponent->updateDescriptorSet(currentImage);
+            }else if(auto* transformComponent = dynamic_cast<Transform*>(component)){
+                transformComponent->updateDescriptorSet(currentImage);
             }
         }
     }
@@ -223,9 +234,42 @@ namespace fmwk {
         Pipeline* oldPipeline = nullptr;
         BaseModel* oldModel = nullptr;
         DescriptorSet* globalDescriptorSet = &_renderSystem.getGlobalDescriptorSet();
-        DescriptorSet* oldTextureDescriptorSet = nullptr;
-        DescriptorSet* oldMaterialDescriptorSet = nullptr;
-        DescriptorSet* oldEntityTransformDescriptorSet = nullptr;
+        BoundTexture* oldTexture = nullptr;
+
+        bool needToBindGlobalDescriptor = true;
+        for(Entity* entity : entities){
+            if(entity->hasComponent("Mesh")) {
+                Transform &transform = entity->getTransform();
+                MeshComponent &meshComponent = reinterpret_cast<MeshComponent &>(entity->getComponentByName("Mesh"));
+                MaterialComponent &materialComponent = reinterpret_cast<MaterialComponent &>(entity->getComponentByName(
+                        "Material"));
+                TextureComponent &textureComponent = reinterpret_cast<TextureComponent &>(entity->getComponentByName(
+                        "Texture"));
+
+                if (&meshComponent.getModel().getTypedModel() != oldModel) {
+                    meshComponent.getModel().getTypedModel().bind(commandBuffer);
+                    oldModel = &meshComponent.getModel().getTypedModel();
+                }
+
+                if (materialComponent.getPipeline() != oldPipeline) {
+                    materialComponent.getPipeline()->bind(commandBuffer);
+                    oldPipeline = materialComponent.getPipeline();
+                }
+
+                if (needToBindGlobalDescriptor) {
+                    globalDescriptorSet->bind(commandBuffer, *oldPipeline, 0, currentImage);
+                    needToBindGlobalDescriptor = false;
+                }
+                if (&textureComponent.getBoundTexture() != oldTexture) {
+                    textureComponent.getBoundTexture().textureSet.bind(commandBuffer, *oldPipeline, 1, currentImage);
+                    oldTexture = &textureComponent.getBoundTexture();
+                }
+                materialComponent.getDescriptorSet().bind(commandBuffer, *oldPipeline, 2, currentImage);
+                transform.getDescriptorSet().bind(commandBuffer, *oldPipeline, 3, currentImage);
+
+                vkCmdDrawIndexed(commandBuffer, oldModel->getVertexCount(), 1, 0, 0, 0);
+            }
+        }
 
 
 

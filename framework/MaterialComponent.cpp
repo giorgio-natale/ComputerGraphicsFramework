@@ -12,6 +12,7 @@ namespace fmwk {
     void MaterialComponent::provision(DescriptorSet descriptorSet, Pipeline* pipeline) {
         _descriptorSet = std::move(descriptorSet);
         _pipeline = pipeline;
+        _alreadyProvisioned = true;
     }
 
     bool MaterialComponent::isProvisioned() const {
@@ -20,6 +21,14 @@ namespace fmwk {
 
     EffectType MaterialComponent::getEffectType() {
         return _effectType;
+    }
+
+    Pipeline *MaterialComponent::getPipeline() const {
+        return _pipeline;
+    }
+
+    DescriptorSet &MaterialComponent::getDescriptorSet() {
+        return _descriptorSet;
     }
 
 } // fmwk

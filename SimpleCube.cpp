@@ -4,6 +4,8 @@
 #include "framework/GameEngine.h"
 #include "framework/MeshComponent.h"
 #include "framework/TextureComponent.h"
+#include "framework/DefaultMaterial.h"
+#include "framework/PerspectiveCamera.h"
 
 
 // The uniform buffer objects data structures
@@ -15,20 +17,10 @@
 //        mat3  : alignas(16)
 //        mat4  : alignas(16)
 
-struct GlobalUniformBlock{
-    alignas(16) glm::mat4 vpMat;
-};
-
-struct EntityTransformUniformBlock{
-    alignas(16) glm::mat4 mMat;
-};
 
 // The vertices data structures
 // Example
-struct Vertex {
-	glm::vec3 pos;
-	glm::vec2 UV;
-};
+
 
 
 
@@ -41,21 +33,6 @@ class SimpleCube : public BaseProject {
 	// Current aspect ratio (used by the callback that resized the window
 	float Ar;
 
-	// Descriptor Layouts ["classes" of what will be passed to the shaders]
-	DescriptorSetLayout globalSetLayout, transformSetLayout;
-
-	// Pipelines [Shader couples]
-	Pipeline P;
-
-
-	// Descriptor sets
-	DescriptorSet globalSet, cubeTransformSet;
-	// Textures
-
-	
-	// C++ storage for uniform variables
-	GlobalUniformBlock gubo;
-    EntityTransformUniformBlock tubo;
 
 	// Other application parameters
 
@@ -86,52 +63,25 @@ class SimpleCube : public BaseProject {
 	void localInit() {
 
         auto gameEngine = fmwk::GameEngine::getInstance();
-		// Descriptor Layouts [what will be passed to the shaders]
-		globalSetLayout.init(this, {
-					// this array contains the bindings:
-					// first  element : the binding number
-					// second element : the type of element (buffer or texture)
-					//                  using the corresponding Vulkan constant
-					// third  element : the pipeline stage where it will be used
-					//                  using the corresponding Vulkan constant
-					{0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT}
-				});
-
-        transformSetLayout.init(this, {
-                // this array contains the bindings:
-                // first  element : the binding number
-                // second element : the type of element (buffer or texture)
-                //                  using the corresponding Vulkan constant
-                // third  element : the pipeline stage where it will be used
-                //                  using the corresponding Vulkan constant
-                {0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT}
-        });
-
-
-		// Pipelines [Shader couples]
-		// The second parameter is the pointer to the vertex definition
-		// Third and fourth parameters are respectively the vertex and fragment shaders
-		// The last array, is a vector of pointer to the layouts of the sets that will
-		// be used in this pipeline. The first element will be set 0, and so on..
-		P.init(this, &gameEngine->getAllVertexDescriptors().find(fmwk::VERTEX)->second.first, "shaders/ShaderVert.spv", "shaders/ShaderFrag.spv", {&globalSetLayout, &gameEngine->getTextureDescriptorSetLayout(), &transformSetLayout});
-
-		// Models, textures and Descriptors (values assigned to the uniforms)
-
-		// Create models
-		// The second parameter is the pointer to the vertex definition for this model
-		// The third parameter is the file name
-		// The last is a constant specifying the file type: currently only OBJ or GLTF
         gameEngine->addModel("myCube", fmwk::VERTEX, "Models/Cube.obj");
         gameEngine->addTexture("cubeTexture", "textures/Checker.png");
-		//cubeModel.init(this, &simpleVertexDescriptor, "Models/Cube.obj", OBJ);
 
         auto cubeEntity = std::make_unique<fmwk::Entity>("myCubeEntity");
         auto modelComponent = std::make_unique<fmwk::MeshComponent>("Mesh", gameEngine->getModelByName("myCube"));
         auto textureComponent = std::make_unique<fmwk::TextureComponent>("Texture", gameEngine->getBoundTextureByName("cubeTexture"));
+        auto materialComponent = std::make_unique<fmwk::DefaultMaterial>("Material", 1.5f);
         cubeEntity->addComponent(std::move(modelComponent));
         cubeEntity->addComponent(std::move(textureComponent));
+        cubeEntity->addComponent(std::move(materialComponent));
 
         gameEngine->addEntity(std::move(cubeEntity));
+
+        auto camera = std::make_unique<fmwk::Entity>("Camera", glm::vec3(0,0,8), fmwk::EulerVector(0, 0,0));
+        auto perspectiveCameraComponent = std::make_unique<fmwk::PerspectiveCamera>("Camera", 0.1f, 100.0f, glm::radians(90.0f));
+        camera->addComponent(std::move(perspectiveCameraComponent));
+
+        gameEngine->addEntity(std::move(camera));
+
 
 		
 		// Init local variables
@@ -139,34 +89,14 @@ class SimpleCube : public BaseProject {
 	
 	// Here you create your pipelines and Descriptor Sets!
 	void pipelinesAndDescriptorSetsInit() {
-		// This creates a new pipeline (with the current surface), using its shaders
-		P.create();
-
-		// Here you define the data set
-		globalSet.init(this, &globalSetLayout, {
-		// the second parameter, is a pointer to the Uniform Set Layout of this set
-		// the last parameter is an array, with one element per binding of the set.
-		// first  elmenet : the binding number
-		// second element : UNIFORM or TEXTURE (an enum) depending on the type
-		// third  element : only for UNIFORMs, the size of the corresponding C++ object. For texture, just put 0
-		// fourth element : only for TEXTUREs, the pointer to the corresponding texture object. For uniforms, use nullptr
-					{0, UNIFORM, sizeof(GlobalUniformBlock)}
-        });
-        cubeTransformSet.init(this, &transformSetLayout, {
-                {0, UNIFORM, sizeof(EntityTransformUniformBlock)}
-        });
+        auto gameEngine = fmwk::GameEngine::getInstance();
+        gameEngine->provisionResources();
 	}
 
 	// Here you destroy your pipelines and Descriptor Sets!
 	// All the object classes defined in Starter.hpp have a method .cleanup() for this purpose
 	void pipelinesAndDescriptorSetsCleanup() {
-		// Cleanup pipelines
-		P.cleanup();
-
-		// Cleanup datasets
-		globalSet.cleanup();
-        fmwk::GameEngine::getInstance()->getBoundTextureByName("cubeTexture").textureSet.cleanup();
-        cubeTransformSet.cleanup();
+        std::cout << "PIPELINES AND DESCRIPTOR SETS CLEANUP CALLED" << std::endl;
 	}
 
 	// Here you destroy all the Models, Texture and Desc. Set Layouts you created!
@@ -174,22 +104,8 @@ class SimpleCube : public BaseProject {
 	// You also have to destroy the pipelines: since they need to be rebuilt, they have two different
 	// methods: .cleanup() recreates them, while .destroy() delete them completely
 	void localCleanup() {
-        auto gameEngine = fmwk::GameEngine::getInstance();
-		// Cleanup textures
-		gameEngine->getBoundTextureByName("cubeTexture").texture.cleanup();
-		
-		// Cleanup models
-		//baseModel->cleanup();
-        fmwk::GameEngine::getInstance()->getModelByName("myCube").getTypedModel().cleanup();
+        std::cout << "LOCAL CLEANUP CALLED" << std::endl;
 
-		// Cleanup descriptor set layouts
-		globalSetLayout.cleanup();
-        gameEngine->getTextureDescriptorSetLayout().cleanup();
-        transformSetLayout.cleanup();
-
-		
-		// Destroies the pipelines
-		P.destroy();		
 	}
 	
 	// Here it is the creation of the command buffer:
@@ -198,65 +114,20 @@ class SimpleCube : public BaseProject {
 	
 	void populateCommandBuffer(VkCommandBuffer commandBuffer, int currentImage) {
         auto gameEngine = fmwk::GameEngine::getInstance();
-        auto& cube = gameEngine->getEntityByName("myCubeEntity");
-		// binds the pipeline
-		P.bind(commandBuffer);
-
-		// binds the data set
-		globalSet.bind(commandBuffer, P, 0, currentImage);
-        dynamic_cast<fmwk::TextureComponent&>(cube.getComponentByName("Texture")).getBoundTexture().textureSet.bind(commandBuffer, P, 1, currentImage);
-        cubeTransformSet.bind(commandBuffer, P, 2, currentImage);
-
-
-        dynamic_cast<fmwk::MeshComponent &>(cube.getComponentByName("Mesh")).getModel().getTypedModel().bind(commandBuffer);
-
-		vkCmdDrawIndexed(commandBuffer,
-                         fmwk::GameEngine::getInstance()->getModelByName("myCube").getTypedModel().getVertexCount(), 1, 0, 0, 0);
-
+        gameEngine->renderFrame(commandBuffer, currentImage);
 	}
 
 	// Here is where you update the uniforms.
 	// Very likely this will be where you will be writing the logic of your application.
 	void updateUniformBuffer(uint32_t currentImage) {
+        auto gameEngine = fmwk::GameEngine::getInstance();
+
 		// Standard procedure to quit when the ESC key is pressed
 		if(glfwGetKey(window, GLFW_KEY_ESCAPE)) {
 			glfwSetWindowShouldClose(window, GL_TRUE);
 		}
 		
-		// Integration with the timers and the controllers
-		float deltaT;
-		auto m = glm::vec3(0.0f), r = glm::vec3(0.0f);
-		bool fire = false;
-		getSixAxis(deltaT, m, r, fire);
-		// getSixAxis() is defined in Starter.hpp in the base class.
-		// It fills the float point variable passed in its first parameter with the time
-		// since the last call to the procedure.
-		// It fills vec3 in the second parameters, with three values in the -1,1 range corresponding
-		// to motion (with left stick of the gamepad, or ASWD + RF keys on the keyboard)
-		// It fills vec3 in the third parameters, with three values in the -1,1 range corresponding
-		// to motion (with right stick of the gamepad, or Arrow keys + QE keys on the keyboard, or mouse)
-		// If fills the last boolean variable with true if fire has been pressed:
-		//          SPACE on the keyboard, A or B button on the Gamepad, Right mouse button
-
-		
-		// Parameters
-		// Camera FOV-y, Near Plane and Far Plane
-		const float FOVy = glm::radians(90.0f);
-		const float nearPlane = 0.1f;
-		const float farPlane = 100.0f;
-		
-		glm::mat4 Prj = glm::perspective(FOVy, Ar, nearPlane, farPlane);
-		Prj[1][1] *= -1;
-		glm::vec3 camTarget = glm::vec3(0,0,0);
-		glm::vec3 camPos    = camTarget + glm::vec3(6,3,10);
-		glm::mat4 View = glm::lookAt(camPos, camTarget, glm::vec3(0,1,0));
-
-
-		glm::mat4 World = glm::mat4(1);		
-		gubo.vpMat = Prj * View;
-        tubo.mMat = World;
-		globalSet.map(currentImage, &gubo, sizeof(gubo), 0);
-        cubeTransformSet.map(currentImage, &tubo, sizeof(tubo), 0);
+		gameEngine->updateGraphicResources(currentImage);
 		// the .map() method of a DataSet object, requires the current image of the swap chain as first parameter
 		// the second parameter is the pointer to the C++ data structure to transfer to the GPU
 		// the third parameter is its size

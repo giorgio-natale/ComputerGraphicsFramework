@@ -4,7 +4,7 @@
 layout(set = 0, binding = 0) uniform GlobalUniformBlock {
 	mat4 vpMat;
 } gubo;
-layout(set = 2, binding = 0) uniform EntityTransformUniformBlock {
+layout(set = 3, binding = 0) uniform EntityTransformUniformBlock {
 	mat4 mMat;
 } tubo;
 

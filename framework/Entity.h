@@ -27,6 +27,7 @@ namespace fmwk {
         void addComponent(std::unique_ptr<Component> component);
         void removeComponentByName(std::string const& name);
         [[nodiscard]] std::vector<Component*> getAllComponents() const;
+        bool hasComponent(std::string const& name) const;
 
         Entity (const Entity&) = delete;
         Entity& operator= (const Entity&) = delete;
