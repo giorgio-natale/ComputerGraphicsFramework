@@ -14,10 +14,7 @@ namespace fmwk {
         if(_boundTextures.find(name) != _boundTextures.end())
             throw std::runtime_error("Could not add texture with name '" + name + "' because there was another texture with the same name");
 
-        std::unique_ptr<BoundTexture> boundTexture = std::make_unique<BoundTexture>();
-
-        boundTexture->texture.init(_bp, fileName.c_str());
-        boundTexture->textureSet.init(_bp, &_textureSetLayout, { {0, TEXTURE, 0, &boundTexture->texture}});
+        std::unique_ptr<BoundTexture> boundTexture = std::make_unique<BoundTexture>(_bp, fileName.c_str(), _textureSetLayout);
 
         _boundTextures.insert({name, std::move(boundTexture)});
     }
@@ -29,11 +26,50 @@ namespace fmwk {
         return *(_boundTextures.find(name)->second);
     }
 
-    DescriptorSetLayout &TextureSystem::getTextureDescriptorSetLayout() {
+    DescriptorSetLayout& TextureSystem::getTextureDescriptorSetLayout() {
         return _textureSetLayout;
     }
 
     void TextureSystem::bootSystem() {
         _textureSetLayout.init(_bp, {{0, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT}});
+    }
+
+    void TextureSystem::rebuildTextureDescriptorSets() {
+        for(auto& [key, boundTexture] : _boundTextures)
+            boundTexture->buildTextureSet(_bp, _textureSetLayout);
+    }
+
+    void TextureSystem::resetTextureDescriptorSets() {
+        for(auto& [key, boundTexture] : _boundTextures)
+            boundTexture->clearTextureSet();
+    }
+
+    void TextureSystem::destroyTextures() {
+        for(auto& [key, boundTexture] : _boundTextures)
+            boundTexture->destroyTexture();
+    }
+
+    BoundTexture::BoundTexture(BaseProject *bp, char const* fileName, DescriptorSetLayout& textureSetLayout) {
+        _texture.init(bp, fileName);
+    }
+
+    void BoundTexture::buildTextureSet(BaseProject *bp, DescriptorSetLayout &descriptorSetLayout) {
+        _textureSet.init(bp, &descriptorSetLayout, { {0, TEXTURE, 0, &_texture}});
+    }
+
+    void BoundTexture::clearTextureSet() {
+        _textureSet.cleanup();
+    }
+
+    void BoundTexture::destroyTexture() {
+        _texture.cleanup();
+    }
+
+    Texture &BoundTexture::getTexture() {
+        return _texture;
+    }
+
+    DescriptorSet &BoundTexture::getDescriptorSet() {
+        return _textureSet;
     }
 } // fmwk

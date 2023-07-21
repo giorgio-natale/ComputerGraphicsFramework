@@ -23,13 +23,13 @@ namespace fmwk {
         MaterialComponent(std::string const& name, EffectType effectType);
         virtual void updateDescriptorSet(int currentImage) = 0;
         virtual DescriptorSetClaim getDescriptorSetClaim() = 0;
-        void provision(DescriptorSet descriptorSet, Pipeline* pipeline);
+        void provision(DescriptorSet *descriptorSet, Pipeline* pipeline);
         DescriptorSet& getDescriptorSet();
         [[nodiscard]] bool isProvisioned() const override;
         EffectType getEffectType();
         [[nodiscard]] Pipeline* getPipeline() const;
     protected:
-        DescriptorSet _descriptorSet;
+        DescriptorSet* _descriptorSet;
     };
 
 } // fmwk

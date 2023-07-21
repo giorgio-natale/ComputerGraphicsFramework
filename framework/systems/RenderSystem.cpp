@@ -24,11 +24,9 @@ namespace fmwk {
                                                       vertexVal.second,
                                                       effectVal.shaderName,
                                                       {&_globalDescriptorSetLayout, &_textureDescriptorSetLayout, &effectVal.layout, &_modelDescriptorSetLayout});
-                insertedPipelineIterator->second.create();
             }
         }
 
-        _globalDescriptorSet.init(_bp, &_globalDescriptorSetLayout, {{0, UNIFORM, sizeof(GlobalUniformBlock)}});
     }
 
     Pipeline &RenderSystem::getPipeline(VertexType vertexType, EffectType effectType) {
@@ -47,6 +45,29 @@ namespace fmwk {
         GlobalUniformBlock gubo{};
         gubo.vpMat = cameraComponent->getProjectionMatrix() * cameraComponent->getViewMatrix();
         _globalDescriptorSet.map(currentImage, &gubo, sizeof(gubo), 0);
+    }
+
+    void RenderSystem::rebuildPipelines() {
+        for(auto& [key, pipeline] : _pipelines)
+            pipeline.create();
+    }
+
+    void RenderSystem::resetPipelines() {
+        for(auto& [key, pipeline] : _pipelines)
+            pipeline.cleanup();
+    }
+
+    void RenderSystem::destroyPipelines() {
+        for(auto& [key, pipeline] : _pipelines)
+            pipeline.destroy();
+    }
+
+    void RenderSystem::rebuildGlobalDescriptorSet() {
+        _globalDescriptorSet.init(_bp, &_globalDescriptorSetLayout, {{0, UNIFORM, sizeof(GlobalUniformBlock)}});
+    }
+
+    void RenderSystem::cleanupGlobalDescriptorSet() {
+        _globalDescriptorSet.cleanup();
     }
 
 } // fmwk

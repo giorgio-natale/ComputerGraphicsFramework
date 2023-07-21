@@ -43,7 +43,7 @@ namespace fmwk {
         void rotate(glm::quat const& deltaQuaternion);
 
         void updateDescriptorSet(int currentImage);
-        void provision(DescriptorSet descriptorSet);
+        void provision(DescriptorSet* descriptorSet);
         DescriptorSet& getDescriptorSet();
         [[nodiscard]] bool isProvisioned() const override;
 
@@ -57,7 +57,7 @@ namespace fmwk {
         mutable glm::mat4 _worldMatrix = I;
         mutable glm::mat4 _inverseWorldMatrix = I;
 
-        DescriptorSet _descriptorSet;
+        DescriptorSet* _descriptorSet;
         bool _alreadyProvisioned;
 
         void computeMatrices() const;

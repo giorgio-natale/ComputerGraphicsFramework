@@ -91,12 +91,16 @@ class SimpleCube : public BaseProject {
 	void pipelinesAndDescriptorSetsInit() {
         auto gameEngine = fmwk::GameEngine::getInstance();
         gameEngine->provisionResources();
+        gameEngine->rebuildResources();
 	}
 
 	// Here you destroy your pipelines and Descriptor Sets!
 	// All the object classes defined in Starter.hpp have a method .cleanup() for this purpose
 	void pipelinesAndDescriptorSetsCleanup() {
         std::cout << "PIPELINES AND DESCRIPTOR SETS CLEANUP CALLED" << std::endl;
+        auto gameEngine = fmwk::GameEngine::getInstance();
+        gameEngine->rebuildResources();
+
 	}
 
 	// Here you destroy all the Models, Texture and Desc. Set Layouts you created!
@@ -111,7 +115,8 @@ class SimpleCube : public BaseProject {
 	// Here it is the creation of the command buffer:
 	// You send to the GPU all the objects you want to draw,
 	// with their buffers and textures
-	
+
+    //TODO: solve the problem that when we add
 	void populateCommandBuffer(VkCommandBuffer commandBuffer, int currentImage) {
         auto gameEngine = fmwk::GameEngine::getInstance();
         gameEngine->renderFrame(commandBuffer, currentImage);

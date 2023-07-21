@@ -202,13 +202,16 @@ namespace fmwk {
                     }
                     VertexType vertexType = meshComponent->getModel().getType();
                     Pipeline& pipeline = _renderSystem.getPipeline(vertexType, materialComponent->getEffectType());
-                    descriptorSet.init(_bp, &dsl, materialComponent->getDescriptorSetClaim());
-                    materialComponent->provision(descriptorSet, &pipeline);
+                    auto [insertedElement, ok] = _entitiesDescriptorSets.insert({component->getParent()->getName() + "-" + component->getName(), {descriptorSet, {&dsl, materialComponent->getDescriptorSetClaim()}}});
+                    //insertedElement->second.first.init(_bp, &dsl, materialComponent->getDescriptorSetClaim());
+                    materialComponent->provision(&insertedElement->second.first, &pipeline);
                 }else if(auto* transform = dynamic_cast<Transform*>(component)){
                     DescriptorSet descriptorSet;
                     DescriptorSetLayout& dsl = _renderSystem.getModelDescriptorSetLayout();
-                    descriptorSet.init(_bp, &dsl, {{0, UNIFORM, sizeof(EntityTransformUniformBlock)}});
-                    transform->provision(descriptorSet);
+                    DescriptorSetInitializationInfo initializationInfo = {&dsl, {{0, UNIFORM, sizeof(EntityTransformUniformBlock)}}};
+                    auto [insertedElement, ok] = _entitiesDescriptorSets.insert({component->getParent()->getName() + "-" + component->getName(), {descriptorSet, initializationInfo}});
+                    //insertedElement->second.first.init(_bp, &dsl, {{0, UNIFORM, sizeof(EntityTransformUniformBlock)}});
+                    transform->provision(&insertedElement->second.first);
                 }else{
                     throw std::runtime_error("Provision of component '" + component->getName() + "' not implemented");
                 }
@@ -261,7 +264,7 @@ namespace fmwk {
                     needToBindGlobalDescriptor = false;
                 }
                 if (&textureComponent.getBoundTexture() != oldTexture) {
-                    textureComponent.getBoundTexture().textureSet.bind(commandBuffer, *oldPipeline, 1, currentImage);
+                    textureComponent.getBoundTexture().getDescriptorSet().bind(commandBuffer, *oldPipeline, 1, currentImage);
                     oldTexture = &textureComponent.getBoundTexture();
                 }
                 materialComponent.getDescriptorSet().bind(commandBuffer, *oldPipeline, 2, currentImage);
@@ -282,6 +285,36 @@ namespace fmwk {
                 components.push_back(component);
         }
         return components;
+    }
+
+    void GameEngine::rebuildDescriptorSets() {
+        for(auto& [key, elem] : _entitiesDescriptorSets){
+            elem.first.init(_bp, elem.second.descriptorSetLayout, elem.second.descriptorSetClaim);
+        }
+    }
+
+    void GameEngine::clearDescriptorSets() {
+        for(auto& [key, elem] : _entitiesDescriptorSets){
+            elem.first.cleanup();
+        }
+    }
+
+    void GameEngine::rebuildResources() {
+        _renderSystem.rebuildPipelines();
+        _renderSystem.rebuildGlobalDescriptorSet();
+        _textureSystem.rebuildTextureDescriptorSets();
+        rebuildDescriptorSets();
+    }
+
+    void GameEngine::cleanupResources() {
+        _renderSystem.resetPipelines();
+        _renderSystem.cleanupGlobalDescriptorSet();
+        _textureSystem.resetTextureDescriptorSets();
+        clearDescriptorSets();
+    }
+
+    void GameEngine::destroyResources() {
+
     }
 
 

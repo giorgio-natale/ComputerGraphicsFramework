@@ -25,6 +25,11 @@
 
 namespace fmwk {
 
+    struct DescriptorSetInitializationInfo{
+        DescriptorSetLayout* descriptorSetLayout;
+        DescriptorSetClaim descriptorSetClaim;
+    };
+
     class GameEngine:GameEngineApi{
     public:
         GameEngine(GameEngine &other) = delete;
@@ -57,7 +62,12 @@ namespace fmwk {
         float getAspectRatio() override;
         void updateGraphicResources(int currentImage);
         void renderFrame(VkCommandBuffer commandBuffer, int currentImage);
+        //TODO: put this in a separate centralized system responsible for resource allocation
         void provisionResources();
+        void rebuildResources();
+        void cleanupResources();
+        void destroyResources();
+
 
     private:
         explicit GameEngine(BaseProject* bp):_window(nullptr), _modelSystem(ModelSystem(bp)), _textureSystem(TextureSystem(bp)),
@@ -69,6 +79,7 @@ namespace fmwk {
         GLFWwindow* _window;
         std::pair<int, int> _windowSize = {800, 600};
         std::map<std::string, std::unique_ptr<Entity>> _entities;
+        std::map<std::string, std::pair<DescriptorSet, DescriptorSetInitializationInfo>> _entitiesDescriptorSets;
         ModelSystem _modelSystem;
         TextureSystem _textureSystem;
         MaterialSystem _materialSystem;
@@ -76,7 +87,8 @@ namespace fmwk {
 
         //utils
         std::vector<Component*> getAllComponents();
-
+        void rebuildDescriptorSets();
+        void clearDescriptorSets();
 
         glm::vec3 _r = {0,0,0}, _m = {0,0,0};
         float _deltaTime = 0;

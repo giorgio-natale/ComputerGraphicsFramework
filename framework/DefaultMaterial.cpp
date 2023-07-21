@@ -8,7 +8,7 @@ namespace fmwk {
     void DefaultMaterial::updateDescriptorSet(int currentImage) {
         DefaultMaterialUniformBlock ubo{};
         ubo.brightness = _brightness;
-        _descriptorSet.map(currentImage, &ubo, sizeof(ubo), 0);
+        _descriptorSet->map(currentImage, &ubo, sizeof(ubo), 0);
     }
 
     DescriptorSetClaim DefaultMaterial::getDescriptorSetClaim() {

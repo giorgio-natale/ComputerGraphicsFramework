@@ -46,6 +46,13 @@ namespace fmwk {
         DescriptorSet& getGlobalDescriptorSet();
         DescriptorSetLayout& getModelDescriptorSetLayout();
         void updateGlobalDescriptor(Camera* cameraComponent, int currentImage);
+
+        void rebuildPipelines();
+        void resetPipelines();
+        void destroyPipelines();
+
+        void rebuildGlobalDescriptorSet();
+        void cleanupGlobalDescriptorSet();
     };
 
 } // fmwk

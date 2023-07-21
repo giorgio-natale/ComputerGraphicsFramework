@@ -10,9 +10,17 @@
 
 namespace fmwk {
 
-    struct BoundTexture{
-        Texture texture{};
-        DescriptorSet textureSet;
+    class BoundTexture{
+    private:
+        Texture _texture{};
+        DescriptorSet _textureSet;
+    public:
+        BoundTexture(BaseProject *bp, char const* fileName, DescriptorSetLayout& textureSetLayout);
+        void buildTextureSet(BaseProject* bp, DescriptorSetLayout& descriptorSetLayout);
+        void clearTextureSet();
+        void destroyTexture();
+        Texture& getTexture();
+        DescriptorSet& getDescriptorSet();
     };
 
     class TextureSystem {
@@ -26,6 +34,9 @@ namespace fmwk {
         BoundTexture& getBoundTextureByName(std::string const& name);
         DescriptorSetLayout& getTextureDescriptorSetLayout();
         void bootSystem();
+        void rebuildTextureDescriptorSets();
+        void resetTextureDescriptorSets();
+        void destroyTextures();
     };
 
 } // fmwk
