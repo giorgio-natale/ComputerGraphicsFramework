@@ -17,6 +17,9 @@ namespace fmwk {
         DefaultMaterial(const std::string &name, float brightness);
         void updateDescriptorSet(int currentImage) override;
         DescriptorSetClaim getDescriptorSetClaim() override;
+
+        void update() override;
+
     private:
         float _brightness;
     };

@@ -801,7 +801,8 @@ void BaseProject::createCommandPool() {
     VkCommandPoolCreateInfo poolInfo{};
     poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
-    poolInfo.flags = 0; // Optional
+    poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT; // Optional
+
 
     VkResult result = vkCreateCommandPool(device, &poolInfo, nullptr, &commandPool);
     if (result != VK_SUCCESS) {
@@ -1208,43 +1209,48 @@ void BaseProject::createCommandBuffers() {
     }
 
     for (size_t i = 0; i < commandBuffers.size(); i++) {
-        VkCommandBufferBeginInfo beginInfo{};
-        beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        beginInfo.flags = 0; // Optional
-        beginInfo.pInheritanceInfo = nullptr; // Optional
+        recordCommandBuffer(i);
+    }
+}
 
-        if (vkBeginCommandBuffer(commandBuffers[i], &beginInfo) !=
-            VK_SUCCESS) {
-            throw std::runtime_error("failed to begin recording command buffer!");
-        }
+void BaseProject::recordCommandBuffer(int currentImage){
+    int i = currentImage;
+    VkCommandBufferBeginInfo beginInfo{};
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags = 0; // Optional
+    beginInfo.pInheritanceInfo = nullptr; // Optional
 
-        VkRenderPassBeginInfo renderPassInfo{};
-        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-        renderPassInfo.renderPass = renderPass;
-        renderPassInfo.framebuffer = swapChainFramebuffers[i];
-        renderPassInfo.renderArea.offset = {0, 0};
-        renderPassInfo.renderArea.extent = swapChainExtent;
+    if (vkBeginCommandBuffer(commandBuffers[i], &beginInfo) !=
+        VK_SUCCESS) {
+        throw std::runtime_error("failed to begin recording command buffer!");
+    }
 
-        std::array<VkClearValue, 2> clearValues{};
-        clearValues[0].color = initialBackgroundColor;
-        clearValues[1].depthStencil = {1.0f, 0};
+    VkRenderPassBeginInfo renderPassInfo{};
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    renderPassInfo.renderPass = renderPass;
+    renderPassInfo.framebuffer = swapChainFramebuffers[i];
+    renderPassInfo.renderArea.offset = {0, 0};
+    renderPassInfo.renderArea.extent = swapChainExtent;
 
-        renderPassInfo.clearValueCount =
-                static_cast<uint32_t>(clearValues.size());
-        renderPassInfo.pClearValues = clearValues.data();
+    std::array<VkClearValue, 2> clearValues{};
+    clearValues[0].color = initialBackgroundColor;
+    clearValues[1].depthStencil = {1.0f, 0};
 
-        vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo,
-                             VK_SUBPASS_CONTENTS_INLINE);
+    renderPassInfo.clearValueCount =
+            static_cast<uint32_t>(clearValues.size());
+    renderPassInfo.pClearValues = clearValues.data();
+
+    vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo,
+                         VK_SUBPASS_CONTENTS_INLINE);
 
 
-        populateCommandBuffer(commandBuffers[i], i);
+    populateCommandBuffer(commandBuffers[i], i);
 
 
-        vkCmdEndRenderPass(commandBuffers[i]);
+    vkCmdEndRenderPass(commandBuffers[i]);
 
-        if (vkEndCommandBuffer(commandBuffers[i]) != VK_SUCCESS) {
-            throw std::runtime_error("failed to record command buffer!");
-        }
+    if (vkEndCommandBuffer(commandBuffers[i]) != VK_SUCCESS) {
+        throw std::runtime_error("failed to record command buffer!");
     }
 }
 
@@ -1311,6 +1317,7 @@ void BaseProject::drawFrame() {
     imagesInFlight[imageIndex] = inFlightFences[currentFrame];
 
     updateUniformBuffer(imageIndex);
+    recordCommandBuffer(imageIndex);
 
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;

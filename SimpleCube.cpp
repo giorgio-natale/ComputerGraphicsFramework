@@ -99,7 +99,7 @@ class SimpleCube : public BaseProject {
 	void pipelinesAndDescriptorSetsCleanup() {
         std::cout << "PIPELINES AND DESCRIPTOR SETS CLEANUP CALLED" << std::endl;
         auto gameEngine = fmwk::GameEngine::getInstance();
-        gameEngine->rebuildResources();
+        gameEngine->cleanupResources();
 
 	}
 
@@ -126,6 +126,8 @@ class SimpleCube : public BaseProject {
 	// Very likely this will be where you will be writing the logic of your application.
 	void updateUniformBuffer(uint32_t currentImage) {
         auto gameEngine = fmwk::GameEngine::getInstance();
+        gameEngine->logicUpdate();
+        gameEngine->provisionResources();
 
 		// Standard procedure to quit when the ESC key is pressed
 		if(glfwGetKey(window, GLFW_KEY_ESCAPE)) {
@@ -137,7 +139,7 @@ class SimpleCube : public BaseProject {
 		// the second parameter is the pointer to the C++ data structure to transfer to the GPU
 		// the third parameter is its size
 		// the fourth parameter is the location inside the descriptor set of this uniform block
-	}	
+	}
 };
 
 

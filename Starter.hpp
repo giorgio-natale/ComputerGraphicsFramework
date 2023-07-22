@@ -443,7 +443,9 @@ protected:
 	virtual void populateCommandBuffer(VkCommandBuffer commandBuffer, int i) = 0;
 
     void createCommandBuffers();
-    
+
+    void recordCommandBuffer(int currentImage);
+
     void createSyncObjects();
 	
     void mainLoop();

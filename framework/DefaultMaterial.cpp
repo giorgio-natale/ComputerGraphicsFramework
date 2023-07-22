@@ -11,6 +11,11 @@ namespace fmwk {
         _descriptorSet->map(currentImage, &ubo, sizeof(ubo), 0);
     }
 
+    void DefaultMaterial::update() {
+        _brightness -= 0.001f;
+        std::cout << "BRIGHTNESS UPDATED: " << _brightness << std::endl;
+    }
+
     DescriptorSetClaim DefaultMaterial::getDescriptorSetClaim() {
         return {{0, UNIFORM, sizeof(DefaultMaterialUniformBlock)}};
     }
