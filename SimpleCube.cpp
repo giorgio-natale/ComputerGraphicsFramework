@@ -8,6 +8,8 @@
 #include "framework/PerspectiveCamera.h"
 #include "framework/CharacterController.h"
 #include "framework/CameraController.h"
+#include "framework/ColorBlendComponent.h"
+#include "framework/CubeSpawner.h"
 
 
 // The uniform buffer objects data structures
@@ -71,17 +73,19 @@ class SimpleCube : public BaseProject {
         auto cubeEntity = std::make_unique<fmwk::Entity>("myCubeEntity");
         auto modelComponent = std::make_unique<fmwk::MeshComponent>("Mesh", gameEngine->getModelByName("myCube"));
         auto textureComponent = std::make_unique<fmwk::TextureComponent>("Texture", gameEngine->getBoundTextureByName("cubeTexture"));
-        auto materialComponent = std::make_unique<fmwk::DefaultMaterial>("Material", 1.5f);
+        auto materialComponent = std::make_unique<fmwk::DefaultMaterial>("Material",  1.5f);
+        auto cubeSpawner = std::make_unique<fmwk::CubeSpawner>("CubeSpawner");
         cubeEntity->addComponent(std::move(modelComponent));
         cubeEntity->addComponent(std::move(textureComponent));
         cubeEntity->addComponent(std::move(materialComponent));
+        cubeEntity->addComponent(std::move(cubeSpawner));
 
 
         auto camera = std::make_unique<fmwk::Entity>("Camera", glm::vec3(0,0,8), fmwk::EulerVector(0, 0,0));
         auto perspectiveCameraComponent = std::make_unique<fmwk::PerspectiveCamera>("Camera", 0.1f, 100.0f, glm::radians(45.0f));
         camera->addComponent(std::move(perspectiveCameraComponent));
 
-        auto characterController = std::make_unique<fmwk::CharacterController>("CharacterController", camera->getTransform(), 2.0f);
+        auto characterController = std::make_unique<fmwk::CharacterController>("CharacterController", camera->getTransform(), 4.0f);
         auto cameraController = std::make_unique<fmwk::CameraController>("CameraController", cubeEntity->getTransform(), glm::radians(120.0f), 8.0f, 0.25f);
 
         cubeEntity->addComponent(std::move(characterController));

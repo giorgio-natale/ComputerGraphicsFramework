@@ -20,7 +20,7 @@ namespace fmwk {
                    }
         );
 
-        _vertexDescriptors.insert({VERTEX, {vd, "shaders/ShaderVert.spv"}});
+        _vertexDescriptors.insert({VERTEX, {vd, "shaders/DefaultVert.spv"}});
 
 
         vd.init(
@@ -35,7 +35,7 @@ namespace fmwk {
                }
         );
 
-        _vertexDescriptors.insert({VERTEX, {vd, "shaders/ShaderVert.spv"}});
+        _vertexDescriptors.insert({VERTEX, {vd, "shaders/DefaultVert.spv"}});
 
     }
 

@@ -1,4 +1,5 @@
 cd shaders
-glslc.exe Shader.frag -o ShaderFrag.spv
-glslc.exe Shader.vert -o ShaderVert.spv
+glslc.exe Default.frag -o DefaultFrag.spv
+glslc.exe Default.vert -o DefaultVert.spv
+glslc.exe ColorBlend.frag -o ColorBlendFrag.spv
 pause

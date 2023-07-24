@@ -17,9 +17,8 @@ namespace fmwk {
     void DefaultMaterial::update() {
         static int id = 0;
         auto gameEngine = GameEngine::getInstance();
-        _brightness -= 0.01f;
+        _brightness -= 0.05f;
         if(_brightness <= 0) {
-
             /*id++;
             auto cubeEntity = std::make_unique<fmwk::Entity>("myCubeEntity" + std::to_string(id));
             auto modelComponent = std::make_unique<fmwk::MeshComponent>("Mesh", gameEngine->getModelByName("myCube"));

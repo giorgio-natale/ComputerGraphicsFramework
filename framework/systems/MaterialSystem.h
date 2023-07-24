@@ -8,7 +8,7 @@
 #include "../../Starter.hpp"
 
 namespace fmwk {
-    enum EffectType{DEFAULT};
+    enum EffectType{DEFAULT, COLOR_BLEND};
 
     struct Effect{
         DescriptorSetLayout layout;
