@@ -22,6 +22,7 @@
 #include "systems/TextureSystem.h"
 #include "systems/MaterialSystem.h"
 #include "systems/RenderSystem.h"
+#include "systems/InputSystem.h"
 
 namespace fmwk {
 
@@ -42,6 +43,7 @@ namespace fmwk {
         void bootTextureSystem();
         void bootMaterialSystem();
         void bootRenderSystem();
+        void bootInputSystem();
 
         void addEntity(std::unique_ptr<Entity> entity) override;
         void enqueueEntity(std::unique_ptr<Entity> entity);
@@ -57,12 +59,12 @@ namespace fmwk {
         TModel& getModelByName(std::string const& name);
         void addTexture(std::string const& name, std::string const& fileName);
         BoundTexture& getBoundTextureByName(std::string const& name);
+        InputResult getInput();
 
         //TODO: remove these
         std::unordered_map<VertexType, std::pair<VertexDescriptor, std::string>>& getAllVertexDescriptors();
         DescriptorSetLayout& getTextureDescriptorSetLayout();
 
-        void handleInputs(float &deltaT, glm::vec3 &m, glm::vec3 &r, bool &fire) override;
         void windowResizeCallback(GLFWwindow* _window, int width, int height) override;
         std::pair<int, int> getWindowSize() override;
         float getAspectRatio() override;
@@ -79,7 +81,8 @@ namespace fmwk {
 
     private:
         explicit GameEngine(BaseProject* bp):_window(nullptr), _modelSystem(ModelSystem(bp)), _textureSystem(TextureSystem(bp)),
-                                             _materialSystem(MaterialSystem(bp)), _renderSystem(RenderSystem(bp)){
+                                             _materialSystem(MaterialSystem(bp)), _renderSystem(RenderSystem(bp)),
+                                             _inputSystem(){
             _bp = bp;
         };
         BaseProject* _bp;
@@ -93,6 +96,7 @@ namespace fmwk {
         TextureSystem _textureSystem;
         MaterialSystem _materialSystem;
         RenderSystem _renderSystem;
+        InputSystem _inputSystem;
 
         //utils
         std::vector<Component*> getAllComponents();
@@ -102,11 +106,6 @@ namespace fmwk {
         void removeResourcesOfComponent(Component* component);
 
         static void addEntityToContainer(std::unique_ptr<Entity> entity, std::map<std::string, std::unique_ptr<Entity>>& container);
-
-        glm::vec3 _r = {0,0,0}, _m = {0,0,0};
-        float _deltaTime = 0;
-        bool _isFire = false;
-        void captureInputs();
     };
 
 } // fmwk

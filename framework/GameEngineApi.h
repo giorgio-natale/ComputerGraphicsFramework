@@ -17,7 +17,6 @@ namespace fmwk{
         virtual void logicUpdate() = 0;
         virtual Entity& getEntityByName(const std::string& name) = 0;
         virtual std::vector<Entity*> getAllEntities() = 0;
-        virtual void handleInputs(float &deltaT, glm::vec3 &m, glm::vec3 &r, bool &fire) = 0;
         virtual void windowResizeCallback(GLFWwindow* _window, int width, int height) = 0;
         virtual std::pair<int, int> getWindowSize() = 0;
         virtual float getAspectRatio() = 0;

@@ -18,12 +18,10 @@ namespace fmwk {
                                                                    _cameraHeight(cameraHeight){}
 
     void CameraController::postUpdate() {
-        float deltaT;
-        auto m = glm::vec3(0.0f), r = glm::vec3(0.0f);
-        bool fire = false;
+        InputResult input = fmwk::GameEngine::getInstance()->getInput();
+
         auto& cameraTransform =_parentEntity->getTransform();;
-        fmwk::GameEngine::getInstance() -> handleInputs(deltaT, m, r, fire);
-        _rotationAboutCenter = _rotationAboutCenter + EulerVector{r.x * _angularSpeed * deltaT,r.y * _angularSpeed * deltaT,0};
+        _rotationAboutCenter = _rotationAboutCenter + EulerVector{input.r.x * _angularSpeed * input.deltaTime,input.r.y * _angularSpeed * input.deltaTime,0};
         _rotationAboutCenter = EulerVector{glm::clamp(_rotationAboutCenter[0], glm::radians(-8.75f), glm::radians(60.0f)), _rotationAboutCenter[1] , _rotationAboutCenter[2]};
 
         auto cameraBasePosition = _characterTransform.getPosition() + glm::vec3(0, _cameraHeight, _cameraDistance);
