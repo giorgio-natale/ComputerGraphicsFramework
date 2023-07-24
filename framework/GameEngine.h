@@ -44,6 +44,10 @@ namespace fmwk {
         void bootRenderSystem();
 
         void addEntity(std::unique_ptr<Entity> entity) override;
+        void enqueueEntity(std::unique_ptr<Entity> entity);
+        void removeEntity(std::string const& name);
+        void enqueueEntityRemoval(std::string const& name);
+        void flushEnqueuedEntityOperations();
         void logicUpdate() override;
         Entity& getEntityByName(const std::string& name) override;
         std::vector<Entity*> getAllEntities() override;
@@ -62,8 +66,10 @@ namespace fmwk {
         float getAspectRatio() override;
         void updateGraphicResources(int currentImage);
         void renderFrame(VkCommandBuffer commandBuffer, int currentImage);
+
         //TODO: put this in a separate centralized system responsible for resource allocation
-        void provisionResources();
+        void buildStaticResources();
+        void provisionResources(bool initializeDescriptorSets);
         void rebuildResources();
         void cleanupResources();
         void destroyResources();
@@ -79,6 +85,7 @@ namespace fmwk {
         GLFWwindow* _window;
         std::pair<int, int> _windowSize = {800, 600};
         std::map<std::string, std::unique_ptr<Entity>> _entities;
+        std::map<std::string, std::unique_ptr<Entity>> _enqueuedEntities;
         std::map<std::string, std::pair<DescriptorSet, DescriptorSetInitializationInfo>> _entitiesDescriptorSets;
         ModelSystem _modelSystem;
         TextureSystem _textureSystem;
@@ -89,6 +96,9 @@ namespace fmwk {
         std::vector<Component*> getAllComponents();
         void rebuildDescriptorSets();
         void clearDescriptorSets();
+        void removeResourcesOfEntity(Entity* entity);
+
+        static void addEntityToContainer(std::unique_ptr<Entity> entity, std::map<std::string, std::unique_ptr<Entity>>& container);
 
         glm::vec3 _r = {0,0,0}, _m = {0,0,0};
         float _deltaTime = 0;

@@ -19,6 +19,7 @@ namespace fmwk {
         _name = name;
         auto transform = std::make_unique<Transform>("Transform", initialPosition, initialRotation, glm::vec3(1));
         addComponent(std::move(transform));
+        _toBeRemoved = false;
     }
 
     std::string Entity::getName() const{
@@ -63,5 +64,13 @@ namespace fmwk {
         return std::any_of(components.begin(),
                            components.end(),
                            [name](Component* component){return component->getName()==name;});
+    }
+
+    void Entity::markForRemoval() {
+        _toBeRemoved = true;
+    }
+
+    bool Entity::isMarkedForRemoval() const {
+        return _toBeRemoved;
     }
 } // fmwk

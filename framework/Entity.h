@@ -26,14 +26,17 @@ namespace fmwk {
         }
         void addComponent(std::unique_ptr<Component> component);
         void removeComponentByName(std::string const& name);
+        void markForRemoval();
+        [[nodiscard]] bool isMarkedForRemoval() const;
         [[nodiscard]] std::vector<Component*> getAllComponents() const;
-        bool hasComponent(std::string const& name) const;
+        [[nodiscard]] bool hasComponent(std::string const& name) const;
 
         Entity (const Entity&) = delete;
         Entity& operator= (const Entity&) = delete;
     private:
         std::string _name;
         std::map<std::string, std::unique_ptr<Component>> _components;
+        bool _toBeRemoved;
 
     };
 

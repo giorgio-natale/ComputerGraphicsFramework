@@ -82,16 +82,16 @@ class SimpleCube : public BaseProject {
 
         gameEngine->addEntity(std::move(camera));
 
-
 		
 		// Init local variables
+        gameEngine->provisionResources(false);
 	}
 	
 	// Here you create your pipelines and Descriptor Sets!
 	void pipelinesAndDescriptorSetsInit() {
         auto gameEngine = fmwk::GameEngine::getInstance();
-        gameEngine->provisionResources();
         gameEngine->rebuildResources();
+
 	}
 
 	// Here you destroy your pipelines and Descriptor Sets!
@@ -116,7 +116,6 @@ class SimpleCube : public BaseProject {
 	// You send to the GPU all the objects you want to draw,
 	// with their buffers and textures
 
-    //TODO: solve the problem that when we add
 	void populateCommandBuffer(VkCommandBuffer commandBuffer, int currentImage) {
         auto gameEngine = fmwk::GameEngine::getInstance();
         gameEngine->renderFrame(commandBuffer, currentImage);
@@ -127,7 +126,7 @@ class SimpleCube : public BaseProject {
 	void updateUniformBuffer(uint32_t currentImage) {
         auto gameEngine = fmwk::GameEngine::getInstance();
         gameEngine->logicUpdate();
-        gameEngine->provisionResources();
+        gameEngine->provisionResources(true);
 
 		// Standard procedure to quit when the ESC key is pressed
 		if(glfwGetKey(window, GLFW_KEY_ESCAPE)) {

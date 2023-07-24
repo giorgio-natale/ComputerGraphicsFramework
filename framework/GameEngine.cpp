@@ -134,25 +134,35 @@ namespace fmwk {
     }
 
     void GameEngine::addEntity(std::unique_ptr<Entity> entity) {
-        if(_entities.find(entity->getName()) != _entities.end())
-            throw std::runtime_error("Could not add component with name '" + entity->getName() + "' because there was another entity with the same name");
-        _entities.insert({entity->getName(), std::move(entity)});
+        GameEngine::addEntityToContainer(std::move(entity), _entities);
+    }
+
+    void GameEngine::enqueueEntity(std::unique_ptr<Entity> entity) {
+        GameEngine::addEntityToContainer(std::move(entity), _enqueuedEntities);
+    }
+
+    void GameEngine::removeEntity(const std::string &name) {
+        auto elem = _entities.find(name);
+        if(elem != _entities.end()){
+            removeResourcesOfEntity(elem->second.get());
+            _entities.erase(name);
+        }
     }
 
     void GameEngine::logicUpdate() {
         captureInputs();
-        std::for_each(_entities.begin(), _entities.end(),[](auto& entry){
-            auto components = entry.second->getAllComponents();
-            std::for_each(components.begin(), components.end(),[](auto& component){
-                component->update();
-            });
-        });
-        std::for_each(_entities.begin(), _entities.end(),[](auto& entry){
-            auto components = entry.second->getAllComponents();
-            std::for_each(components.begin(), components.end(),[](auto& component){
-                component->postUpdate();
-            });
-        });
+
+        std::vector<Component*> components = getAllComponents();
+        for(Component* component : components){
+            component->update();
+        }
+        flushEnqueuedEntityOperations();
+        components = getAllComponents();
+        for(Component* component : components){
+            component->postUpdate();
+        }
+        flushEnqueuedEntityOperations();
+
     }
 
     void GameEngine::addModel(const std::string &name, VertexType vertexType, const std::string &fileName) {
@@ -189,7 +199,7 @@ namespace fmwk {
         _renderSystem.bootSystem(_textureSystem.getTextureDescriptorSetLayout(), _modelSystem.getAllVertexDescriptors(), _materialSystem.getAllEffects());
     }
 
-    void GameEngine::provisionResources() {
+    void GameEngine::provisionResources(bool initializeDescriptorSets) {
         auto components = getAllComponents();
         for(Component* component : components){
             if(!component->isProvisioned()){
@@ -203,14 +213,16 @@ namespace fmwk {
                     VertexType vertexType = meshComponent->getModel().getType();
                     Pipeline& pipeline = _renderSystem.getPipeline(vertexType, materialComponent->getEffectType());
                     auto [insertedElement, ok] = _entitiesDescriptorSets.insert({component->getParent()->getName() + "-" + component->getName(), {descriptorSet, {&dsl, materialComponent->getDescriptorSetClaim()}}});
-                    //insertedElement->second.first.init(_bp, &dsl, materialComponent->getDescriptorSetClaim());
+                    if(initializeDescriptorSets)
+                        insertedElement->second.first.init(_bp, &dsl, materialComponent->getDescriptorSetClaim());
                     materialComponent->provision(&insertedElement->second.first, &pipeline);
                 }else if(auto* transform = dynamic_cast<Transform*>(component)){
                     DescriptorSet descriptorSet;
                     DescriptorSetLayout& dsl = _renderSystem.getModelDescriptorSetLayout();
                     DescriptorSetInitializationInfo initializationInfo = {&dsl, {{0, UNIFORM, sizeof(EntityTransformUniformBlock)}}};
                     auto [insertedElement, ok] = _entitiesDescriptorSets.insert({component->getParent()->getName() + "-" + component->getName(), {descriptorSet, initializationInfo}});
-                    //insertedElement->second.first.init(_bp, &dsl, {{0, UNIFORM, sizeof(EntityTransformUniformBlock)}});
+                    if(initializeDescriptorSets)
+                        insertedElement->second.first.init(_bp, &dsl, {{0, UNIFORM, sizeof(EntityTransformUniformBlock)}});
                     transform->provision(&insertedElement->second.first);
                 }else{
                     throw std::runtime_error("Provision of component '" + component->getName() + "' not implemented");
@@ -299,10 +311,14 @@ namespace fmwk {
         }
     }
 
-    void GameEngine::rebuildResources() {
+    void GameEngine::buildStaticResources() {
         _renderSystem.rebuildPipelines();
         _renderSystem.rebuildGlobalDescriptorSet();
         _textureSystem.rebuildTextureDescriptorSets();
+    }
+
+    void GameEngine::rebuildResources() {
+        buildStaticResources();
         rebuildDescriptorSets();
     }
 
@@ -315,6 +331,43 @@ namespace fmwk {
 
     void GameEngine::destroyResources() {
 
+    }
+
+    void GameEngine::removeResourcesOfEntity(Entity *entity) {
+        for(Component* component : entity->getAllComponents()){
+            auto key = entity->getName() + "-" + component->getName();
+            auto elem = _entitiesDescriptorSets.find(key);
+            if(elem != _entitiesDescriptorSets.end()){
+                elem->second.first.cleanup();
+                _entitiesDescriptorSets.erase(key);
+            }
+        }
+    }
+
+    void GameEngine::addEntityToContainer(std::unique_ptr<Entity> entity,
+                                          std::map<std::string, std::unique_ptr<Entity>>& container) {
+        if(container.find(entity->getName()) != container.end())
+            throw std::runtime_error("Could not add component with name '" + entity->getName() + "' because there was another entity with the same name");
+        container.insert({entity->getName(), std::move(entity)});
+    }
+
+    void GameEngine::enqueueEntityRemoval(const std::string &name) {
+        //TODO: decide if making the application crash if the entity is not found or do nothing (in this case it crashes)
+        Entity& entity = getEntityByName(name);
+        entity.markForRemoval();
+    }
+
+    void GameEngine::flushEnqueuedEntityOperations() {
+        auto entities = getAllEntities();
+        for(auto& entity : entities){
+            if(entity->isMarkedForRemoval())
+                removeEntity(entity->getName());
+        }
+
+        for(auto& [name, entity] : _enqueuedEntities){
+            addEntity(std::move(entity));
+        }
+        _enqueuedEntities.clear();
     }
 
 
