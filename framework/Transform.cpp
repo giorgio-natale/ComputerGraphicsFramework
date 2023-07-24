@@ -109,7 +109,7 @@ namespace fmwk {
 
     void Transform::updateDescriptorSet(int currentImage) {
         EntityTransformUniformBlock ubo{};
-        ubo.mMat = _worldMatrix;
+        ubo.mMat = getWorldMatrix();
         _descriptorSet->map(currentImage, &ubo, sizeof(ubo), 0);
     }
 

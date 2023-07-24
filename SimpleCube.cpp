@@ -6,6 +6,8 @@
 #include "framework/TextureComponent.h"
 #include "framework/DefaultMaterial.h"
 #include "framework/PerspectiveCamera.h"
+#include "framework/CharacterController.h"
+#include "framework/CameraController.h"
 
 
 // The uniform buffer objects data structures
@@ -74,12 +76,18 @@ class SimpleCube : public BaseProject {
         cubeEntity->addComponent(std::move(textureComponent));
         cubeEntity->addComponent(std::move(materialComponent));
 
-        gameEngine->addEntity(std::move(cubeEntity));
 
         auto camera = std::make_unique<fmwk::Entity>("Camera", glm::vec3(0,0,8), fmwk::EulerVector(0, 0,0));
-        auto perspectiveCameraComponent = std::make_unique<fmwk::PerspectiveCamera>("Camera", 0.1f, 100.0f, glm::radians(90.0f));
+        auto perspectiveCameraComponent = std::make_unique<fmwk::PerspectiveCamera>("Camera", 0.1f, 100.0f, glm::radians(45.0f));
         camera->addComponent(std::move(perspectiveCameraComponent));
 
+        auto characterController = std::make_unique<fmwk::CharacterController>("CharacterController", camera->getTransform(), 2.0f);
+        auto cameraController = std::make_unique<fmwk::CameraController>("CameraController", cubeEntity->getTransform(), glm::radians(120.0f), 8.0f, 0.25f);
+
+        cubeEntity->addComponent(std::move(characterController));
+        camera->addComponent(std::move(cameraController));
+
+        gameEngine->addEntity(std::move(cubeEntity));
         gameEngine->addEntity(std::move(camera));
 
 		
