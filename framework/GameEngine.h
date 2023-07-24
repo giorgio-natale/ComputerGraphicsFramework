@@ -48,6 +48,8 @@ namespace fmwk {
         void removeEntity(std::string const& name);
         void enqueueEntityRemoval(std::string const& name);
         void flushEnqueuedEntityOperations();
+
+
         void logicUpdate() override;
         Entity& getEntityByName(const std::string& name) override;
         std::vector<Entity*> getAllEntities() override;
@@ -97,6 +99,7 @@ namespace fmwk {
         void rebuildDescriptorSets();
         void clearDescriptorSets();
         void removeResourcesOfEntity(Entity* entity);
+        void removeResourcesOfComponent(Component* component);
 
         static void addEntityToContainer(std::unique_ptr<Entity> entity, std::map<std::string, std::unique_ptr<Entity>>& container);
 

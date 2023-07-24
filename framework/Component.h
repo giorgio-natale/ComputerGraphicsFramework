@@ -21,12 +21,16 @@ namespace fmwk {
         virtual ~Component();
         Component (const Component&) = delete;
         Component& operator= (const Component&) = delete;
+        void markForRemoval();
+        [[nodiscard]] bool isMarkedForRemoval() const;
+
 
 
     protected:
         std::string _name;
-        Entity const* _parentEntity;
-        [[nodiscard]] const Entity * getParentEntity() const;
+        Entity *_parentEntity;
+        Entity * getParentEntity();
+        bool _toBeRemoved;
     };
 
 } // fmwk

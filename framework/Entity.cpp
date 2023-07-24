@@ -32,13 +32,43 @@ namespace fmwk {
             throw std::runtime_error("Could not find component with name '" + name + "' in entity '" + _name + "'");
         return *(_components.find(name)->second);
     }
-    void Entity::addComponent(std::unique_ptr<Component> component) {
-        if(_components.find(component->getName()) != _components.end())
+
+    void Entity::addComponentToContainer(std::unique_ptr<Component> component,
+                                         std::map<std::string, std::unique_ptr<Component>> &container) {
+        if(container.find(component->getName()) != container.end())
             throw std::runtime_error("Could not add component with name '" + component->getName() + "' in entity '" + _name + "' because there was another component with the same name");
         component->setParent(this);
 
-        _components.insert({component->getName(), std::move(component)});
+        container.insert({component->getName(), std::move(component)});
     }
+
+    void Entity::addComponent(std::unique_ptr<Component> component) {
+        addComponentToContainer(std::move(component), _components);
+    }
+
+    void Entity::enqueueComponent(std::unique_ptr<Component> component) {
+        Entity::addComponentToContainer(std::move(component), _enqueuedComponents);
+    }
+
+    void Entity::enqueueComponentRemoval(const std::string &name) const {
+        //TODO: decide if making the application crash if the component is not found or do nothing (in this case it crashes)
+        auto& component = getComponentByName(name);
+        component.markForRemoval();
+    }
+
+    void Entity::flushEnqueuedComponents() {
+        for(Component* component : getAllComponents())
+            if(component->isMarkedForRemoval())
+                removeComponentByName(component->getName());
+
+        for(auto& [key, component] : _enqueuedComponents){
+            addComponent(std::move(component));
+        }
+
+        _enqueuedComponents.clear();
+
+    }
+
 
     void Entity::removeComponentByName(const std::string &name) {
         auto componentItr = _components.find(name);
@@ -73,4 +103,17 @@ namespace fmwk {
     bool Entity::isMarkedForRemoval() const {
         return _toBeRemoved;
     }
+
+    std::vector<Component *> Entity::getAllEnqueuedComponents() {
+        std::vector<Component*> components;
+        std::transform(_enqueuedComponents.cbegin(),
+                       _enqueuedComponents.cend(),
+                       std::back_inserter(components),
+                       [](auto & entry){
+                           return entry.second.get();
+                       });
+        return components;
+    }
+
+
 } // fmwk

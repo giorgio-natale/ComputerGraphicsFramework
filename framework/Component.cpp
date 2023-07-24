@@ -16,6 +16,7 @@ namespace fmwk {
     Component::Component(std::string const& name) {
         _name = name;
         _parentEntity = nullptr;
+        _toBeRemoved = false;
     }
 
     Component::~Component() = default;
@@ -28,12 +29,20 @@ namespace fmwk {
         _parentEntity = nullptr;
     }
 
-    const Entity * Component::getParentEntity() const {
+    Entity * Component::getParentEntity() {
         return _parentEntity;
     }
 
     Entity const*Component::getParent() {
         return _parentEntity;
+    }
+
+    void Component::markForRemoval() {
+        _toBeRemoved = true;
+    }
+
+    bool Component::isMarkedForRemoval() const {
+        return _toBeRemoved;
     }
 
 } // fmwk

@@ -333,21 +333,25 @@ namespace fmwk {
 
     }
 
+    void GameEngine::removeResourcesOfComponent(Component *component) {
+        auto key = component->getParent()->getName() + "-" + component->getName();
+        auto elem = _entitiesDescriptorSets.find(key);
+        if(elem != _entitiesDescriptorSets.end()){
+            elem->second.first.cleanup();
+            _entitiesDescriptorSets.erase(key);
+        }
+    }
+
     void GameEngine::removeResourcesOfEntity(Entity *entity) {
         for(Component* component : entity->getAllComponents()){
-            auto key = entity->getName() + "-" + component->getName();
-            auto elem = _entitiesDescriptorSets.find(key);
-            if(elem != _entitiesDescriptorSets.end()){
-                elem->second.first.cleanup();
-                _entitiesDescriptorSets.erase(key);
-            }
+            removeResourcesOfComponent(component);
         }
     }
 
     void GameEngine::addEntityToContainer(std::unique_ptr<Entity> entity,
                                           std::map<std::string, std::unique_ptr<Entity>>& container) {
         if(container.find(entity->getName()) != container.end())
-            throw std::runtime_error("Could not add component with name '" + entity->getName() + "' because there was another entity with the same name");
+            throw std::runtime_error("Could not add entity with name '" + entity->getName() + "' because there was another entity with the same name");
         container.insert({entity->getName(), std::move(entity)});
     }
 
@@ -359,9 +363,19 @@ namespace fmwk {
 
     void GameEngine::flushEnqueuedEntityOperations() {
         auto entities = getAllEntities();
-        for(auto& entity : entities){
+
+        //removing entities and the components marked for removal
+        //TODO: provision the components with a lambda that will allow them to free themselves
+        for(auto entity : entities){
             if(entity->isMarkedForRemoval())
                 removeEntity(entity->getName());
+            else{
+                for(Component* component : entity->getAllComponents()){
+                    if(component->isMarkedForRemoval())
+                        removeResourcesOfComponent(component);
+                }
+                entity->flushEnqueuedComponents();
+            }
         }
 
         for(auto& [name, entity] : _enqueuedEntities){

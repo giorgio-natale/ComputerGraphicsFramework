@@ -25,7 +25,13 @@ namespace fmwk {
             return dynamic_cast<Transform&>(getComponentByName("Transform"));
         }
         void addComponent(std::unique_ptr<Component> component);
+        void enqueueComponent(std::unique_ptr<Component> component);
         void removeComponentByName(std::string const& name);
+        void enqueueComponentRemoval(std::string const& name) const;
+        void flushEnqueuedComponents();
+
+        std::vector<Component*> getAllEnqueuedComponents();
+
         void markForRemoval();
         [[nodiscard]] bool isMarkedForRemoval() const;
         [[nodiscard]] std::vector<Component*> getAllComponents() const;
@@ -36,7 +42,12 @@ namespace fmwk {
     private:
         std::string _name;
         std::map<std::string, std::unique_ptr<Component>> _components;
+        std::map<std::string, std::unique_ptr<Component>> _enqueuedComponents;
         bool _toBeRemoved;
+
+        //utils
+        void addComponentToContainer(std::unique_ptr<Component> component, std::map<std::string, std::unique_ptr<Component>>& container);
+
 
     };
 
