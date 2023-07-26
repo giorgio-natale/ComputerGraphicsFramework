@@ -9,7 +9,7 @@ namespace fmwk {
 
     void RenderSystem::bootSystem(
             DescriptorSetLayout& textureDescriptorSetLayout,
-            std::unordered_map<VertexType, std::pair<VertexDescriptor, std::string>> &_vertexDescriptors,
+            std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>>& _vertexDescriptors,
             std::unordered_map<EffectType, Effect> &_effects) {
 
         _globalDescriptorSetLayout.init(_bp, {{0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT}});
@@ -18,12 +18,37 @@ namespace fmwk {
 
         for (auto& [vertexKey, vertexVal]: _vertexDescriptors) {
             for(auto& [effectKey, effectVal]: _effects){
+                auto requiredFeatures = effectVal.requiredFeatures;
+                auto& possibleShaders = vertexVal.second;
+
+                size_t bestShaderScore = INT_MAX;
+                VertexShader const* bestVertexShader = nullptr;
+                for(auto& vertexShader : possibleShaders){
+                    std::set<VertexShaderOutputFeature> testSet;
+                    std::set_difference(requiredFeatures.begin(), requiredFeatures.end(), vertexShader.outputFeatures.begin(), vertexShader.outputFeatures.end(), std::inserter(testSet, testSet.end()));
+                    if(testSet.empty()){
+                        testSet.clear();
+                        std::set_difference(vertexShader.outputFeatures.begin(), vertexShader.outputFeatures.end(), requiredFeatures.begin(), requiredFeatures.end(), std::inserter(testSet, testSet.end()));
+                        if(testSet.size() < bestShaderScore){
+                            bestShaderScore = testSet.size();
+                            bestVertexShader = &vertexShader;
+                            if(bestShaderScore == 0)
+                                break;
+                        }
+                    }
+                }
+
+                if(bestVertexShader == nullptr)
+                    throw std::runtime_error("Cannot find an appropriate vertex shader for an effect (fragment shader: " + effectVal.shaderName + ")");
+
                 auto [insertedPipelineIterator, ok] = _pipelines.insert({{vertexKey, effectKey}, {}});
                 insertedPipelineIterator->second.init(_bp,
                                                       &vertexVal.first,
-                                                      vertexVal.second,
+                                                      bestVertexShader->fileName,
                                                       effectVal.shaderName,
                                                       {&_globalDescriptorSetLayout, &_textureDescriptorSetLayout, &effectVal.layout, &_modelDescriptorSetLayout});
+
+                std::cout << "[PIPELINE CREATED]: Vertex Shader: " + bestVertexShader->fileName + ", Fragment Shader: " + effectVal.shaderName << std::endl;
             }
         }
 

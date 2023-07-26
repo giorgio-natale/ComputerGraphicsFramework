@@ -6,6 +6,7 @@
 #define DEMO_MATERIALSYSTEM_H
 
 #include "../../Starter.hpp"
+#include "ModelSystem.h"
 
 namespace fmwk {
     enum EffectType{DEFAULT, COLOR_BLEND};
@@ -14,6 +15,7 @@ namespace fmwk {
         DescriptorSetLayout layout;
         EffectType type;
         std::string shaderName;
+        std::set<VertexShaderOutputFeature> requiredFeatures;
     };
 
     class MaterialSystem {

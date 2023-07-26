@@ -39,7 +39,7 @@ namespace fmwk {
         explicit RenderSystem(BaseProject *bp);
         void bootSystem(
                 DescriptorSetLayout& textureDescriptorSetLayout,
-                std::unordered_map<VertexType, std::pair<VertexDescriptor, std::string>>& _vertexDescriptors,
+                std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>>& _vertexDescriptors,
                 std::unordered_map<EffectType, Effect>& _effects
                 );
         Pipeline& getPipeline(VertexType vertexType, EffectType effectType);

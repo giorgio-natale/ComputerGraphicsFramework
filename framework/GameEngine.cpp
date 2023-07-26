@@ -95,7 +95,7 @@ namespace fmwk {
         return _modelSystem.getModelByName(name);
     }
 
-    std::unordered_map<VertexType, std::pair<VertexDescriptor, std::string>>& GameEngine::getAllVertexDescriptors(){
+    std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>>& GameEngine::getAllVertexDescriptors(){
         return _modelSystem.getAllVertexDescriptors();
     }
 

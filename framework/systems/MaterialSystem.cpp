@@ -15,8 +15,9 @@ namespace fmwk {
         Effect defaultEffect;
         defaultEffect.type = DEFAULT;
         defaultEffect.layout = defaultLayout;
-        defaultEffect.shaderName = "shaders/DefaultFrag.spv";
-        _effects.insert({DEFAULT, defaultEffect});
+        defaultEffect.shaderName = "shaders/Default.spv";
+        defaultEffect.requiredFeatures = {FRAG_UV};
+        _effects.insert({defaultEffect.type, defaultEffect});
 
         DescriptorSetLayout colorBlendLayout{};
 
@@ -25,7 +26,8 @@ namespace fmwk {
         Effect colorBlendEffect;
         colorBlendEffect.type = COLOR_BLEND;
         colorBlendEffect.layout = colorBlendLayout;
-        colorBlendEffect.shaderName = "shaders/ColorBlendFrag.spv";
+        colorBlendEffect.shaderName = "shaders/ColorBlend.spv";
+        colorBlendEffect.requiredFeatures = {FRAG_UV};
         _effects.insert({COLOR_BLEND, colorBlendEffect});
     }
 

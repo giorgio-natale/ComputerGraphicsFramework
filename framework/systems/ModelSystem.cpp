@@ -20,7 +20,12 @@ namespace fmwk {
                    }
         );
 
-        _vertexDescriptors.insert({VERTEX, {vd, "shaders/DefaultVert.spv"}});
+        std::set<VertexShader> defaultShaders = {
+                {"shaders/PosUvToUv.spv", {FRAG_UV}},
+                {"shaders/PosUvToUvFragPos.spv", {FRAG_UV, FRAG_POSITION}}
+        };
+
+        _vertexDescriptors.insert({VERTEX, {vd, defaultShaders}});
 
 
         vd.init(
@@ -35,7 +40,14 @@ namespace fmwk {
                }
         );
 
-        _vertexDescriptors.insert({VERTEX, {vd, "shaders/DefaultVert.spv"}});
+         std::set<VertexShader> posUvNormShaders = {
+                 {"shaders/PosUvNormToUv.spv", {FRAG_UV}},
+                 {"shaders/PosUvNormToUvFragpos.spv", {FRAG_UV, FRAG_POSITION}},
+                 {"shaders/PosUvNormToUvFragposFragnorm.spv", {FRAG_UV, FRAG_POSITION, FRAG_NORMAL}}
+
+         };
+
+         _vertexDescriptors.insert({VERTEX_WITH_NORMAL, {vd, posUvNormShaders}});
 
     }
 
@@ -75,7 +87,7 @@ namespace fmwk {
         return _models.find(name)->second;
     }
 
-    std::unordered_map<VertexType, std::pair<VertexDescriptor, std::string>>& ModelSystem::getAllVertexDescriptors(){
+    std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>>& ModelSystem::getAllVertexDescriptors(){
         return _vertexDescriptors;
     }
 

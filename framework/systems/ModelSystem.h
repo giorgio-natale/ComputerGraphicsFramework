@@ -23,6 +23,19 @@ namespace fmwk {
     };
     enum VertexType{VERTEX, VERTEX_WITH_NORMAL};
 
+    enum VertexShaderOutputFeature{FRAG_UV, FRAG_POSITION, FRAG_NORMAL, FRAG_TANGENT};
+
+    struct VertexShader{
+        std::string fileName;
+        std::set<VertexShaderOutputFeature> outputFeatures;
+    };
+
+    inline bool operator<(const VertexShader& lhs, const VertexShader& rhs)
+    {
+        return lhs.fileName < rhs.fileName;
+    }
+
+
     class TModel{
     private:
         std::unique_ptr<BaseModel> _model;
@@ -36,7 +49,7 @@ namespace fmwk {
     class ModelSystem {
     private:
         BaseProject *_bp;
-        std::unordered_map<VertexType, std::pair<VertexDescriptor, std::string>> _vertexDescriptors;
+        std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>> _vertexDescriptors;
         std::unordered_map<std::string, TModel> _models;
 
     public:
@@ -46,7 +59,7 @@ namespace fmwk {
 
         TModel& getModelByName(std::string const& name);
 
-        std::unordered_map<VertexType, std::pair<VertexDescriptor, std::string>>& getAllVertexDescriptors();
+        std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>>& getAllVertexDescriptors();
 
     };
 

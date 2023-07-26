@@ -62,7 +62,7 @@ namespace fmwk {
         InputResult getInput();
 
         //TODO: remove these
-        std::unordered_map<VertexType, std::pair<VertexDescriptor, std::string>>& getAllVertexDescriptors();
+        std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>>& getAllVertexDescriptors();
         DescriptorSetLayout& getTextureDescriptorSetLayout();
 
         void windowResizeCallback(GLFWwindow* _window, int width, int height) override;
