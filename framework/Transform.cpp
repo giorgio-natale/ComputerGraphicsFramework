@@ -13,6 +13,7 @@ namespace fmwk {
                          const glm::vec3 &scale) : Component(name), _position(position), _eulerVector(eulerVector),
                                                    _scale(scale) {
         _areMatricesCoherent = false;
+        _quaternion = quaternionFromEulerZXY(eulerVector);
         _worldMatrix = getWorldMatrix();
         _inverseWorldMatrix = getInverseWorldMatrix();
         _alreadyProvisioned = false;
