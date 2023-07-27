@@ -9,7 +9,7 @@
 #include "ModelSystem.h"
 
 namespace fmwk {
-    enum EffectType{DEFAULT, COLOR_BLEND};
+    enum EffectType{DEFAULT, COLOR_BLEND, SIMPLE_PHONG, GGX};
 
     struct Effect{
         DescriptorSetLayout layout;

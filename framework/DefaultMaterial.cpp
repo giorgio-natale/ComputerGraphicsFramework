@@ -15,7 +15,7 @@ namespace fmwk {
     }
 
     void DefaultMaterial::update() {
-        static int id = 0;
+        /*static int id = 0;
         auto gameEngine = GameEngine::getInstance();
         _brightness -= 0.05f;
         if(_brightness <= 0) {
@@ -30,12 +30,12 @@ namespace fmwk {
 
             gameEngine->enqueueEntityRemoval(_parentEntity->getName());
             gameEngine->enqueueEntity(std::move(cubeEntity));
-             */
             auto materialComponent = std::make_unique<fmwk::DefaultMaterial>("Material", 1.5f);
             _parentEntity->enqueueComponentRemoval(_name);
             _parentEntity->enqueueComponent(std::move(materialComponent));
 
         }
+         */
     }
 
     DescriptorSetClaim DefaultMaterial::getDescriptorSetClaim() {

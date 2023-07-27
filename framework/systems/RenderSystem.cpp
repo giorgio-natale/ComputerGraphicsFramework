@@ -38,17 +38,22 @@ namespace fmwk {
                     }
                 }
 
-                if(bestVertexShader == nullptr)
-                    throw std::runtime_error("Cannot find an appropriate vertex shader for an effect (fragment shader: " + effectVal.shaderName + ")");
+                //if(bestVertexShader == nullptr)
+                //    throw std::runtime_error("Cannot find an appropriate vertex shader for an effect (fragment shader: " + effectVal.shaderName + ")");
 
-                auto [insertedPipelineIterator, ok] = _pipelines.insert({{vertexKey, effectKey}, {}});
-                insertedPipelineIterator->second.init(_bp,
-                                                      &vertexVal.first,
-                                                      bestVertexShader->fileName,
-                                                      effectVal.shaderName,
-                                                      {&_globalDescriptorSetLayout, &_textureDescriptorSetLayout, &effectVal.layout, &_modelDescriptorSetLayout});
+                if(bestVertexShader != nullptr) {
+                    auto [insertedPipelineIterator, ok] = _pipelines.insert({{vertexKey, effectKey},
+                                                                             {}});
+                    insertedPipelineIterator->second.init(_bp,
+                                                          &vertexVal.first,
+                                                          bestVertexShader->fileName,
+                                                          effectVal.shaderName,
+                                                          {&_globalDescriptorSetLayout, &_textureDescriptorSetLayout,
+                                                           &effectVal.layout, &_modelDescriptorSetLayout});
 
-                std::cout << "[PIPELINE CREATED]: Vertex Shader: " + bestVertexShader->fileName + ", Fragment Shader: " + effectVal.shaderName << std::endl;
+                    std::cout << "[PIPELINE CREATED]: Vertex Shader: " + bestVertexShader->fileName +
+                                 ", Fragment Shader: " + effectVal.shaderName << std::endl;
+                }
             }
         }
 

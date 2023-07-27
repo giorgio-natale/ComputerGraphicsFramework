@@ -21,7 +21,7 @@ namespace fmwk {
 
         DescriptorSetLayout colorBlendLayout{};
 
-        //default effect
+        //color blend effect
         colorBlendLayout.init(_bp, {{0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT}});
         Effect colorBlendEffect;
         colorBlendEffect.type = COLOR_BLEND;
@@ -29,6 +29,36 @@ namespace fmwk {
         colorBlendEffect.shaderName = "shaders/ColorBlend.spv";
         colorBlendEffect.requiredFeatures = {FRAG_UV};
         _effects.insert({COLOR_BLEND, colorBlendEffect});
+
+        //simple phong effect
+        DescriptorSetLayout simplePhongLayout{};
+        simplePhongLayout.init(_bp, {{0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT}});
+        Effect simplePhongEffect;
+        simplePhongEffect.type = SIMPLE_PHONG;
+        simplePhongEffect.layout = simplePhongLayout;
+        simplePhongEffect.shaderName = "shaders/SimplePhong.spv";
+        simplePhongEffect.requiredFeatures = {FRAG_POSITION, FRAG_UV, FRAG_NORMAL};
+
+        _effects.insert({SIMPLE_PHONG, simplePhongEffect});
+
+        //ggx effect
+        DescriptorSetLayout ggxLayout{};
+        ggxLayout.init(_bp, {
+            {0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT},
+            {1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT},
+            {2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT}
+        });
+
+        Effect ggxEffect;
+        ggxEffect.type = GGX;
+        ggxEffect.layout = ggxLayout;
+        ggxEffect.shaderName = "shaders/GGXTest.spv";
+        ggxEffect.requiredFeatures = {FRAG_POSITION, FRAG_UV, FRAG_NORMAL, FRAG_TANGENT};
+
+
+        _effects.insert({GGX, ggxEffect});
+
+
     }
 
     Effect &MaterialSystem::getEffectByType(EffectType type) {

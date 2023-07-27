@@ -21,7 +21,14 @@ namespace fmwk {
         glm::vec2 UV;
         glm::vec3 norm;
     };
-    enum VertexType{VERTEX, VERTEX_WITH_NORMAL};
+
+    struct VertexWithNormalAndTan{
+        glm::vec3 pos;
+        glm::vec2 UV;
+        glm::vec3 norm;
+        glm::vec4 tan;
+    };
+    enum VertexType{VERTEX, VERTEX_WITH_NORMAL, VERTEX_WITH_NORMAL_AND_TANGENT};
 
     enum VertexShaderOutputFeature{FRAG_UV, FRAG_POSITION, FRAG_NORMAL, FRAG_TANGENT};
 

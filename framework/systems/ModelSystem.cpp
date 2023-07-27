@@ -43,11 +43,35 @@ namespace fmwk {
          std::set<VertexShader> posUvNormShaders = {
                  {"shaders/PosUvNormToUv.spv", {FRAG_UV}},
                  {"shaders/PosUvNormToUvFragpos.spv", {FRAG_UV, FRAG_POSITION}},
-                 {"shaders/PosUvNormToUvFragposFragnorm.spv", {FRAG_UV, FRAG_POSITION, FRAG_NORMAL}}
+                 {"shaders/PosUvNormToUvFragposFragnorm.spv", {FRAG_POSITION, FRAG_UV, FRAG_NORMAL}}
 
          };
 
          _vertexDescriptors.insert({VERTEX_WITH_NORMAL, {vd, posUvNormShaders}});
+
+
+         vd.init(
+                 _bp,
+                 {
+                         {0, sizeof(VertexWithNormalAndTan), VK_VERTEX_INPUT_RATE_VERTEX}
+                 },
+                 {
+                         {0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(VertexWithNormalAndTan, pos),sizeof(glm::vec3), POSITION},
+                         {0, 1, VK_FORMAT_R32G32_SFLOAT,    offsetof(VertexWithNormalAndTan, UV),sizeof(glm::vec2), UV},
+                         {0, 2, VK_FORMAT_R32G32B32_SFLOAT, offsetof(VertexWithNormalAndTan, norm),sizeof(glm::vec3), NORMAL},
+                         {0, 3, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(VertexWithNormalAndTan, tan),sizeof(glm::vec4), TANGENT}
+                 }
+         );
+
+         std::set<VertexShader> posUvNormTanShaders = {
+                 {"shaders/PosUvNormTanToUv.spv", {FRAG_UV}},
+                 {"shaders/PosUvNormTanToUvFragpos.spv", {FRAG_UV, FRAG_POSITION}},
+                 {"shaders/PosUvNormTanToUvFragposFragnorm.spv", {FRAG_POSITION, FRAG_UV, FRAG_NORMAL}},
+                 {"shaders/PosUvNormTanToUvFragposFragnormFragtan.spv", {FRAG_POSITION, FRAG_UV, FRAG_NORMAL, FRAG_TANGENT}}
+         };
+
+         _vertexDescriptors.insert({VERTEX_WITH_NORMAL_AND_TANGENT, {vd, posUvNormTanShaders}});
+
 
     }
 
@@ -73,6 +97,11 @@ namespace fmwk {
             case VERTEX_WITH_NORMAL:
                 model = std::make_unique<Model<VertexWithNormal>>();
                 break;
+            case VERTEX_WITH_NORMAL_AND_TANGENT:
+                model = std::make_unique<Model<VertexWithNormalAndTan>>();
+                break;
+            default:
+                throw std::runtime_error("Remember to add new vertex layout in model loading code");
         }
 
         model->init(_bp, &_vertexDescriptors.find(vertexType)->second.first, fileName, modelType);

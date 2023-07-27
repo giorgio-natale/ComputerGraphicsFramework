@@ -10,6 +10,7 @@
 #include "framework/CameraController.h"
 #include "framework/ColorBlendComponent.h"
 #include "framework/CubeSpawner.h"
+#include "framework/GGXMaterial.h"
 
 
 // The uniform buffer objects data structures
@@ -67,8 +68,14 @@ class SimpleCube : public BaseProject {
 	void localInit() {
 
         auto gameEngine = fmwk::GameEngine::getInstance();
-        gameEngine->addModel("myCube", fmwk::VERTEX, "Models/Cube.obj");
+        gameEngine->addModel("myCube", fmwk::VERTEX_WITH_NORMAL, "Models/Cube.obj");
+        gameEngine->addModel("mySphere", fmwk::VERTEX_WITH_NORMAL_AND_TANGENT, "models/Sphere.gltf");
         gameEngine->addTexture("cubeTexture", "textures/Checker.png");
+
+        gameEngine->addTexture("sphereTexture", "textures/Metals_09_basecolor.png");
+        gameEngine->addTexture("sphereNormal", "textures/Metals_09_normal.png");
+        gameEngine->addTexture("sphereMaterial", "textures/Metals_09_met_rough_ao.png");
+
 
         auto cubeEntity = std::make_unique<fmwk::Entity>("myCubeEntity");
         auto modelComponent = std::make_unique<fmwk::MeshComponent>("Mesh", gameEngine->getModelByName("myCube"));
