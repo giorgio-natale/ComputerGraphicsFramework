@@ -3,6 +3,7 @@
 //
 
 #include "RenderSystem.h"
+#include "../Entity.h"
 
 namespace fmwk {
     RenderSystem::RenderSystem(BaseProject *bp):_bp(bp){}
@@ -12,7 +13,10 @@ namespace fmwk {
             std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>>& _vertexDescriptors,
             std::unordered_map<EffectType, Effect> &_effects) {
 
-        _globalDescriptorSetLayout.init(_bp, {{0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT}});
+        _globalDescriptorSetLayout.init(_bp, {
+            {0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT},
+            {1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT}
+        });
         _modelDescriptorSetLayout.init(_bp, {{0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT}});
         _textureDescriptorSetLayout = textureDescriptorSetLayout;
 
@@ -74,7 +78,22 @@ namespace fmwk {
     void RenderSystem::updateGlobalDescriptor(Camera* cameraComponent, int currentImage) {
         GlobalUniformBlock gubo{};
         gubo.vpMat = cameraComponent->getProjectionMatrix() * cameraComponent->getViewMatrix();
+
+        GlobalLightUniformBlock glubo{};
+        glubo.eyePosition = cameraComponent->getParent()->getTransform().getPosition();
+
+        DirectionalLightBlock directionalLightBlock{};
+        directionalLightBlock.lightColor = glm::vec4(1,1,1,1);
+        directionalLightBlock.lightDir = glm::vec3(-1, 0, 0);
+        glubo.directLights[0] = directionalLightBlock;
+
+        glubo.directLightsCount = 1;
+        glubo.pointLightsCount = 0;
+        glubo.spotLightsCount = 0;
+
         _globalDescriptorSet.map(currentImage, &gubo, sizeof(gubo), 0);
+        _globalDescriptorSet.map(currentImage, &glubo, sizeof(glubo), 1);
+
     }
 
     void RenderSystem::rebuildPipelines() {
@@ -93,7 +112,10 @@ namespace fmwk {
     }
 
     void RenderSystem::rebuildGlobalDescriptorSet() {
-        _globalDescriptorSet.init(_bp, &_globalDescriptorSetLayout, {{0, UNIFORM, sizeof(GlobalUniformBlock)}});
+        _globalDescriptorSet.init(_bp, &_globalDescriptorSetLayout, {
+            {0, UNIFORM, sizeof(GlobalUniformBlock)},
+            {1, UNIFORM, sizeof(GlobalLightUniformBlock)}
+        });
     }
 
     void RenderSystem::cleanupGlobalDescriptorSet() {

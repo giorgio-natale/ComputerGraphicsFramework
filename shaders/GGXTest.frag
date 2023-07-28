@@ -2,6 +2,42 @@
 #extension GL_ARB_separate_shader_objects : enable
 #define PI 3.1415926535897932384626433832795
 
+#define DIRECT_LIGHTS_MAX 10
+#define POINT_LIGHTS_MAX 10
+#define SPOT_LIGHTS_MAX 10
+
+struct DirectionalLightBlock{
+    vec3 lightDir;
+    vec4 lightColor;
+};
+
+struct PointLightBlock{
+    vec3 lightPos;
+    vec4 lightColor;
+    float beta;
+    float g;
+};
+
+struct SpotLightBlock{
+    vec3 lightPos;
+    vec3 lightDir;
+    vec4 lightColor;
+    float beta;
+    float g;
+    float cosOuter;
+    float cosInner;
+};
+
+layout(set = 0, binding = 1) uniform GlobalLightUniformBlock{
+    vec3 eyePosition;
+    DirectionalLightBlock directLights[DIRECT_LIGHTS_MAX];
+    PointLightBlock pointLights[POINT_LIGHTS_MAX];
+    SpotLightBlock spotLights[SPOT_LIGHTS_MAX];
+    int directLightsCount;
+    int pointLightsCount;
+    int spotLightsCount;
+} lightsUniform;
+
 layout(location = 0) in vec2 fragUV;
 layout(location = 1) in vec3 fragPos;
 layout(location = 2) in vec3 fragNorm;
@@ -69,8 +105,8 @@ void main() {
     float ao = MRAO.b;
     float metallic = MRAO.r;
 
-    vec3 L = -vec3(-1, -1, 1);
-    vec3 lightColor = vec3(1, 1, 1);
+    vec3 L = -lightsUniform.directLights[0].lightDir;
+    vec3 lightColor = lightsUniform.directLights[0].lightColor.xyz;
 
     vec3 V = normalize(gubo.eyePos - fragPos);
 

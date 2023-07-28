@@ -1,6 +1,42 @@
 #version 450
 #extension GL_ARB_separate_shader_objects : enable
 
+#define DIRECT_LIGHTS_MAX 10
+#define POINT_LIGHTS_MAX 10
+#define SPOT_LIGHTS_MAX 10
+
+struct DirectionalLightBlock{
+    vec3 lightDir;
+    vec4 lightColor;
+};
+
+struct PointLightBlock{
+    vec3 lightPos;
+    vec4 lightColor;
+    float beta;
+    float g;
+};
+
+struct SpotLightBlock{
+    vec3 lightPos;
+    vec3 lightDir;
+    vec4 lightColor;
+    float beta;
+    float g;
+    float cosOuter;
+    float cosInner;
+};
+
+layout(set = 0, binding = 1) uniform GlobalLightUniformBlock{
+    vec3 eyePosition;
+    DirectionalLightBlock directLights[DIRECT_LIGHTS_MAX];
+    PointLightBlock pointLights[POINT_LIGHTS_MAX];
+    SpotLightBlock spotLights[SPOT_LIGHTS_MAX];
+    int directLightsCount;
+    int pointLightsCount;
+    int spotLightsCount;
+} lightsUniform;
+
 layout(location = 0) in vec2 fragUV;
 layout(location = 1) in vec3 fragPos;
 layout(location = 2) in vec3 fragNorm;
@@ -35,10 +71,10 @@ void main() {
     vec3 Norm = normalize(fragNorm);
     vec3 EyeDir = normalize(phongMaterial.eyePos - fragPos);
 
-    vec3 lightDir = -normalize(vec3(-1, -1, 0));
-    vec3 lightColor = vec3(1, 1, 1);
+    vec3 lightDir = -lightsUniform.directLights[0].lightDir;
+    vec3 lightColor = lightsUniform.directLights[0].lightColor.xyz;
 
-    vec3 DiffSpec = BRDF(EyeDir, Norm, lightDir, texture(tex, fragUV).rgb, vec3(1.0f), 25.0f);
+    vec3 DiffSpec = BRDF(EyeDir, Norm, lightDir, texture(tex, fragUV).rgb, vec3(1.0f), 160.0f);
     vec3 Ambient = texture(tex, fragUV).rgb * 0.15f;
 
     outColor = vec4(clamp(0.95 * (DiffSpec) * lightColor.rgb + Ambient,0.0,1.0), 1.0f);

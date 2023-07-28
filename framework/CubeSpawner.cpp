@@ -20,6 +20,26 @@ namespace fmwk {
         if(!gameEngine->getInput().spacePressed)
             _spawnEnabled = true;
 
+        /*if(gameEngine->getInput().spacePressed && _spawnEnabled) {
+            _spawnEnabled = false;
+            auto &transform = _parentEntity->getTransform();
+
+            auto cubeEntity = std::make_unique<fmwk::Entity>("spawnedCube" + std::to_string(id),
+                                                             transform.getPosition(), transform.getRotation());
+            auto modelComponent = std::make_unique<fmwk::MeshComponent>("Mesh", gameEngine->getModelByName("myCube"));
+            auto textureComponent = std::make_unique<fmwk::TextureComponent>("Texture",
+                                                                             gameEngine->getBoundTextureByName(
+                                                                                     "cubeTexture"));
+            //auto materialComponent = std::make_unique<fmwk::ColorBlendComponent>("Material", glm::vec3(255, 0, 0), 0.3f);
+            auto materialComponent = std::make_unique<fmwk::SimplePhongMaterial>("Material");
+
+            cubeEntity->addComponent(std::move(modelComponent));
+            cubeEntity->addComponent(std::move(textureComponent));
+            cubeEntity->addComponent(std::move(materialComponent));
+
+            gameEngine->enqueueEntity(std::move(cubeEntity));
+            id++;
+        } */
         if(gameEngine->getInput().spacePressed && _spawnEnabled) {
             _spawnEnabled = false;
             auto &transform = _parentEntity->getTransform();

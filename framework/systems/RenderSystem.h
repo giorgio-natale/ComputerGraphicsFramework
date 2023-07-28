@@ -10,6 +10,10 @@
 #include "MaterialSystem.h"
 #include "../Camera.h"
 
+#define DIRECT_LIGHTS_MAX 10
+#define POINT_LIGHTS_MAX 10
+#define SPOT_LIGHTS_MAX 10
+
 namespace std{
     template <>
     struct hash<std::pair<fmwk::VertexType, fmwk::EffectType>>
@@ -23,9 +27,41 @@ namespace std{
 
 namespace fmwk {
 
+    struct DirectionalLightBlock{
+        alignas(16) glm::vec3 lightDir;
+        alignas(16) glm::vec4 lightColor;
+    };
+
+    struct PointLightBlock{
+        alignas(16) glm::vec3 lightPos;
+        alignas(16) glm::vec4 lightColor;
+        alignas(4) float beta;
+        alignas(4) float g;
+    };
+
+    struct SpotLightBlock{
+        alignas(16) glm::vec3 lightPos;
+        alignas(16) glm::vec3 lightDir;
+        alignas(16) glm::vec4 lightColor;
+        alignas(4) float beta;
+        alignas(4) float g;
+        alignas(4) float cosOuter;
+        alignas(4) float cosInner;
+    };
+
     struct GlobalUniformBlock{
         alignas(16) glm::mat4 vpMat;
     };
+    struct GlobalLightUniformBlock{
+        alignas(16) glm::vec3 eyePosition;
+        alignas(16) DirectionalLightBlock directLights[DIRECT_LIGHTS_MAX];
+        alignas(16) PointLightBlock pointLights[POINT_LIGHTS_MAX];
+        alignas(16) SpotLightBlock spotLights[SPOT_LIGHTS_MAX];
+        alignas(4) int directLightsCount;
+        alignas(4) int pointLightsCount;
+        alignas(4) int spotLightsCount;
+    };
+
     class RenderSystem {
     private:
         BaseProject *_bp;
