@@ -9,6 +9,7 @@
 #include "ModelSystem.h"
 #include "MaterialSystem.h"
 #include "../Camera.h"
+#include "../LightComponent.h"
 
 #define DIRECT_LIGHTS_MAX 10
 #define POINT_LIGHTS_MAX 10
@@ -27,7 +28,7 @@ namespace std{
 
 namespace fmwk {
 
-    struct DirectionalLightBlock{
+    struct DirectLightBlock{
         alignas(16) glm::vec3 lightDir;
         alignas(16) glm::vec4 lightColor;
     };
@@ -54,7 +55,7 @@ namespace fmwk {
     };
     struct GlobalLightUniformBlock{
         alignas(16) glm::vec3 eyePosition;
-        alignas(16) DirectionalLightBlock directLights[DIRECT_LIGHTS_MAX];
+        alignas(16) DirectLightBlock directLights[DIRECT_LIGHTS_MAX];
         alignas(16) PointLightBlock pointLights[POINT_LIGHTS_MAX];
         alignas(16) SpotLightBlock spotLights[SPOT_LIGHTS_MAX];
         alignas(4) int directLightsCount;
@@ -81,7 +82,7 @@ namespace fmwk {
         Pipeline& getPipeline(VertexType vertexType, EffectType effectType);
         DescriptorSet& getGlobalDescriptorSet();
         DescriptorSetLayout& getModelDescriptorSetLayout();
-        void updateGlobalDescriptor(Camera* cameraComponent, int currentImage);
+        void updateGlobalDescriptor(Camera* cameraComponent, std::vector<LightComponent*>& lights, int currentImage) ;
 
         void rebuildPipelines();
         void resetPipelines();

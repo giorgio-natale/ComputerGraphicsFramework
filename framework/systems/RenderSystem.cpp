@@ -4,6 +4,7 @@
 
 #include "RenderSystem.h"
 #include "../Entity.h"
+#include "../LightComponent.h"
 
 namespace fmwk {
     RenderSystem::RenderSystem(BaseProject *bp):_bp(bp){}
@@ -75,21 +76,22 @@ namespace fmwk {
         return _modelDescriptorSetLayout;
     }
 
-    void RenderSystem::updateGlobalDescriptor(Camera* cameraComponent, int currentImage) {
+    void RenderSystem::updateGlobalDescriptor(Camera* cameraComponent, std::vector<LightComponent*>& lights, int currentImage) {
         GlobalUniformBlock gubo{};
         gubo.vpMat = cameraComponent->getProjectionMatrix() * cameraComponent->getViewMatrix();
 
         GlobalLightUniformBlock glubo{};
         glubo.eyePosition = cameraComponent->getParent()->getTransform().getPosition();
 
-        DirectionalLightBlock directionalLightBlock{};
-        directionalLightBlock.lightColor = glm::vec4(1,1,1,1);
-        directionalLightBlock.lightDir = glm::vec3(-1, 0, 0);
-        glubo.directLights[0] = directionalLightBlock;
-
-        glubo.directLightsCount = 1;
+        DirectLightBlock directionalLightBlock{};
+        glubo.directLightsCount = 0;
         glubo.pointLightsCount = 0;
         glubo.spotLightsCount = 0;
+
+        for(LightComponent* light : lights){
+            if(light->isTurnedOn())
+                light->updateLightUniformBlock(glubo);
+        }
 
         _globalDescriptorSet.map(currentImage, &gubo, sizeof(gubo), 0);
         _globalDescriptorSet.map(currentImage, &glubo, sizeof(glubo), 1);

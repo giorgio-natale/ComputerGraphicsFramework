@@ -5,7 +5,7 @@
 #define POINT_LIGHTS_MAX 10
 #define SPOT_LIGHTS_MAX 10
 
-struct DirectionalLightBlock{
+struct DirectLightBlock{
     vec3 lightDir;
     vec4 lightColor;
 };
@@ -29,7 +29,7 @@ struct SpotLightBlock{
 
 layout(set = 0, binding = 1) uniform GlobalLightUniformBlock{
     vec3 eyePosition;
-    DirectionalLightBlock directLights[DIRECT_LIGHTS_MAX];
+    DirectLightBlock directLights[DIRECT_LIGHTS_MAX];
     PointLightBlock pointLights[POINT_LIGHTS_MAX];
     SpotLightBlock spotLights[SPOT_LIGHTS_MAX];
     int directLightsCount;

@@ -146,7 +146,10 @@ namespace fmwk {
                     if(initializeDescriptorSets)
                         insertedElement->second.first.init(_bp, &dsl, {{0, UNIFORM, sizeof(EntityTransformUniformBlock)}});
                     transform->provision(&insertedElement->second.first);
-                }else{
+                }else if(auto* lightComponent = dynamic_cast<LightComponent*>(component)){
+                    lightComponent->provision(&_renderSystem.getGlobalDescriptorSet());
+                }
+                else{
                     throw std::runtime_error("Provision of component '" + component->getName() + "' not implemented");
                 }
             }
@@ -155,8 +158,14 @@ namespace fmwk {
 
     void GameEngine::updateGraphicResources(int currentImage) {
 
+        auto allComponents = getAllComponents();
+        std::vector<LightComponent*> lights;
+        for(Component* component : allComponents){
+            if(auto* lightComponent = dynamic_cast<LightComponent*>(component))
+                lights.push_back(lightComponent);
+        }
         auto* cameraComponent = dynamic_cast<Camera*>(&getEntityByName("Camera").getComponentByName("Camera"));
-        _renderSystem.updateGlobalDescriptor(cameraComponent, currentImage);
+        _renderSystem.updateGlobalDescriptor(cameraComponent, lights, currentImage);
         for(Component* component : getAllComponents()){
             if(auto* materialComponent = dynamic_cast<MaterialComponent*>(component)){
                 materialComponent->updateDescriptorSet(currentImage);

@@ -6,7 +6,7 @@
 #define POINT_LIGHTS_MAX 10
 #define SPOT_LIGHTS_MAX 10
 
-struct DirectionalLightBlock{
+struct DirectLightBlock{
     vec3 lightDir;
     vec4 lightColor;
 };
@@ -30,7 +30,7 @@ struct SpotLightBlock{
 
 layout(set = 0, binding = 1) uniform GlobalLightUniformBlock{
     vec3 eyePosition;
-    DirectionalLightBlock directLights[DIRECT_LIGHTS_MAX];
+    DirectLightBlock directLights[DIRECT_LIGHTS_MAX];
     PointLightBlock pointLights[POINT_LIGHTS_MAX];
     SpotLightBlock spotLights[SPOT_LIGHTS_MAX];
     int directLightsCount;
@@ -104,14 +104,23 @@ void main() {
     float roughness = MRAO.g;
     float ao = MRAO.b;
     float metallic = MRAO.r;
-
-    vec3 L = -lightsUniform.directLights[0].lightDir;
-    vec3 lightColor = lightsUniform.directLights[0].lightColor.xyz;
-
     vec3 V = normalize(gubo.eyePos - fragPos);
-
-    vec3 DiffSpec = BRDF(V, N, L, albedo, 0.3f, metallic, roughness);
     vec3 Ambient = albedo * 0.05f * ao;
 
-    outColor = vec4(clamp(0.95 * DiffSpec * lightColor.rgb + Ambient,0.0,1.0), 1.0f);
-}
+    vec3 DiffSpec = vec3(0,0,0);
+
+    for(int i = 0; i < lightsUniform.directLightsCount; i++){
+        vec3 L = -lightsUniform.directLights[i].lightDir;
+        vec3 lightColor = lightsUniform.directLights[i].lightColor.xyz;
+        DiffSpec += BRDF(V, N, L, albedo, 0.3f, metallic, roughness) * lightColor;
+    }
+
+    for(int i = 0; i < lightsUniform.pointLightsCount; i++){
+        vec3 L = normalize(lightsUniform.pointLights[i].lightPos - fragPos);
+        vec3 lightColor = (lightsUniform.pointLights[i].lightColor * pow(lightsUniform.pointLights[i].g / length(lightsUniform.pointLights[i].lightPos - fragPos), lightsUniform.pointLights[i].beta)).xyz;
+        DiffSpec += BRDF(V, N, L, albedo, 0.3f, metallic, roughness) * lightColor;
+    }
+
+
+    outColor = vec4(clamp(0.95 * DiffSpec + Ambient,0.0,1.0), 1.0f);
+ }

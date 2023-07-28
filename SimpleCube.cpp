@@ -11,6 +11,8 @@
 #include "framework/ColorBlendComponent.h"
 #include "framework/CubeSpawner.h"
 #include "framework/GGXMaterial.h"
+#include "framework/DirectLightComponent.h"
+#include "framework/PointLightComponent.h"
 
 
 // The uniform buffer objects data structures
@@ -100,6 +102,17 @@ class SimpleCube : public BaseProject {
 
         gameEngine->addEntity(std::move(cubeEntity));
         gameEngine->addEntity(std::move(camera));
+
+        auto directLight = std::make_unique<fmwk::Entity>("DirectLight");
+        auto directLightComponent = std::make_unique<fmwk::DirectLightComponent>("DirectLight", glm::vec3(1, 0, 0), glm::vec4(1,1,1,1));
+        //directLightComponent->turnOff();
+        directLight->addComponent(std::move(directLightComponent));
+        gameEngine->addEntity(std::move(directLight));
+
+        auto pointLight = std::make_unique<fmwk::Entity>("PointLight");
+        auto pointLightComponent = std::make_unique<fmwk::PointLightComponent>("PointLightComponent", glm::vec4(1,1,1,1), 2.0f, 1.5f);
+        pointLight->addComponent(std::move(pointLightComponent));
+        gameEngine->addEntity(std::move(pointLight));
 
 		
 		// Init local variables
