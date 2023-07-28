@@ -91,13 +91,13 @@ vec3 BRDF(vec3 V, vec3 N, vec3 L, vec3 Md, float F0, float metallic, float rough
 }
 
 void main() {
+
     vec3 Norm = normalize(fragNorm);
     vec3 Tan = normalize(fragTan.xyz - Norm * dot(fragTan.xyz, Norm));
     vec3 Bitan = cross(Norm, Tan) * fragTan.w;
     mat3 tbn = mat3(Tan, Bitan, Norm);
     vec4 nMap = texture(normMap, fragUV);
     vec3 N = normalize(tbn * (nMap.rgb * 2.0 - 1.0));
-
     vec3 albedo = texture(tex, fragUV).rgb;
 
     vec4 MRAO = texture(matMap, fragUV);
@@ -121,6 +121,18 @@ void main() {
         DiffSpec += BRDF(V, N, L, albedo, 0.3f, metallic, roughness) * lightColor;
     }
 
+    for(int i = 0; i < lightsUniform.spotLightsCount; i++){
+        vec3 L = normalize(lightsUniform.spotLights[i].lightPos - fragPos);
 
+        float cosAlpha = dot(L, -lightsUniform.spotLights[i].lightDir);
+        float decay = clamp( (cosAlpha - lightsUniform.spotLights[i].cosOuter) / (lightsUniform.spotLights[i].cosInner - lightsUniform.spotLights[i].cosOuter), 0, 1);
+        float pointLightDimming = pow(lightsUniform.spotLights[i].g / length(lightsUniform.spotLights[i].lightPos - fragPos), lightsUniform.spotLights[i].beta);
+        vec3 lightColor = lightsUniform.spotLights[i].lightColor.xyz * decay * pointLightDimming;
+
+        DiffSpec += BRDF(V, N, L, albedo, 0.3f, metallic, roughness) * lightColor;
+    }
     outColor = vec4(clamp(0.95 * DiffSpec + Ambient,0.0,1.0), 1.0f);
+
+
+
  }

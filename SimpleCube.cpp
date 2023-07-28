@@ -13,6 +13,7 @@
 #include "framework/GGXMaterial.h"
 #include "framework/DirectLightComponent.h"
 #include "framework/PointLightComponent.h"
+#include "framework/SpotLightComponent.h"
 
 
 // The uniform buffer objects data structures
@@ -105,14 +106,20 @@ class SimpleCube : public BaseProject {
 
         auto directLight = std::make_unique<fmwk::Entity>("DirectLight");
         auto directLightComponent = std::make_unique<fmwk::DirectLightComponent>("DirectLight", glm::vec3(1, 0, 0), glm::vec4(1,1,1,1));
-        //directLightComponent->turnOff();
+        directLightComponent->turnOff();
         directLight->addComponent(std::move(directLightComponent));
         gameEngine->addEntity(std::move(directLight));
 
         auto pointLight = std::make_unique<fmwk::Entity>("PointLight");
         auto pointLightComponent = std::make_unique<fmwk::PointLightComponent>("PointLightComponent", glm::vec4(1,1,1,1), 2.0f, 1.5f);
+        pointLightComponent->turnOff();
         pointLight->addComponent(std::move(pointLightComponent));
         gameEngine->addEntity(std::move(pointLight));
+
+        auto spotLight = std::make_unique<fmwk::Entity>("SpotLight", glm::vec3(0, 4, 0), glm::vec3(glm::radians(90.0f), 0, 0));
+        auto spotLightComponent = std::make_unique<fmwk::SpotLightComponent>("SpotLightComponent", glm::vec4(1,1,1,1), 2.0f, 1.5f, 0.85f, 0.95f);
+        spotLight->addComponent(std::move(spotLightComponent));
+        gameEngine->addEntity(std::move(spotLight));
 
 		
 		// Init local variables
