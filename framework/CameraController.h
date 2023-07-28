@@ -26,8 +26,7 @@ namespace fmwk {
         float const _angularSpeed;
         float const _cameraDistance;
         float const _cameraHeight;
-        EulerVector _rotationAboutCenter = {0,0,0};
-        glm::vec3 _rotationAboutCenterNaked = {0,0,0};
+        glm::vec3 _rotationAboutCenter = {0,0,0};
     };
 
 } // fmwk

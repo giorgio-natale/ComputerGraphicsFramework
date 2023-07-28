@@ -91,7 +91,7 @@ class SimpleCube : public BaseProject {
         cubeEntity->addComponent(std::move(cubeSpawner));
 
 
-        auto camera = std::make_unique<fmwk::Entity>("Camera", glm::vec3(0,0,8), fmwk::EulerVector(0, 0,0));
+        auto camera = std::make_unique<fmwk::Entity>("Camera", glm::vec3(0,0,8), glm::quat());
         auto perspectiveCameraComponent = std::make_unique<fmwk::PerspectiveCamera>("Camera", 0.1f, 100.0f, glm::radians(45.0f));
         camera->addComponent(std::move(perspectiveCameraComponent));
 
@@ -116,7 +116,7 @@ class SimpleCube : public BaseProject {
         pointLight->addComponent(std::move(pointLightComponent));
         gameEngine->addEntity(std::move(pointLight));
 
-        auto spotLight = std::make_unique<fmwk::Entity>("SpotLight", glm::vec3(0, 4, 0), glm::vec3(glm::radians(90.0f), 0, 0));
+        auto spotLight = std::make_unique<fmwk::Entity>("SpotLight", glm::vec3(0, 4, 0), glm::vec3(glm::radians(-90.0f), 0, 0));
         auto spotLightComponent = std::make_unique<fmwk::SpotLightComponent>("SpotLightComponent", glm::vec4(1,1,1,1), 2.0f, 1.5f, 0.85f, 0.95f);
         spotLight->addComponent(std::move(spotLightComponent));
         gameEngine->addEntity(std::move(spotLight));

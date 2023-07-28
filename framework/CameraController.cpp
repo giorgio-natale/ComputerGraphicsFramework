@@ -21,14 +21,14 @@ namespace fmwk {
         InputResult input = fmwk::GameEngine::getInstance()->getInput();
 
         auto& cameraTransform =_parentEntity->getTransform();;
-        _rotationAboutCenter = _rotationAboutCenter + EulerVector{input.r.x * _angularSpeed * input.deltaTime,input.r.y * _angularSpeed * input.deltaTime,0};
-        _rotationAboutCenter = EulerVector{glm::clamp(_rotationAboutCenter[0], glm::radians(-8.75f), glm::radians(60.0f)), _rotationAboutCenter[1] , _rotationAboutCenter[2]};
+        _rotationAboutCenter = _rotationAboutCenter + glm::vec3(input.r.x * _angularSpeed * input.deltaTime,input.r.y * _angularSpeed * input.deltaTime,0);
+        _rotationAboutCenter = {glm::clamp(_rotationAboutCenter[0], glm::radians(-8.75f), glm::radians(60.0f)), _rotationAboutCenter[1] , _rotationAboutCenter[2]};
 
         auto cameraBasePosition = _characterTransform.getPosition() + glm::vec3(0, _cameraHeight, _cameraDistance);
         auto cameraPosition = glm::vec3 (rotationAroundPoint(
                 _characterTransform.getPosition(),
-                _rotationAboutCenter.getVector()[1],
-                _rotationAboutCenter.getVector()[0]) * glm::vec4(cameraBasePosition, 1));
+                _rotationAboutCenter[1],
+                _rotationAboutCenter[0]) * glm::vec4(cameraBasePosition, 1));
 
         cameraTransform.setPosition(cameraPosition);
         auto lookingDirection = glm::normalize(_characterTransform.getPosition() - cameraPosition);

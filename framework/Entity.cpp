@@ -11,9 +11,7 @@
 
 namespace fmwk {
     Entity::Entity(std::string const& name) :
-            Entity(name, glm::vec3(0), EulerVector(0,0,0)){}
-    Entity::Entity(const std::string &name, const glm::vec3 &initialPosition, const EulerVector &initialRotation) :
-            Entity(name, initialPosition, quaternionFromEulerZXY(initialRotation)){}
+            Entity(name, glm::vec3(0), glm::quat()){}
 
     Entity::Entity(const std::string &name, const glm::vec3 &initialPosition, const glm::quat &initialRotation) {
         _name = name;

@@ -16,7 +16,6 @@ namespace fmwk {
     class Entity {
     public:
         explicit Entity(std::string const& name);
-        Entity(std::string const& name, glm::vec3 const& initialPosition, EulerVector const& initialRotation);
         Entity(std::string const& name, glm::vec3 const& initialPosition, glm::quat const& initialRotation);
 
         [[nodiscard]] std::string getName() const;
