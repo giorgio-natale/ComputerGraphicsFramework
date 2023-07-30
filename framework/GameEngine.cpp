@@ -74,6 +74,9 @@ namespace fmwk {
     void GameEngine::logicUpdate() {
         _inputSystem.captureInputs();
 
+        std::cout << "Frame rate:" << 1 / getInput().deltaTime << " Entities: " << _entities.size() << std::endl;
+
+
         std::vector<Component*> components = getAllComponents();
         for(Component* component : components){
             component->update();

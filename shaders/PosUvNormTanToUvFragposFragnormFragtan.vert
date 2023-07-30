@@ -6,6 +6,7 @@ layout(set = 0, binding = 0) uniform GlobalUniformBlock {
 } gubo;
 layout(set = 3, binding = 0) uniform EntityTransformUniformBlock {
     mat4 mMat;
+    mat4 nMat;
 } tubo;
 
 layout(location = 0) in vec3 inPosition;
@@ -23,8 +24,7 @@ layout(location = 3) out vec4 outFragTan;
 void main() {
     gl_Position = gubo.vpMat * tubo.mMat * vec4(inPosition, 1.0);
     outFragPos = (tubo.mMat * vec4(inPosition, 1.0)).xyz;
-    //TODO: compute it with CPU and change all the interested vertex shaders
-    outFragNorm = transpose(inverse(mat3(tubo.mMat))) * inNorm;
-    outFragTan = vec4(transpose(inverse(mat3(tubo.mMat))) * inTan.xyz, inTan.w);
+    outFragNorm = mat3(tubo.nMat) * inNorm;
+    outFragTan = vec4(mat3(tubo.nMat) * inTan.xyz, inTan.w);
     outUV = inUV;
 }

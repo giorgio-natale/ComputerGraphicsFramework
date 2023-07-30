@@ -6,6 +6,7 @@ layout(set = 0, binding = 0) uniform GlobalUniformBlock {
 } gubo;
 layout(set = 3, binding = 0) uniform EntityTransformUniformBlock {
 	mat4 mMat;
+	mat3 nMat;
 } tubo;
 
 layout(location = 0) in vec3 inPosition;

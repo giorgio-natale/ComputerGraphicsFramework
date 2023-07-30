@@ -91,6 +91,7 @@ namespace fmwk {
     void Transform::updateDescriptorSet(int currentImage) {
         EntityTransformUniformBlock ubo{};
         ubo.mMat = getWorldMatrix();
+        ubo.nMat = glm::transpose(glm::inverse(glm::mat3(ubo.mMat)));
         _descriptorSet->map(currentImage, &ubo, sizeof(ubo), 0);
     }
 

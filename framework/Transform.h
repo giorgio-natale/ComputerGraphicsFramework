@@ -15,6 +15,7 @@
 namespace fmwk {
     struct EntityTransformUniformBlock{
         alignas(16) glm::mat4 mMat;
+        alignas(16) glm::mat4 nMat;
     };
 
     class Transform : public Component{
