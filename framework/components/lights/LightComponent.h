@@ -5,8 +5,8 @@
 #ifndef DEMO_LIGHTCOMPONENT_H
 #define DEMO_LIGHTCOMPONENT_H
 
-#include "Component.h"
-#include "../Starter.hpp"
+#include "../scripts/Component.h"
+#include "../../../Starter.hpp"
 
 
 namespace fmwk {

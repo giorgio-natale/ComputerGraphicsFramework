@@ -6,8 +6,8 @@
 #include <glm/ext/matrix_clip_space.hpp>
 #include <iostream>
 #include "PerspectiveCamera.h"
-#include "utils.h"
-#include "GameEngine.h"
+#include "../../utils.h"
+#include "../../GameEngine.h"
 
 namespace fmwk {
     glm::mat4 PerspectiveCamera::getProjectionMatrix() {

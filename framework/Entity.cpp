@@ -3,7 +3,7 @@
 //
 
 #include "Entity.h"
-#include "Transform.h"
+#include "components/transform/Transform.h"
 
 #include <stdexcept>
 #include <algorithm>

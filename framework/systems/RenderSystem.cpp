@@ -4,7 +4,7 @@
 
 #include "RenderSystem.h"
 #include "../Entity.h"
-#include "../LightComponent.h"
+#include "../components/lights/LightComponent.h"
 
 namespace fmwk {
     RenderSystem::RenderSystem(BaseProject *bp):_bp(bp){}

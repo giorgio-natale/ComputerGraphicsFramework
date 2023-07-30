@@ -7,10 +7,10 @@
 
 #include <glm/vec3.hpp>
 #include <glm/gtc/quaternion.hpp>
-#include "Component.h"
-#include "utils.h"
-#include "../Starter.hpp"
-#include "MaterialComponent.h"
+#include "../scripts/Component.h"
+#include "../../utils.h"
+#include "../../../Starter.hpp"
+#include "../materials/MaterialComponent.h"
 
 namespace fmwk {
     struct EntityTransformUniformBlock{

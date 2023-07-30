@@ -3,9 +3,9 @@
 //
 
 #include "GameEngine.h"
-#include "MaterialComponent.h"
-#include "MeshComponent.h"
-#include "TextureComponent.h"
+#include "components/materials/MaterialComponent.h"
+#include "components/mesh/MeshComponent.h"
+#include "components/texture/TextureComponent.h"
 
 namespace fmwk {
     GameEngine* GameEngine::_instance= nullptr;

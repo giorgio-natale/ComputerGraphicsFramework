@@ -8,8 +8,8 @@
 #include "../../Starter.hpp"
 #include "ModelSystem.h"
 #include "MaterialSystem.h"
-#include "../Camera.h"
-#include "../LightComponent.h"
+#include "../components/camera/Camera.h"
+#include "../components/lights/LightComponent.h"
 
 #define DIRECT_LIGHTS_MAX 10
 #define POINT_LIGHTS_MAX 10

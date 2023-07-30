@@ -3,7 +3,7 @@
 //
 
 #include "DirectLightComponent.h"
-#include "systems/RenderSystem.h"
+#include "../../systems/RenderSystem.h"
 
 namespace fmwk {
     DirectLightComponent::DirectLightComponent(const std::string &name, glm::vec3 direction, glm::vec4 color) : LightComponent(name), _direction(direction), _color(color) {}

@@ -3,13 +3,13 @@
 //
 
 #include "CubeSpawner.h"
-#include "GameEngine.h"
-#include "MeshComponent.h"
-#include "TextureComponent.h"
-#include "DefaultMaterial.h"
-#include "ColorBlendComponent.h"
-#include "SimplePhongMaterial.h"
-#include "GGXMaterial.h"
+#include "../../GameEngine.h"
+#include "../mesh/MeshComponent.h"
+#include "../texture/TextureComponent.h"
+#include "../materials/DefaultMaterial.h"
+#include "../materials/ColorBlendComponent.h"
+#include "../materials/SimplePhongMaterial.h"
+#include "../materials/GGXMaterial.h"
 
 namespace fmwk {
     CubeSpawner::CubeSpawner(const std::string &name) : Component(name) {}

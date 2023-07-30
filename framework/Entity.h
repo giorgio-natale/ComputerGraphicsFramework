@@ -6,9 +6,9 @@
 #include <unordered_set>
 #include <vector>
 #include <memory>
-#include "Component.h"
+#include "components/scripts/Component.h"
 #include "utils.h"
-#include "Transform.h"
+#include "components/transform/Transform.h"
 
 namespace fmwk {
 

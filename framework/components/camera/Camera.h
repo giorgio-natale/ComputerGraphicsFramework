@@ -6,7 +6,7 @@
 #define A07_CAMERA_H
 
 #include <glm/glm.hpp>
-#include "Component.h"
+#include "../scripts/Component.h"
 
 namespace fmwk {
 

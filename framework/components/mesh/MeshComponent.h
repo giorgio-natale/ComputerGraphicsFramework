@@ -5,9 +5,9 @@
 #ifndef DEMO_MESHCOMPONENT_H
 #define DEMO_MESHCOMPONENT_H
 
-#include "../Starter.hpp"
-#include "Component.h"
-#include "systems/ModelSystem.h"
+#include "../../../Starter.hpp"
+#include "../scripts/Component.h"
+#include "../../systems/ModelSystem.h"
 
 namespace fmwk {
 

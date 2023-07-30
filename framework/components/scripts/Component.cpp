@@ -3,7 +3,7 @@
 //
 
 #include "Component.h"
-#include "Entity.h"
+#include "../../Entity.h"
 
 #include <utility>
 

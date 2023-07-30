@@ -3,8 +3,8 @@
 //
 
 #include "SpotLightComponent.h"
-#include "systems/RenderSystem.h"
-#include "Entity.h"
+#include "../../systems/RenderSystem.h"
+#include "../../Entity.h"
 
 namespace fmwk {
     SpotLightComponent::SpotLightComponent(const std::string &name, glm::vec4 lightColor, float beta, float g,

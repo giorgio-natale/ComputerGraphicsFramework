@@ -5,8 +5,8 @@
 #ifndef DEMO_TEXTURECOMPONENT_H
 #define DEMO_TEXTURECOMPONENT_H
 
-#include "systems/TextureSystem.h"
-#include "Component.h"
+#include "../../systems/TextureSystem.h"
+#include "../scripts/Component.h"
 
 namespace fmwk {
 

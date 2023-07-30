@@ -5,9 +5,9 @@
 #include <memory>
 #include <iostream>
 #include "CameraController.h"
-#include "GameEngine.h"
-#include "Entity.h"
-#include "utils.h"
+#include "../../GameEngine.h"
+#include "../../Entity.h"
+#include "../../utils.h"
 
 namespace fmwk {
     CameraController::CameraController(const std::string &name, const Transform &characterTransform,

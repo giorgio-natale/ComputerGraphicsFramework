@@ -3,8 +3,8 @@
 //
 
 #include "Camera.h"
-#include "Entity.h"
-#include "Transform.h"
+#include "../../Entity.h"
+#include "../transform/Transform.h"
 
 namespace fmwk {
     Camera::Camera(float nearPlane) : Component("Camera"), _nearPlane(nearPlane) {}

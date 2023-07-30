@@ -3,8 +3,8 @@
 //
 
 #include "PointLightComponent.h"
-#include "systems/RenderSystem.h"
-#include "Entity.h"
+#include "../../systems/RenderSystem.h"
+#include "../../Entity.h"
 
 namespace fmwk {
     PointLightComponent::PointLightComponent(std::string const& name, glm::vec4 lightColor, float beta, float g) :LightComponent(name),

@@ -3,9 +3,9 @@
 //
 
 #include "DefaultMaterial.h"
-#include "GameEngine.h"
-#include "MeshComponent.h"
-#include "TextureComponent.h"
+#include "../../GameEngine.h"
+#include "../mesh/MeshComponent.h"
+#include "../texture/TextureComponent.h"
 
 namespace fmwk {
     void DefaultMaterial::updateDescriptorSet(int currentImage) {

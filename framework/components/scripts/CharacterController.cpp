@@ -5,8 +5,8 @@
 #include <memory>
 #include <iostream>
 #include "CharacterController.h"
-#include "GameEngine.h"
-#include "Entity.h"
+#include "../../GameEngine.h"
+#include "../../Entity.h"
 
 namespace fmwk {
     CharacterController::CharacterController(const std::string &name, const Transform &cameraTransform, float maxSpeed) : Component(

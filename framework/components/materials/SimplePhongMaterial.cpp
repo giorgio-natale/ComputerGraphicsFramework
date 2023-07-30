@@ -3,7 +3,7 @@
 //
 
 #include "SimplePhongMaterial.h"
-#include "GameEngine.h"
+#include "../../GameEngine.h"
 
 namespace fmwk {
     SimplePhongMaterial::SimplePhongMaterial() : MaterialComponent(SIMPLE_PHONG) {}

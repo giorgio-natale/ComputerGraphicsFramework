@@ -3,7 +3,7 @@
 //
 
 #include "GGXMaterial.h"
-#include "GameEngine.h"
+#include "../../GameEngine.h"
 
 namespace fmwk {
     GGXMaterial::GGXMaterial(Texture &normalTexture, Texture &materialTexture)

@@ -5,9 +5,9 @@
 #ifndef DEMO_MATERIALCOMPONENT_H
 #define DEMO_MATERIALCOMPONENT_H
 
-#include "Component.h"
-#include "../Starter.hpp"
-#include "systems/MaterialSystem.h"
+#include "../scripts/Component.h"
+#include "../../../Starter.hpp"
+#include "../../systems/MaterialSystem.h"
 
 namespace fmwk {
 
