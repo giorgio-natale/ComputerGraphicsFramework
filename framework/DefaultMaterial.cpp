@@ -42,5 +42,5 @@ namespace fmwk {
         return {{0, UNIFORM, sizeof(DefaultMaterialUniformBlock)}};
     }
 
-    DefaultMaterial::DefaultMaterial(const std::string &name,float brightness) : MaterialComponent(name, DEFAULT), _brightness(brightness){}
+    DefaultMaterial::DefaultMaterial(float brightness) : MaterialComponent(DEFAULT), _brightness(brightness){}
 } // fmwk

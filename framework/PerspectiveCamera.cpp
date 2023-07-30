@@ -16,8 +16,7 @@ namespace fmwk {
 
     }
 
-    PerspectiveCamera::PerspectiveCamera(const std::string &name, float nearPlane, float farPlane, float fovY) : Camera(
-            name, nearPlane), _farPlane(farPlane), _fovY(fovY) {}
+    PerspectiveCamera::PerspectiveCamera(float nearPlane, float farPlane, float fovY) : Camera(nearPlane), _farPlane(farPlane), _fovY(fovY) {}
 
     PerspectiveCamera::~PerspectiveCamera() = default;
 } // fmwk

@@ -5,7 +5,7 @@
 #include "TextureComponent.h"
 
 namespace fmwk {
-    TextureComponent::TextureComponent(const std::string &name, BoundTexture &boundTexture): Component(name), _boundTexture(boundTexture){}
+    TextureComponent::TextureComponent(BoundTexture &boundTexture): Component("Texture"), _boundTexture(boundTexture){}
 
     BoundTexture &TextureComponent::getBoundTexture() {
         return _boundTexture;

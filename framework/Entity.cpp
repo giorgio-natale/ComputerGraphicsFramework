@@ -15,7 +15,7 @@ namespace fmwk {
 
     Entity::Entity(const std::string &name, const glm::vec3 &initialPosition, const glm::quat &initialRotation) {
         _name = name;
-        auto transform = std::make_unique<Transform>("Transform", initialPosition, initialRotation, glm::vec3(1));
+        auto transform = std::make_unique<Transform>(initialPosition, initialRotation, glm::vec3(1));
         addComponent(std::move(transform));
         _toBeRemoved = false;
     }

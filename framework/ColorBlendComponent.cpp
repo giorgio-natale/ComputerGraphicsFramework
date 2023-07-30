@@ -5,7 +5,7 @@
 #include "ColorBlendComponent.h"
 
 namespace fmwk {
-    ColorBlendComponent::ColorBlendComponent(const std::string &name, glm::vec3 color, float percentage) : MaterialComponent(name, COLOR_BLEND), _color(color), _percentage(percentage)
+    ColorBlendComponent::ColorBlendComponent(glm::vec3 color, float percentage) : MaterialComponent(COLOR_BLEND), _color(color), _percentage(percentage)
     {}
 
     void ColorBlendComponent::updateDescriptorSet(int currentImage) {

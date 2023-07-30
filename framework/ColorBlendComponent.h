@@ -16,7 +16,7 @@ namespace fmwk {
 
     class ColorBlendComponent : public MaterialComponent{
     public:
-        ColorBlendComponent(const std::string &name, glm::vec3 color, float percentage);
+        ColorBlendComponent(glm::vec3 color, float percentage);
 
         void updateDescriptorSet(int currentImage) override;
 

@@ -5,7 +5,7 @@
 #include "MeshComponent.h"
 
 namespace fmwk {
-    MeshComponent::MeshComponent(const std::string &name, TModel &model): Component(name), _model(model){}
+    MeshComponent::MeshComponent(TModel &model): Component("Mesh"), _model(model){}
 
     TModel &MeshComponent::getModel() const {
         return _model;

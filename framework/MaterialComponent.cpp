@@ -7,7 +7,7 @@
 #include <utility>
 
 namespace fmwk {
-    MaterialComponent::MaterialComponent(const std::string &name, EffectType effectType): Component(name), _effectType(effectType), _alreadyProvisioned(false), _pipeline(nullptr), _descriptorSet(nullptr){}
+    MaterialComponent::MaterialComponent(EffectType effectType): Component("Material"), _effectType(effectType), _alreadyProvisioned(false), _pipeline(nullptr), _descriptorSet(nullptr){}
 
     void MaterialComponent::provision(DescriptorSet* descriptorSet, Pipeline* pipeline) {
         _descriptorSet = descriptorSet;

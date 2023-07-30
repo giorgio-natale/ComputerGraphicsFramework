@@ -15,7 +15,7 @@ namespace fmwk {
     private:
         TModel& _model;
     public:
-        MeshComponent(std::string const& name, TModel& model);
+        explicit MeshComponent(TModel& model);
         [[nodiscard]] TModel& getModel() const;
     };
 

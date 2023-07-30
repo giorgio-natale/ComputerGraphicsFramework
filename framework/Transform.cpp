@@ -9,8 +9,8 @@
 
 namespace fmwk {
 
-    Transform::Transform(const std::string &name, const glm::vec3 &position, const glm::quat &quaternion,
-                         const glm::vec3 &scale): Component(name), _position(position), _scale(scale){
+    Transform::Transform(const glm::vec3 &position, const glm::quat &quaternion,
+                         const glm::vec3 &scale): Component("Transform"), _position(position), _scale(scale){
         _areMatricesCoherent = false;
         _quaternion = quaternion;
         _worldMatrix = getWorldMatrix();

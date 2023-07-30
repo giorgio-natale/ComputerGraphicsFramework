@@ -6,8 +6,8 @@
 #include "GameEngine.h"
 
 namespace fmwk {
-    GGXMaterial::GGXMaterial(const std::string &name, Texture &normalTexture, Texture &materialTexture)
-        : MaterialComponent(name, GGX), _normalTexture(normalTexture), _materialTexture(materialTexture){}
+    GGXMaterial::GGXMaterial(Texture &normalTexture, Texture &materialTexture)
+        : MaterialComponent(GGX), _normalTexture(normalTexture), _materialTexture(materialTexture){}
 
     void GGXMaterial::updateDescriptorSet(int currentImage) {
         GGXUniformBlock ubo{};

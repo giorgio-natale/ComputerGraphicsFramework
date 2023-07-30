@@ -20,7 +20,7 @@ namespace fmwk {
         EffectType _effectType;
         bool _alreadyProvisioned;
     public:
-        MaterialComponent(std::string const& name, EffectType effectType);
+        explicit MaterialComponent(EffectType effectType);
         virtual void updateDescriptorSet(int currentImage) = 0;
         virtual DescriptorSetClaim getDescriptorSetClaim() = 0;
         void provision(DescriptorSet *descriptorSet, Pipeline* pipeline);

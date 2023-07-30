@@ -20,7 +20,7 @@ namespace fmwk {
 
     class Transform : public Component{
     public:
-        Transform(const std::string &name, const glm::vec3 &position, const glm::quat &quaternion,
+        Transform(const glm::vec3 &position, const glm::quat &quaternion,
                   const glm::vec3 &scale);
 
         glm::mat4 getWorldMatrix() const;

@@ -12,7 +12,7 @@ namespace fmwk {
     class PerspectiveCamera : public Camera{
     public:
 
-        PerspectiveCamera(const std::string &name, float nearPlane, float farPlane, float fovY);
+        PerspectiveCamera( float nearPlane, float farPlane, float fovY);
         glm::mat4 getProjectionMatrix() override;
         ~PerspectiveCamera() override;
     private:

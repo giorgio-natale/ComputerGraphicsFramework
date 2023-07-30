@@ -6,7 +6,7 @@
 #include "GameEngine.h"
 
 namespace fmwk {
-    SimplePhongMaterial::SimplePhongMaterial(const std::string &name) : MaterialComponent(name, SIMPLE_PHONG) {}
+    SimplePhongMaterial::SimplePhongMaterial() : MaterialComponent(SIMPLE_PHONG) {}
     void SimplePhongMaterial::updateDescriptorSet(int currentImage) {
         SimplePhongUniformBlock ubo{};
         ubo.eyePos = GameEngine::getInstance()->getEntityByName("Camera").getTransform().getPosition();

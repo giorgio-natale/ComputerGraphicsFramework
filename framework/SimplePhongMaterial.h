@@ -15,7 +15,7 @@ namespace fmwk {
 
     class SimplePhongMaterial : public MaterialComponent{
     public:
-        explicit SimplePhongMaterial(std::string const& name);
+        explicit SimplePhongMaterial();
 
         void updateDescriptorSet(int currentImage) override;
 

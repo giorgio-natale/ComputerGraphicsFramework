@@ -14,7 +14,7 @@ namespace fmwk {
     private:
         BoundTexture& _boundTexture;
     public:
-        TextureComponent(std::string const& name, BoundTexture& boundTexture);
+        explicit TextureComponent(BoundTexture& boundTexture);
         BoundTexture& getBoundTexture();
     };
 

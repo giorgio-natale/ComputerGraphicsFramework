@@ -12,7 +12,7 @@ namespace fmwk {
 
     class Camera : public Component{
     public:
-        Camera(const std::string &name, float nearPlane);
+        Camera(float nearPlane);
 
         ~Camera() override;
 

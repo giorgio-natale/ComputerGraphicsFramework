@@ -46,9 +46,9 @@ namespace fmwk {
 
             auto sphereEntity = std::make_unique<fmwk::Entity>("spawnedSphere" + std::to_string(id), transform.getPosition(), transform.getRotation());
 
-            auto sphereModelComponent = std::make_unique<fmwk::MeshComponent>("Mesh", gameEngine->getModelByName("mySphere"));
-            auto sphereTextureComponent = std::make_unique<fmwk::TextureComponent>("Texture", gameEngine->getBoundTextureByName("sphereTexture"));
-            auto sphereMaterialComponent = std::make_unique<fmwk::GGXMaterial>("Material",  gameEngine->getBoundTextureByName("sphereNormal").getTexture(), gameEngine->getBoundTextureByName("sphereMaterial").getTexture());
+            auto sphereModelComponent = std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("mySphere"));
+            auto sphereTextureComponent = std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("sphereTexture"));
+            auto sphereMaterialComponent = std::make_unique<fmwk::GGXMaterial>(gameEngine->getBoundTextureByName("sphereNormal").getTexture(), gameEngine->getBoundTextureByName("sphereMaterial").getTexture());
             sphereEntity->addComponent(std::move(sphereModelComponent));
             sphereEntity->addComponent(std::move(sphereTextureComponent));
             sphereEntity->addComponent(std::move(sphereMaterialComponent));

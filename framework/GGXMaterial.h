@@ -15,7 +15,7 @@ namespace fmwk {
     };
     class GGXMaterial : public MaterialComponent{
     public:
-        GGXMaterial(std::string const& name, Texture& normalTexture, Texture& materialTexture);
+        GGXMaterial(Texture& normalTexture, Texture& materialTexture);
 
         void updateDescriptorSet(int currentImage) override;
 
