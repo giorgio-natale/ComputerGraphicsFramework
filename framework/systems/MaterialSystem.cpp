@@ -15,7 +15,7 @@ namespace fmwk {
         Effect defaultEffect;
         defaultEffect.type = DEFAULT;
         defaultEffect.layout = defaultLayout;
-        defaultEffect.shaderName = "shaders/Default.spv";
+        defaultEffect.shaderName = "shaders/compiled/Default.spv";
         defaultEffect.requiredFeatures = {FRAG_UV};
         _effects.insert({defaultEffect.type, defaultEffect});
 
@@ -26,7 +26,7 @@ namespace fmwk {
         Effect colorBlendEffect;
         colorBlendEffect.type = COLOR_BLEND;
         colorBlendEffect.layout = colorBlendLayout;
-        colorBlendEffect.shaderName = "shaders/ColorBlend.spv";
+        colorBlendEffect.shaderName = "shaders/compiled/ColorBlend.spv";
         colorBlendEffect.requiredFeatures = {FRAG_UV};
         _effects.insert({COLOR_BLEND, colorBlendEffect});
 
@@ -36,7 +36,7 @@ namespace fmwk {
         Effect simplePhongEffect;
         simplePhongEffect.type = SIMPLE_PHONG;
         simplePhongEffect.layout = simplePhongLayout;
-        simplePhongEffect.shaderName = "shaders/SimplePhong.spv";
+        simplePhongEffect.shaderName = "shaders/compiled/SimplePhong.spv";
         simplePhongEffect.requiredFeatures = {FRAG_POSITION, FRAG_UV, FRAG_NORMAL};
 
         _effects.insert({SIMPLE_PHONG, simplePhongEffect});
@@ -52,7 +52,7 @@ namespace fmwk {
         Effect ggxEffect;
         ggxEffect.type = GGX;
         ggxEffect.layout = ggxLayout;
-        ggxEffect.shaderName = "shaders/GGXTest.spv";
+        ggxEffect.shaderName = "shaders/compiled/GGXTest.spv";
         ggxEffect.requiredFeatures = {FRAG_POSITION, FRAG_UV, FRAG_NORMAL, FRAG_TANGENT};
 
 

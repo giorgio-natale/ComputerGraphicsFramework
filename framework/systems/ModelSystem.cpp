@@ -21,8 +21,8 @@ namespace fmwk {
         );
 
         std::set<VertexShader> defaultShaders = {
-                {"shaders/PosUvToUv.spv", {FRAG_UV}},
-                {"shaders/PosUvToUvFragPos.spv", {FRAG_UV, FRAG_POSITION}}
+                {"shaders/compiled/PosUvToUv.spv", {FRAG_UV}},
+                {"shaders/compiled/PosUvToUvFragPos.spv", {FRAG_UV, FRAG_POSITION}}
         };
 
         _vertexDescriptors.insert({VERTEX, {vd, defaultShaders}});
@@ -41,9 +41,9 @@ namespace fmwk {
         );
 
          std::set<VertexShader> posUvNormShaders = {
-                 {"shaders/PosUvNormToUv.spv", {FRAG_UV}},
-                 {"shaders/PosUvNormToUvFragpos.spv", {FRAG_UV, FRAG_POSITION}},
-                 {"shaders/PosUvNormToUvFragposFragnorm.spv", {FRAG_POSITION, FRAG_UV, FRAG_NORMAL}}
+                 {"shaders/compiled/PosUvNormToUv.spv", {FRAG_UV}},
+                 {"shaders/compiled/PosUvNormToUvFragpos.spv", {FRAG_UV, FRAG_POSITION}},
+                 {"shaders/compiled/PosUvNormToUvFragposFragnorm.spv", {FRAG_POSITION, FRAG_UV, FRAG_NORMAL}}
 
          };
 
@@ -64,10 +64,10 @@ namespace fmwk {
          );
 
          std::set<VertexShader> posUvNormTanShaders = {
-                 {"shaders/PosUvNormTanToUv.spv", {FRAG_UV}},
-                 {"shaders/PosUvNormTanToUvFragpos.spv", {FRAG_UV, FRAG_POSITION}},
-                 {"shaders/PosUvNormTanToUvFragposFragnorm.spv", {FRAG_POSITION, FRAG_UV, FRAG_NORMAL}},
-                 {"shaders/PosUvNormTanToUvFragposFragnormFragtan.spv", {FRAG_POSITION, FRAG_UV, FRAG_NORMAL, FRAG_TANGENT}}
+                 {"shaders/compiled/PosUvNormTanToUv.spv", {FRAG_UV}},
+                 {"shaders/compiled/PosUvNormTanToUvFragpos.spv", {FRAG_UV, FRAG_POSITION}},
+                 {"shaders/compiled/PosUvNormTanToUvFragposFragnorm.spv", {FRAG_POSITION, FRAG_UV, FRAG_NORMAL}},
+                 {"shaders/compiled/PosUvNormTanToUvFragposFragnormFragtan.spv", {FRAG_POSITION, FRAG_UV, FRAG_NORMAL, FRAG_TANGENT}}
          };
 
          _vertexDescriptors.insert({VERTEX_WITH_NORMAL_AND_TANGENT, {vd, posUvNormTanShaders}});
