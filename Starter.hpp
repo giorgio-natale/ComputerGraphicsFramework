@@ -35,6 +35,10 @@
 //#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
+#include <plusaes.hpp>
+
+#include <sinfl.h>
+
 
 struct QueueFamilyIndices {
 	std::optional<uint32_t> graphicsFamily;
@@ -113,7 +117,7 @@ struct VertexDescriptor {
 						getAttributeDescriptions();
 };
 
-enum ModelType {OBJ, GLTF};
+enum ModelType {OBJ, GLTF, MGCG};
 
 class BaseModel{
 public:
@@ -138,7 +142,7 @@ class Model : public BaseModel{
 	std::vector<Vert> vertices{};
 	std::vector<uint32_t> indices{};
 	void loadModelOBJ(std::string file);
-	void loadModelGLTF(std::string file);
+	void loadModelGLTF(std::string file, bool encoded);
 	void createIndexBuffer();
 	void createVertexBuffer();
     uint32_t getVertexCount() override;
@@ -553,15 +557,48 @@ void Model<Vert>::loadModelOBJ(std::string file) {
 }
 
 template <class Vert>
-void Model<Vert>::loadModelGLTF(std::string file) {
+void Model<Vert>::loadModelGLTF(std::string file, bool encoded) {
     tinygltf::Model model;
     tinygltf::TinyGLTF loader;
     std::string warn, err;
 
-    std::cout << "Loading : " << file << "[GLTF]\n";
-    if (!loader.LoadASCIIFromFile(&model, &warn, &err,
-                                  file.c_str())) {
-        throw std::runtime_error(warn + err);
+    std::cout << "Loading : " << file << (encoded ? "[MGCG]" : "[GLTF]") << "\n";
+    if(encoded) {
+        auto modelString = Pipeline::readFile(file);
+
+        const std::vector<unsigned char> key = plusaes::key_from_string(&"CG2023SkelKey128"); // 16-char = 128-bit
+        const unsigned char iv[16] = {
+                0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+                0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+        };
+
+        // decrypt
+        unsigned long padded_size = 0;
+        std::vector<unsigned char> decrypted(modelString.size());
+
+        plusaes::decrypt_cbc((unsigned char*)modelString.data(), modelString.size(), &key[0], key.size(), &iv, &decrypted[0], decrypted.size(), &padded_size);
+
+        int size = 0;
+        void *decomp;
+
+        sscanf(reinterpret_cast<char *const>(&decrypted[0]), "%d", &size);
+//std::cout << decrypted.size() << ", decomp: " << size << "\n";
+//for(int i=0;i<32;i++) {
+//	std::cout << (int)decrypted[i] << "\n";
+//}
+
+        decomp = calloc(size, 1);
+        int n = sinflate(decomp, (int)size, &decrypted[16], decrypted.size()-16);
+
+        if (!loader.LoadASCIIFromString(&model, &warn, &err,
+                                        reinterpret_cast<const char *>(decomp), size, "/")) {
+            throw std::runtime_error(warn + err);
+        }
+    } else {
+        if (!loader.LoadASCIIFromFile(&model, &warn, &err,
+                                      file.c_str())) {
+            throw std::runtime_error(warn + err);
+        }
     }
 
     for (const auto& mesh :  model.meshes) {
@@ -717,7 +754,7 @@ void Model<Vert>::loadModelGLTF(std::string file) {
         }
     }
 
-    std::cout << "[GLTF] Vertices: " << vertices.size()
+    std::cout << (encoded ? "[MGCG]" : "[GLTF]") << " Vertices: " << vertices.size()
               << "\nIndices: " << indices.size() << "\n";
 }
 
@@ -768,7 +805,9 @@ void Model<Vert>::init(BaseProject *bp, VertexDescriptor *vd, std::string file, 
     if(MT == OBJ) {
         loadModelOBJ(file);
     } else if(MT == GLTF) {
-        loadModelGLTF(file);
+        loadModelGLTF(file, false);
+    } else if(MT == MGCG) {
+        loadModelGLTF(file, true);
     }
     createVertexBuffer();
     createIndexBuffer();

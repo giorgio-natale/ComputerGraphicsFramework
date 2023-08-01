@@ -84,6 +84,8 @@ namespace fmwk {
             modelType = GLTF;
         } else if(extension == "obj") {
             modelType = OBJ;
+        } else if(extension == "mgcg"){
+            modelType = MGCG;
         } else {
             throw std::runtime_error("Cannot recognize model extension '" + extension + "'");
         }

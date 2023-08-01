@@ -5,6 +5,7 @@
 #define TINYGLTF_NOEXCEPTION
 #define JSON_NOEXCEPTION
 #define TINYGLTF_NO_INCLUDE_STB_IMAGE
+#define SINFL_IMPLEMENTATION
 
 #include "Starter.hpp"
 #include "framework/GameEngine.h"
