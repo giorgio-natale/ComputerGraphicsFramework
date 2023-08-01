@@ -14,12 +14,9 @@ namespace fmwk {
 
     class DefaultMaterial : public MaterialComponent{
     public:
-        DefaultMaterial(float brightness);
+        explicit DefaultMaterial(float brightness);
         void updateDescriptorSet(int currentImage) override;
         DescriptorSetClaim getDescriptorSetClaim() override;
-
-        void update() override;
-
     private:
         float _brightness;
     };

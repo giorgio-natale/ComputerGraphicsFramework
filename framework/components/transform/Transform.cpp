@@ -11,12 +11,12 @@ namespace fmwk {
 
     Transform::Transform(const glm::vec3 &position, const glm::quat &quaternion,
                          const glm::vec3 &scale): Component("Transform"), _position(position), _scale(scale){
-        _areMatricesCoherent = false;
         _quaternion = quaternion;
         _worldMatrix = getWorldMatrix();
         _inverseWorldMatrix = getInverseWorldMatrix();
         _alreadyProvisioned = false;
         _descriptorSet = nullptr;
+        _areMatricesCoherent = false;
     }
 
     glm::mat4 Transform::getWorldMatrix() const{

@@ -20,7 +20,7 @@ namespace fmwk {
     void CameraController::postUpdate() {
         InputResult input = fmwk::GameEngine::getInstance()->getInput();
 
-        auto& cameraTransform =_parentEntity->getTransform();;
+        auto& cameraTransform =_parentEntity->getTransform();
         _rotationAboutCenter = _rotationAboutCenter + glm::vec3(input.r.x * _angularSpeed * input.deltaTime,input.r.y * _angularSpeed * input.deltaTime,0);
         _rotationAboutCenter = {glm::clamp(_rotationAboutCenter[0], glm::radians(-8.75f), glm::radians(60.0f)), _rotationAboutCenter[1] , _rotationAboutCenter[2]};
 

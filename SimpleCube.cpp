@@ -14,6 +14,7 @@
 #include "framework/components/lights/DirectLightComponent.h"
 #include "framework/components/lights/PointLightComponent.h"
 #include "framework/components/lights/SpotLightComponent.h"
+#include "framework/components/materials/SimplePhongMaterial.h"
 
 
 // The uniform buffer objects data structures
@@ -66,61 +67,39 @@ class SimpleCube : public BaseProject {
 		Ar = (float)w / (float)h;
 	}
 	
-	// Here you load and setup all your Vulkan Models and Texutures.
+	// Here you load and setup all your Vulkan Models and Textures.
 	// Here you also create your Descriptor set layouts and load the shaders for the pipelines
 	void localInit() {
-
         auto gameEngine = fmwk::GameEngine::getInstance();
+
         gameEngine->addModel("myCube", fmwk::VERTEX_WITH_NORMAL, "Models/Cube.obj");
         gameEngine->addModel("mySphere", fmwk::VERTEX_WITH_NORMAL_AND_TANGENT, "models/Sphere.gltf");
         gameEngine->addTexture("cubeTexture", "textures/Checker.png");
-
         gameEngine->addTexture("sphereTexture", "textures/Metals_09_basecolor.png");
         gameEngine->addTexture("sphereNormal", "textures/Metals_09_normal.png");
         gameEngine->addTexture("sphereMaterial", "textures/Metals_09_met_rough_ao.png");
 
 
-        auto cubeEntity = std::make_unique<fmwk::Entity>("myCubeEntity");
-        auto modelComponent = std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("myCube"));
-        auto textureComponent = std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("cubeTexture"));
-        auto materialComponent = std::make_unique<fmwk::DefaultMaterial>(1.5f);
-        auto cubeSpawner = std::make_unique<fmwk::CubeSpawner>("CubeSpawner");
-        cubeEntity->addComponent(std::move(modelComponent));
-        cubeEntity->addComponent(std::move(textureComponent));
-        cubeEntity->addComponent(std::move(materialComponent));
-        cubeEntity->addComponent(std::move(cubeSpawner));
+        auto cameraEntity = std::make_unique<fmwk::Entity>("Camera", glm::vec3(0, 0, 10), glm::quat(1, 0, 0, 0));
+        auto cameraComponent = std::make_unique<fmwk::PerspectiveCamera>(0.1f, 100.0f, glm::radians(45.0f));
+        cameraEntity->addComponent(std::move(cameraComponent));
 
+        auto cubeEntity = std::make_unique<fmwk::Entity>("Cube");
+        cubeEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("myCube")));
+        cubeEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("cubeTexture")));
+        cubeEntity->addComponent(std::make_unique<fmwk::SimplePhongMaterial>());
+        cubeEntity->addComponent(std::make_unique<fmwk::CubeSpawner>("CubeSpawner"));
 
-        auto camera = std::make_unique<fmwk::Entity>("Camera", glm::vec3(0,0,8), glm::quat());
-        auto perspectiveCameraComponent = std::make_unique<fmwk::PerspectiveCamera>(0.1f, 100.0f, glm::radians(45.0f));
-        camera->addComponent(std::move(perspectiveCameraComponent));
+        cubeEntity->addComponent(std::make_unique<fmwk::CharacterController>("CharacterController", cameraEntity->getTransform(), 4.0f));
+        cameraEntity->addComponent(std::make_unique<fmwk::CameraController>("CameraController", cubeEntity->getTransform(), glm::radians(120.0f), 8.0f, 0.25f));
 
-        auto characterController = std::make_unique<fmwk::CharacterController>("CharacterController", camera->getTransform(), 4.0f);
-        auto cameraController = std::make_unique<fmwk::CameraController>("CameraController", cubeEntity->getTransform(), glm::radians(120.0f), 8.0f, 0.25f);
-
-        cubeEntity->addComponent(std::move(characterController));
-        camera->addComponent(std::move(cameraController));
-
+        auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(0,3,0), glm::rotate(glm::quat(1,0,0,0), glm::radians(-90.0f), fmwk::X));
+        lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight1", glm::vec3(-1, 0, 0), glm::vec4(1)));
+        //lightEntity->addComponent(std::make_unique<fmwk::PointLightComponent>("PointLight1", glm::vec4(1), 2.0f, 3.0f));
+        lightEntity->addComponent(std::make_unique<fmwk::SpotLightComponent>("SpotLight1", glm::vec4(1), 2.0f, 3.0f, 0.85f, 0.95f));
+        gameEngine->addEntity(std::move(cameraEntity));
         gameEngine->addEntity(std::move(cubeEntity));
-        gameEngine->addEntity(std::move(camera));
-
-        auto directLight = std::make_unique<fmwk::Entity>("DirectLight");
-        auto directLightComponent = std::make_unique<fmwk::DirectLightComponent>("DirectLight", glm::vec3(1, 0, 0), glm::vec4(1,1,1,1));
-        //directLightComponent->turnOff();
-        directLight->addComponent(std::move(directLightComponent));
-        gameEngine->addEntity(std::move(directLight));
-
-        auto pointLight = std::make_unique<fmwk::Entity>("PointLight");
-        auto pointLightComponent = std::make_unique<fmwk::PointLightComponent>("PointLightComponent", glm::vec4(1,1,1,1), 2.0f, 1.5f);
-       // pointLightComponent->turnOff();
-        pointLight->addComponent(std::move(pointLightComponent));
-        gameEngine->addEntity(std::move(pointLight));
-
-        auto spotLight = std::make_unique<fmwk::Entity>("SpotLight", glm::vec3(0, 4, 0), glm::vec3(glm::radians(-90.0f), 0, 0));
-        auto spotLightComponent = std::make_unique<fmwk::SpotLightComponent>("SpotLightComponent", glm::vec4(1,1,1,1), 2.0f, 1.5f, 0.85f, 0.95f);
-        //spotLightComponent->turnOff();
-        spotLight->addComponent(std::move(spotLightComponent));
-        gameEngine->addEntity(std::move(spotLight));
+        gameEngine->addEntity(std::move(lightEntity));
 
 		
 		// Init local variables
