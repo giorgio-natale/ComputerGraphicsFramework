@@ -3,4 +3,4 @@ config.json
 cmake-build-debug
 .idea
 .bat
-main.cpp
+/main.cpp
