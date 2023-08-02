@@ -1,20 +1,21 @@
 // This has been adapted from the Vulkan tutorial
 
-#include "Starter.hpp"
-#include "framework/GameEngine.h"
-#include "framework/components/mesh/MeshComponent.h"
-#include "framework/components/texture/TextureComponent.h"
-#include "framework/components/materials/DefaultMaterial.h"
-#include "framework/components/camera/PerspectiveCamera.h"
-#include "framework/components/scripts/CharacterController.h"
-#include "framework/components/scripts/CameraController.h"
-#include "framework/components/materials/ColorBlendComponent.h"
-#include "framework/components/scripts/CubeSpawner.h"
-#include "framework/components/materials/GGXMaterial.h"
-#include "framework/components/lights/DirectLightComponent.h"
-#include "framework/components/lights/PointLightComponent.h"
-#include "framework/components/lights/SpotLightComponent.h"
-#include "framework/components/materials/SimplePhongMaterial.h"
+#include "../Starter.hpp"
+#include "../framework/GameEngine.h"
+#include "../framework/components/mesh/MeshComponent.h"
+#include "../framework/components/texture/TextureComponent.h"
+#include "../framework/components/materials/DefaultMaterial.h"
+#include "../framework/components/camera/PerspectiveCamera.h"
+#include "../framework/components/scripts/CharacterController.h"
+#include "../framework/components/scripts/CameraController.h"
+#include "../framework/components/materials/ColorBlendComponent.h"
+#include "../framework/components/scripts/CubeSpawner.h"
+#include "../framework/components/materials/GGXMaterial.h"
+#include "../framework/components/lights/DirectLightComponent.h"
+#include "../framework/components/lights/PointLightComponent.h"
+#include "../framework/components/lights/SpotLightComponent.h"
+#include "../framework/components/materials/SimplePhongMaterial.h"
+#include "SimpleCube.h"
 
 
 // The uniform buffer objects data structures
@@ -30,23 +31,7 @@
 // The vertices data structures
 // Example
 
-
-
-
-
-
-// MAIN ! 
-class SimpleCube : public BaseProject {
-	protected:
-
-	// Current aspect ratio (used by the callback that resized the window
-	float Ar;
-
-
-	// Other application parameters
-
-	// Here you set the main application parameters
-	void setWindowParameters() {
+	void SimpleCube::setWindowParameters() {
 		// window size, titile and initial background
 		windowWidth = 800;
 		windowHeight = 600;
@@ -63,13 +48,13 @@ class SimpleCube : public BaseProject {
 	}
 	
 	// What to do when the window changes size
-	void onWindowResize(int w, int h) {
+	void SimpleCube::onWindowResize(int w, int h) {
 		Ar = (float)w / (float)h;
 	}
 	
 	// Here you load and setup all your Vulkan Models and Textures.
 	// Here you also create your Descriptor set layouts and load the shaders for the pipelines
-	void localInit() {
+	void SimpleCube::localInit() {
         auto gameEngine = fmwk::GameEngine::getInstance();
 
         gameEngine->addModel("myCube", fmwk::VERTEX_WITH_NORMAL, "Models/Cube.obj");
@@ -107,7 +92,7 @@ class SimpleCube : public BaseProject {
 	}
 	
 	// Here you create your pipelines and Descriptor Sets!
-	void pipelinesAndDescriptorSetsInit() {
+	void SimpleCube::pipelinesAndDescriptorSetsInit() {
         auto gameEngine = fmwk::GameEngine::getInstance();
         gameEngine->rebuildResources();
 
@@ -115,7 +100,7 @@ class SimpleCube : public BaseProject {
 
 	// Here you destroy your pipelines and Descriptor Sets!
 	// All the object classes defined in Starter.hpp have a method .cleanup() for this purpose
-	void pipelinesAndDescriptorSetsCleanup() {
+	void SimpleCube::pipelinesAndDescriptorSetsCleanup() {
         std::cout << "PIPELINES AND DESCRIPTOR SETS CLEANUP CALLED" << std::endl;
         auto gameEngine = fmwk::GameEngine::getInstance();
         gameEngine->cleanupResources();
@@ -126,7 +111,7 @@ class SimpleCube : public BaseProject {
 	// All the object classes defined in Starter.hpp have a method .cleanup() for this purpose
 	// You also have to destroy the pipelines: since they need to be rebuilt, they have two different
 	// methods: .cleanup() recreates them, while .destroy() delete them completely
-	void localCleanup() {
+	void SimpleCube::localCleanup() {
         std::cout << "LOCAL CLEANUP CALLED" << std::endl;
 
 	}
@@ -135,14 +120,14 @@ class SimpleCube : public BaseProject {
 	// You send to the GPU all the objects you want to draw,
 	// with their buffers and textures
 
-	void populateCommandBuffer(VkCommandBuffer commandBuffer, int currentImage) {
+	void SimpleCube::populateCommandBuffer(VkCommandBuffer commandBuffer, int currentImage) {
         auto gameEngine = fmwk::GameEngine::getInstance();
         gameEngine->renderFrame(commandBuffer, currentImage);
 	}
 
 	// Here is where you update the uniforms.
 	// Very likely this will be where you will be writing the logic of your application.
-	void updateUniformBuffer(uint32_t currentImage) {
+	void SimpleCube::updateUniformBuffer(uint32_t currentImage) {
         auto gameEngine = fmwk::GameEngine::getInstance();
         gameEngine->logicUpdate();
         gameEngine->provisionResources(true);
@@ -158,19 +143,3 @@ class SimpleCube : public BaseProject {
 		// the third parameter is its size
 		// the fourth parameter is the location inside the descriptor set of this uniform block
 	}
-};
-
-
-// This is the main: probably you do not need to touch this!
-int main() {
-    SimpleCube app;
-
-    try {
-        app.run();
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    return EXIT_SUCCESS;
-}
