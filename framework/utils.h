@@ -42,6 +42,10 @@ namespace fmwk {
                 * glm::translate(I, -1.0f * center);
     }
 
+    inline glm::quat createQuat(glm::vec3 direction, float angleDegrees){
+        return glm::rotate(glm::quat(1,0,0,0), glm::radians(angleDegrees), glm::normalize(direction));
+    }
+
 
 }
 
