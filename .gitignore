@@ -1,5 +1,5 @@
 .DS_Store
-CMakeLists.txt
+config.json
 cmake-build-debug
 .idea
 .bat
