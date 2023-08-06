@@ -23,6 +23,7 @@
 #include "systems/MaterialSystem.h"
 #include "systems/RenderSystem.h"
 #include "systems/InputSystem.h"
+#include "systems/CollisionSystem.h"
 
 namespace fmwk {
 
@@ -82,7 +83,7 @@ namespace fmwk {
     private:
         explicit GameEngine(BaseProject* bp):_window(nullptr), _modelSystem(ModelSystem(bp)), _textureSystem(TextureSystem(bp)),
                                              _materialSystem(MaterialSystem(bp)), _renderSystem(RenderSystem(bp)),
-                                             _inputSystem(){
+                                             _inputSystem(), _collisionSystem(){
             _bp = bp;
         };
         BaseProject* _bp;
@@ -97,6 +98,7 @@ namespace fmwk {
         MaterialSystem _materialSystem;
         RenderSystem _renderSystem;
         InputSystem _inputSystem;
+        CollisionSystem _collisionSystem;
 
         //utils
         std::vector<Component*> getAllComponents();

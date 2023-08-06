@@ -6,6 +6,7 @@
 #include "components/materials/MaterialComponent.h"
 #include "components/mesh/MeshComponent.h"
 #include "components/texture/TextureComponent.h"
+#include "components/collision/Collider.h"
 
 namespace fmwk {
     GameEngine* GameEngine::_instance= nullptr;
@@ -74,7 +75,7 @@ namespace fmwk {
     void GameEngine::logicUpdate() {
         _inputSystem.captureInputs();
 
-        std::cout << "Frame rate:" << 1 / getInput().deltaTime << " Entities: " << _entities.size() << std::endl;
+        //std::cout << "Frame rate:" << 1 / getInput().deltaTime << " Entities: " << _entities.size() << std::endl;
 
 
         std::vector<Component*> components = getAllComponents();
@@ -151,6 +152,9 @@ namespace fmwk {
                     transform->provision(&insertedElement->second.first);
                 }else if(auto* lightComponent = dynamic_cast<LightComponent*>(component)){
                     lightComponent->provision(&_renderSystem.getGlobalDescriptorSet());
+                }else if(auto* colliderComponent = dynamic_cast<Collider*>(component)){
+                    _collisionSystem.addCollider(colliderComponent);
+                    colliderComponent->provision();
                 }
                 else{
                     throw std::runtime_error("Provision of component '" + component->getName() + "' not implemented");
@@ -274,6 +278,8 @@ namespace fmwk {
             elem->second.first.cleanup();
             _entitiesDescriptorSets.erase(key);
         }
+
+        _collisionSystem.removeCollider(component->getParent()->getName(), component->getName());
     }
 
     void GameEngine::removeResourcesOfEntity(Entity *entity) {

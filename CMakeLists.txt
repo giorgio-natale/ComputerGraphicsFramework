@@ -37,7 +37,7 @@ add_executable(${PROJECT_NAME} ${MAIN} starter.cpp framework/components/scripts/
 demo/MovingCube.cpp
         demo/MovingCube.h
         framework/components/scripts/MovingCubeController.cpp
-        framework/components/scripts/MovingCubeController.h)
+        framework/components/scripts/MovingCubeController.h framework/components/collision/Collider.cpp framework/components/collision/Collider.h framework/systems/CollisionSystem.cpp framework/systems/CollisionSystem.h framework/components/scripts/EntityDespawner.cpp framework/components/scripts/EntityDespawner.h)
 target_link_libraries(${PROJECT_NAME})
 find_package(Vulkan REQUIRED)
 foreach(dir IN LISTS Vulkan_INCLUDE_DIR INCLUDE_DIRS)
