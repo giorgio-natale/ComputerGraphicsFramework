@@ -332,5 +332,13 @@ namespace fmwk {
         _inputSystem.bootSystem(_window);
     }
 
+    std::vector<Entity *> GameEngine::getCollidingEntities(Collider *collider) {
+        return _collisionSystem.getCollidingEntities(collider);
+    }
+
+    Entity *GameEngine::getCharacterCollidingEntity(Collider *collider) {
+        return _collisionSystem.getCharacterCollidingEntity(collider);
+    }
+
 
 } // fmwk

@@ -62,6 +62,9 @@ namespace fmwk {
         BoundTexture& getBoundTextureByName(std::string const& name);
         InputResult getInput();
 
+        std::vector<Entity*> getCollidingEntities(Collider* collider);
+        Entity* getCharacterCollidingEntity(Collider* collider);
+
         //TODO: remove these
         std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>>& getAllVertexDescriptors();
         DescriptorSetLayout& getTextureDescriptorSetLayout();
