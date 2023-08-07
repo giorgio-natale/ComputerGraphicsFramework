@@ -41,12 +41,13 @@ demo/MovingCube.cpp
         demo/ColliderTest.cpp
         demo/ColliderTest.h
         framework/components/scripts/TestCollisionChecker.cpp
-        framework/components/scripts/TestCollisionChecker.h)
         framework/components/scripts/TestCollisionChecker.h
         framework/components/scripts/BulletSpawner.cpp
         framework/components/scripts/BulletSpawner.h
         framework/components/scripts/BulletAI.cpp
         framework/components/scripts/BulletAI.h
+        demo/BulletSpawnerTest.cpp
+        demo/BulletSpawnerTest.h)
 target_link_libraries(${PROJECT_NAME})
 find_package(Vulkan REQUIRED)
 foreach(dir IN LISTS Vulkan_INCLUDE_DIR INCLUDE_DIRS)
