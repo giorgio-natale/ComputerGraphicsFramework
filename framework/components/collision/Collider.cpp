@@ -9,7 +9,10 @@ namespace fmwk {
         return _alreadyProvisioned;
     }
 
-    Collider::Collider(const std::string &name, float radius) : Component(name), _radius(radius), _alreadyProvisioned(false){}
+    Collider::Collider(const std::string &name, float radius, std::string const &tag) : Component(name),
+                                                                                        _radius(radius),
+                                                                                        _alreadyProvisioned(false),
+                                                                                        _tag(tag) {}
 
     void Collider::provision() {
         _alreadyProvisioned = true;
@@ -17,5 +20,9 @@ namespace fmwk {
 
     float Collider::getRadius() const {
         return _radius;
+    }
+
+    const std::string &Collider::getTag() const {
+        return _tag;
     }
 } // fmwk

@@ -8,6 +8,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <unordered_set>
 #include "../components/collision/Collider.h"
 
 namespace fmwk {
@@ -16,7 +17,7 @@ namespace fmwk {
     public:
         void addCollider(Collider* collider);
         void removeCollider(std::string const& entityName, std::string const& colliderName);
-        std::vector<Entity*> getCollidingEntities(Collider* collider);
+        std::vector<Entity*> getCollidingEntities(Collider* collider, std::unordered_set<std::string> const *targetTags);
         Entity* getCharacterCollidingEntity(Collider* collider);
 
     private:

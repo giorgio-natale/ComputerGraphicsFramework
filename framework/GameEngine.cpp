@@ -9,18 +9,17 @@
 #include "components/collision/Collider.h"
 
 namespace fmwk {
-    GameEngine* GameEngine::_instance= nullptr;
+    GameEngine *GameEngine::_instance = nullptr;
 
-    void GameEngine::createInstance(BaseProject *bp){
-        if(_instance != nullptr){
+    void GameEngine::createInstance(BaseProject *bp) {
+        if (_instance != nullptr) {
             throw std::runtime_error("Cannot initialize game engine twice");
         }
         _instance = new GameEngine(bp);
     }
 
-    GameEngine *GameEngine::getInstance()
-    {
-        if(_instance==nullptr){
+    GameEngine *GameEngine::getInstance() {
+        if (_instance == nullptr) {
             throw std::runtime_error("Cannot obtain GameEngine instance if GameEngine has not been created");
         }
         return _instance;
@@ -31,26 +30,26 @@ namespace fmwk {
     }
 
     float GameEngine::getAspectRatio() {
-        return (float)_windowSize.first / (float)_windowSize.second;
+        return (float) _windowSize.first / (float) _windowSize.second;
     }
 
     void GameEngine::windowResizeCallback(GLFWwindow *window, int width, int height) {
         _windowSize = std::pair{width, height};
     }
 
-    Entity &GameEngine::getEntityByName(const std::string &name){
+    Entity &GameEngine::getEntityByName(const std::string &name) {
         auto itr = _entities.find(name);
         if (itr == _entities.end())
-            throw std::runtime_error("Could not find entity with name '" + name+"'");
+            throw std::runtime_error("Could not find entity with name '" + name + "'");
         return *(_entities.find(name)->second);
     }
 
     std::vector<Entity *> GameEngine::getAllEntities() {
-        std::vector<Entity*> entities;
+        std::vector<Entity *> entities;
         std::transform(_entities.cbegin(),
                        _entities.cend(),
                        std::back_inserter(entities),
-                       [](auto & entry){
+                       [](auto &entry) {
                            return entry.second.get();
                        });
         return entities;
@@ -66,7 +65,7 @@ namespace fmwk {
 
     void GameEngine::removeEntity(const std::string &name) {
         auto elem = _entities.find(name);
-        if(elem != _entities.end()){
+        if (elem != _entities.end()) {
             removeResourcesOfEntity(elem->second.get());
             _entities.erase(name);
         }
@@ -78,13 +77,13 @@ namespace fmwk {
         //std::cout << "Frame rate:" << 1 / getInput().deltaTime << " Entities: " << _entities.size() << std::endl;
 
 
-        std::vector<Component*> components = getAllComponents();
-        for(Component* component : components){
+        std::vector<Component *> components = getAllComponents();
+        for (Component *component: components) {
             component->update();
         }
         flushEnqueuedEntityOperations();
         components = getAllComponents();
-        for(Component* component : components){
+        for (Component *component: components) {
             component->postUpdate();
         }
         flushEnqueuedEntityOperations();
@@ -99,7 +98,8 @@ namespace fmwk {
         return _modelSystem.getModelByName(name);
     }
 
-    std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>>& GameEngine::getAllVertexDescriptors(){
+    std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>> &
+    GameEngine::getAllVertexDescriptors() {
         return _modelSystem.getAllVertexDescriptors();
     }
 
@@ -118,45 +118,55 @@ namespace fmwk {
     void GameEngine::bootTextureSystem() {
         _textureSystem.bootSystem();
     }
+
     void GameEngine::bootMaterialSystem() {
         _materialSystem.bootSystem();
     }
-    void GameEngine::bootRenderSystem(){
-        _renderSystem.bootSystem(_textureSystem.getTextureDescriptorSetLayout(), _modelSystem.getAllVertexDescriptors(), _materialSystem.getAllEffects());
+
+    void GameEngine::bootRenderSystem() {
+        _renderSystem.bootSystem(_textureSystem.getTextureDescriptorSetLayout(), _modelSystem.getAllVertexDescriptors(),
+                                 _materialSystem.getAllEffects());
     }
 
     void GameEngine::provisionResources(bool initializeDescriptorSets) {
         auto components = getAllComponents();
-        for(Component* component : components){
-            if(!component->isProvisioned()){
-                if(auto* materialComponent = dynamic_cast<MaterialComponent*>(component)){
+        for (Component *component: components) {
+            if (!component->isProvisioned()) {
+                if (auto *materialComponent = dynamic_cast<MaterialComponent *>(component)) {
                     DescriptorSet descriptorSet;
-                    DescriptorSetLayout& dsl = _materialSystem.getEffectByType(materialComponent->getEffectType()).layout;
-                    auto* meshComponent = dynamic_cast<MeshComponent*>(&materialComponent->getParent()->getComponentByName("Mesh"));
-                    if(!meshComponent){
+                    DescriptorSetLayout &dsl = _materialSystem.getEffectByType(
+                            materialComponent->getEffectType()).layout;
+                    auto *meshComponent = dynamic_cast<MeshComponent *>(&materialComponent->getParent()->getComponentByName(
+                            "Mesh"));
+                    if (!meshComponent) {
                         throw std::runtime_error("Cannot cast to a Mesh component while provisioning resources");
                     }
                     VertexType vertexType = meshComponent->getModel().getType();
-                    Pipeline& pipeline = _renderSystem.getPipeline(vertexType, materialComponent->getEffectType());
-                    auto [insertedElement, ok] = _entitiesDescriptorSets.insert({component->getParent()->getName() + "-" + component->getName(), {descriptorSet, {&dsl, materialComponent->getDescriptorSetClaim()}}});
-                    if(initializeDescriptorSets)
+                    Pipeline &pipeline = _renderSystem.getPipeline(vertexType, materialComponent->getEffectType());
+                    auto [insertedElement, ok] = _entitiesDescriptorSets.insert(
+                            {component->getParent()->getName() + "-" + component->getName(),
+                             {descriptorSet, {&dsl, materialComponent->getDescriptorSetClaim()}}});
+                    if (initializeDescriptorSets)
                         insertedElement->second.first.init(_bp, &dsl, materialComponent->getDescriptorSetClaim());
                     materialComponent->provision(&insertedElement->second.first, &pipeline);
-                }else if(auto* transform = dynamic_cast<Transform*>(component)){
+                } else if (auto *transform = dynamic_cast<Transform *>(component)) {
                     DescriptorSet descriptorSet;
-                    DescriptorSetLayout& dsl = _renderSystem.getModelDescriptorSetLayout();
-                    DescriptorSetInitializationInfo initializationInfo = {&dsl, {{0, UNIFORM, sizeof(EntityTransformUniformBlock)}}};
-                    auto [insertedElement, ok] = _entitiesDescriptorSets.insert({component->getParent()->getName() + "-" + component->getName(), {descriptorSet, initializationInfo}});
-                    if(initializeDescriptorSets)
-                        insertedElement->second.first.init(_bp, &dsl, {{0, UNIFORM, sizeof(EntityTransformUniformBlock)}});
+                    DescriptorSetLayout &dsl = _renderSystem.getModelDescriptorSetLayout();
+                    DescriptorSetInitializationInfo initializationInfo = {&dsl, {{0, UNIFORM,
+                                                                                  sizeof(EntityTransformUniformBlock)}}};
+                    auto [insertedElement, ok] = _entitiesDescriptorSets.insert(
+                            {component->getParent()->getName() + "-" + component->getName(),
+                             {descriptorSet, initializationInfo}});
+                    if (initializeDescriptorSets)
+                        insertedElement->second.first.init(_bp, &dsl,
+                                                           {{0, UNIFORM, sizeof(EntityTransformUniformBlock)}});
                     transform->provision(&insertedElement->second.first);
-                }else if(auto* lightComponent = dynamic_cast<LightComponent*>(component)){
+                } else if (auto *lightComponent = dynamic_cast<LightComponent *>(component)) {
                     lightComponent->provision(&_renderSystem.getGlobalDescriptorSet());
-                }else if(auto* colliderComponent = dynamic_cast<Collider*>(component)){
+                } else if (auto *colliderComponent = dynamic_cast<Collider *>(component)) {
                     _collisionSystem.addCollider(colliderComponent);
                     colliderComponent->provision();
-                }
-                else{
+                } else {
                     throw std::runtime_error("Provision of component '" + component->getName() + "' not implemented");
                 }
             }
@@ -166,32 +176,32 @@ namespace fmwk {
     void GameEngine::updateGraphicResources(int currentImage) {
 
         auto allComponents = getAllComponents();
-        std::vector<LightComponent*> lights;
-        for(Component* component : allComponents){
-            if(auto* lightComponent = dynamic_cast<LightComponent*>(component))
+        std::vector<LightComponent *> lights;
+        for (Component *component: allComponents) {
+            if (auto *lightComponent = dynamic_cast<LightComponent *>(component))
                 lights.push_back(lightComponent);
         }
-        auto* cameraComponent = dynamic_cast<Camera*>(&getEntityByName("Camera").getComponentByName("Camera"));
+        auto *cameraComponent = dynamic_cast<Camera *>(&getEntityByName("Camera").getComponentByName("Camera"));
         _renderSystem.updateGlobalDescriptor(cameraComponent, lights, currentImage);
-        for(Component* component : getAllComponents()){
-            if(auto* materialComponent = dynamic_cast<MaterialComponent*>(component)){
+        for (Component *component: getAllComponents()) {
+            if (auto *materialComponent = dynamic_cast<MaterialComponent *>(component)) {
                 materialComponent->updateDescriptorSet(currentImage);
-            }else if(auto* transformComponent = dynamic_cast<Transform*>(component)){
+            } else if (auto *transformComponent = dynamic_cast<Transform *>(component)) {
                 transformComponent->updateDescriptorSet(currentImage);
             }
         }
     }
 
     void GameEngine::renderFrame(VkCommandBuffer commandBuffer, int currentImage) {
-        std::vector<Entity*> entities = getAllEntities();
-        Pipeline* oldPipeline = nullptr;
-        BaseModel* oldModel = nullptr;
-        DescriptorSet* globalDescriptorSet = &_renderSystem.getGlobalDescriptorSet();
-        BoundTexture* oldTexture = nullptr;
+        std::vector<Entity *> entities = getAllEntities();
+        Pipeline *oldPipeline = nullptr;
+        BaseModel *oldModel = nullptr;
+        DescriptorSet *globalDescriptorSet = &_renderSystem.getGlobalDescriptorSet();
+        BoundTexture *oldTexture = nullptr;
 
         bool needToBindGlobalDescriptor = true;
-        for(Entity* entity : entities){
-            if(entity->hasComponent("Mesh")) {
+        for (Entity *entity: entities) {
+            if (entity->hasComponent("Mesh")) {
                 Transform &transform = entity->getTransform();
                 MeshComponent &meshComponent = reinterpret_cast<MeshComponent &>(entity->getComponentByName("Mesh"));
                 MaterialComponent &materialComponent = reinterpret_cast<MaterialComponent &>(entity->getComponentByName(
@@ -214,7 +224,8 @@ namespace fmwk {
                     needToBindGlobalDescriptor = false;
                 }
                 if (&textureComponent.getBoundTexture() != oldTexture) {
-                    textureComponent.getBoundTexture().getDescriptorSet().bind(commandBuffer, *oldPipeline, 1, currentImage);
+                    textureComponent.getBoundTexture().getDescriptorSet().bind(commandBuffer, *oldPipeline, 1,
+                                                                               currentImage);
                     oldTexture = &textureComponent.getBoundTexture();
                 }
                 materialComponent.getDescriptorSet().bind(commandBuffer, *oldPipeline, 2, currentImage);
@@ -225,26 +236,25 @@ namespace fmwk {
         }
 
 
-
     }
 
     std::vector<Component *> GameEngine::getAllComponents() {
-        std::vector<Component*> components;
-        for(Entity* entity : getAllEntities()){
-            for(Component* component : entity->getAllComponents())
+        std::vector<Component *> components;
+        for (Entity *entity: getAllEntities()) {
+            for (Component *component: entity->getAllComponents())
                 components.push_back(component);
         }
         return components;
     }
 
     void GameEngine::rebuildDescriptorSets() {
-        for(auto& [key, elem] : _entitiesDescriptorSets){
+        for (auto &[key, elem]: _entitiesDescriptorSets) {
             elem.first.init(_bp, elem.second.descriptorSetLayout, elem.second.descriptorSetClaim);
         }
     }
 
     void GameEngine::clearDescriptorSets() {
-        for(auto& [key, elem] : _entitiesDescriptorSets){
+        for (auto &[key, elem]: _entitiesDescriptorSets) {
             elem.first.cleanup();
         }
     }
@@ -274,7 +284,7 @@ namespace fmwk {
     void GameEngine::removeResourcesOfComponent(Component *component) {
         auto key = component->getParent()->getName() + "-" + component->getName();
         auto elem = _entitiesDescriptorSets.find(key);
-        if(elem != _entitiesDescriptorSets.end()){
+        if (elem != _entitiesDescriptorSets.end()) {
             elem->second.first.cleanup();
             _entitiesDescriptorSets.erase(key);
         }
@@ -283,21 +293,22 @@ namespace fmwk {
     }
 
     void GameEngine::removeResourcesOfEntity(Entity *entity) {
-        for(Component* component : entity->getAllComponents()){
+        for (Component *component: entity->getAllComponents()) {
             removeResourcesOfComponent(component);
         }
     }
 
     void GameEngine::addEntityToContainer(std::unique_ptr<Entity> entity,
-                                          std::map<std::string, std::unique_ptr<Entity>>& container) {
-        if(container.find(entity->getName()) != container.end())
-            throw std::runtime_error("Could not add entity with name '" + entity->getName() + "' because there was another entity with the same name");
+                                          std::map<std::string, std::unique_ptr<Entity>> &container) {
+        if (container.find(entity->getName()) != container.end())
+            throw std::runtime_error("Could not add entity with name '" + entity->getName() +
+                                     "' because there was another entity with the same name");
         container.insert({entity->getName(), std::move(entity)});
     }
 
     void GameEngine::enqueueEntityRemoval(const std::string &name) {
         //TODO: decide if making the application crash if the entity is not found or do nothing (in this case it crashes)
-        Entity& entity = getEntityByName(name);
+        Entity &entity = getEntityByName(name);
         entity.markForRemoval();
     }
 
@@ -306,19 +317,19 @@ namespace fmwk {
 
         //removing entities and the components marked for removal
         //TODO: provision the components with a lambda that will allow them to free themselves
-        for(auto entity : entities){
-            if(entity->isMarkedForRemoval())
+        for (auto entity: entities) {
+            if (entity->isMarkedForRemoval())
                 removeEntity(entity->getName());
-            else{
-                for(Component* component : entity->getAllComponents()){
-                    if(component->isMarkedForRemoval())
+            else {
+                for (Component *component: entity->getAllComponents()) {
+                    if (component->isMarkedForRemoval())
                         removeResourcesOfComponent(component);
                 }
                 entity->flushEnqueuedComponents();
             }
         }
 
-        for(auto& [name, entity] : _enqueuedEntities){
+        for (auto &[name, entity]: _enqueuedEntities) {
             addEntity(std::move(entity));
         }
         _enqueuedEntities.clear();
@@ -332,8 +343,9 @@ namespace fmwk {
         _inputSystem.bootSystem(_window);
     }
 
-    std::vector<Entity *> GameEngine::getCollidingEntities(Collider *collider) {
-        return _collisionSystem.getCollidingEntities(collider);
+    std::vector<Entity *>
+    GameEngine::getCollidingEntities(Collider *collider, std::unordered_set<std::string> const *targetTags) {
+        return _collisionSystem.getCollidingEntities(collider, targetTags);
     }
 
     Entity *GameEngine::getCharacterCollidingEntity(Collider *collider) {

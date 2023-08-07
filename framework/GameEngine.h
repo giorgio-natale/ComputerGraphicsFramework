@@ -27,71 +27,102 @@
 
 namespace fmwk {
 
-    struct DescriptorSetInitializationInfo{
-        DescriptorSetLayout* descriptorSetLayout;
+    struct DescriptorSetInitializationInfo {
+        DescriptorSetLayout *descriptorSetLayout;
         DescriptorSetClaim descriptorSetClaim;
     };
 
-    class GameEngine:GameEngineApi{
+    class GameEngine : GameEngineApi {
     public:
         GameEngine(GameEngine &other) = delete;
+
         void operator=(const GameEngine &) = delete;
-        static GameEngine* getInstance();
-        static void createInstance(BaseProject* bp);
-        void setWindow(GLFWwindow* window) override{
+
+        static GameEngine *getInstance();
+
+        static void createInstance(BaseProject *bp);
+
+        void setWindow(GLFWwindow *window) override {
             _window = window;
         }
+
         void bootTextureSystem();
+
         void bootMaterialSystem();
+
         void bootRenderSystem();
+
         void bootInputSystem();
 
         void addEntity(std::unique_ptr<Entity> entity) override;
+
         void enqueueEntity(std::unique_ptr<Entity> entity);
-        void removeEntity(std::string const& name);
-        void enqueueEntityRemoval(std::string const& name);
+
+        void removeEntity(std::string const &name);
+
+        void enqueueEntityRemoval(std::string const &name);
+
         void flushEnqueuedEntityOperations();
 
 
         void logicUpdate() override;
-        Entity& getEntityByName(const std::string& name) override;
-        std::vector<Entity*> getAllEntities() override;
-        void addModel(std::string const& name, VertexType vertexType, std::string const& fileName);
-        TModel& getModelByName(std::string const& name);
-        void addTexture(std::string const& name, std::string const& fileName);
-        BoundTexture& getBoundTextureByName(std::string const& name);
+
+        Entity &getEntityByName(const std::string &name) override;
+
+        std::vector<Entity *> getAllEntities() override;
+
+        void addModel(std::string const &name, VertexType vertexType, std::string const &fileName);
+
+        TModel &getModelByName(std::string const &name);
+
+        void addTexture(std::string const &name, std::string const &fileName);
+
+        BoundTexture &getBoundTextureByName(std::string const &name);
+
         InputResult getInput();
 
-        std::vector<Entity*> getCollidingEntities(Collider* collider);
-        Entity* getCharacterCollidingEntity(Collider* collider);
+        std::vector<Entity *>
+        getCollidingEntities(Collider *collider, std::unordered_set<std::string> const *targetTags);
+
+        Entity *getCharacterCollidingEntity(Collider *collider);
 
         //TODO: remove these
-        std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>>& getAllVertexDescriptors();
-        DescriptorSetLayout& getTextureDescriptorSetLayout();
+        std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>> &getAllVertexDescriptors();
 
-        void windowResizeCallback(GLFWwindow* _window, int width, int height) override;
+        DescriptorSetLayout &getTextureDescriptorSetLayout();
+
+        void windowResizeCallback(GLFWwindow *_window, int width, int height) override;
+
         std::pair<int, int> getWindowSize() override;
+
         float getAspectRatio() override;
+
         void updateGraphicResources(int currentImage);
+
         void renderFrame(VkCommandBuffer commandBuffer, int currentImage);
 
         //TODO: put this in a separate centralized system responsible for resource allocation
         void buildStaticResources();
+
         void provisionResources(bool initializeDescriptorSets);
+
         void rebuildResources();
+
         void cleanupResources();
+
         void destroyResources();
 
 
     private:
-        explicit GameEngine(BaseProject* bp):_window(nullptr), _modelSystem(ModelSystem(bp)), _textureSystem(TextureSystem(bp)),
-                                             _materialSystem(MaterialSystem(bp)), _renderSystem(RenderSystem(bp)),
-                                             _inputSystem(), _collisionSystem(){
+        explicit GameEngine(BaseProject *bp) : _window(nullptr), _modelSystem(ModelSystem(bp)),
+                                               _textureSystem(TextureSystem(bp)),
+                                               _materialSystem(MaterialSystem(bp)), _renderSystem(RenderSystem(bp)),
+                                               _inputSystem(), _collisionSystem() {
             _bp = bp;
         };
-        BaseProject* _bp;
-        static GameEngine* _instance;
-        GLFWwindow* _window;
+        BaseProject *_bp;
+        static GameEngine *_instance;
+        GLFWwindow *_window;
         std::pair<int, int> _windowSize = {800, 600};
         std::map<std::string, std::unique_ptr<Entity>> _entities;
         std::map<std::string, std::unique_ptr<Entity>> _enqueuedEntities;
@@ -104,13 +135,18 @@ namespace fmwk {
         CollisionSystem _collisionSystem;
 
         //utils
-        std::vector<Component*> getAllComponents();
-        void rebuildDescriptorSets();
-        void clearDescriptorSets();
-        void removeResourcesOfEntity(Entity* entity);
-        void removeResourcesOfComponent(Component* component);
+        std::vector<Component *> getAllComponents();
 
-        static void addEntityToContainer(std::unique_ptr<Entity> entity, std::map<std::string, std::unique_ptr<Entity>>& container);
+        void rebuildDescriptorSets();
+
+        void clearDescriptorSets();
+
+        void removeResourcesOfEntity(Entity *entity);
+
+        void removeResourcesOfComponent(Component *component);
+
+        static void
+        addEntityToContainer(std::unique_ptr<Entity> entity, std::map<std::string, std::unique_ptr<Entity>> &container);
     };
 
 } // fmwk

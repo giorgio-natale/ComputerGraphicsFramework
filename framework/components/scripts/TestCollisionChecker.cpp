@@ -9,10 +9,10 @@ namespace fmwk {
     TestCollisionChecker::TestCollisionChecker(const std::string &name) : Component(name) {}
 
     void TestCollisionChecker::update() {
-        GameEngine* gameEngine = GameEngine::getInstance();
+        GameEngine *gameEngine = GameEngine::getInstance();
         std::vector<Entity *> collidingEntities = gameEngine->getCollidingEntities(
-                static_cast<Collider *>(&(getParent()->getComponentByName("CharacterCollider"))));
-        for(Entity* entity : collidingEntities) {
+                static_cast<Collider *>(&(getParent()->getComponentByName("CharacterCollider"))), nullptr);
+        for (Entity *entity: collidingEntities) {
             std::cout << "COLLISION WITH " << entity->getName() << std::endl;
         }
     }
