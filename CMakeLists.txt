@@ -49,7 +49,11 @@ demo/MovingCube.cpp
         demo/BulletSpawnerTest.cpp
         demo/BulletSpawnerTest.h
         demo/MazeGeneration.cpp demo/MazeGeneration.h maze_generation/Direction.cpp maze_generation/Direction.h maze_generation/Position.cpp maze_generation/Position.h maze_generation/mazeUtils.h maze_generation/FragmentedFace.cpp maze_generation/FragmentedFace.h maze_generation/FragmentedBox.cpp maze_generation/FragmentedBox.h maze_generation/VertexDictionary.cpp maze_generation/VertexDictionary.h maze_generation/MazeCell.cpp maze_generation/MazeCell.h maze_generation/Maze.cpp maze_generation/Maze.h
-        )
+        demo/EnemyDemo.cpp
+        demo/EnemyDemo.h
+        framework/components/scripts/EnemyController.cpp
+        framework/components/scripts/EnemyController.h
+)
 target_link_libraries(${PROJECT_NAME})
 find_package(Vulkan REQUIRED)
 foreach(dir IN LISTS Vulkan_INCLUDE_DIR INCLUDE_DIRS)
