@@ -66,19 +66,17 @@ namespace fmwk {
 
 
         void logicUpdate() override;
-
-        Entity &getEntityByName(const std::string &name) override;
-
-        std::vector<Entity *> getAllEntities() override;
-
-        void addModel(std::string const &name, VertexType vertexType, std::string const &fileName);
-
-        TModel &getModelByName(std::string const &name);
-
-        void addTexture(std::string const &name, std::string const &fileName);
-
-        BoundTexture &getBoundTextureByName(std::string const &name);
-
+        Entity& getEntityByName(const std::string& name) override;
+        std::vector<Entity*> getAllEntities() override;
+        void addModel(std::string const& name, VertexType vertexType, std::string const& fileName);
+        template<class Vert>
+        void addModel(const std::string &name, VertexType vertexType, const std::vector<Vert> &vertices,
+                                  const std::vector<uint32_t> &indices) {
+            _modelSystem.addModel(name, vertexType, vertices, indices);
+        }
+        TModel& getModelByName(std::string const& name);
+        void addTexture(std::string const& name, std::string const& fileName);
+        BoundTexture& getBoundTextureByName(std::string const& name);
         InputResult getInput();
 
         std::vector<Entity *>

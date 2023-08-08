@@ -90,22 +90,7 @@ namespace fmwk {
             throw std::runtime_error("Cannot recognize model extension '" + extension + "'");
         }
 
-        std::unique_ptr<BaseModel> model;
-        switch (vertexType) {
-            case VERTEX: {
-                model = std::make_unique<Model<Vertex>>();
-                break;
-            }
-            case VERTEX_WITH_NORMAL:
-                model = std::make_unique<Model<VertexWithNormal>>();
-                break;
-            case VERTEX_WITH_NORMAL_AND_TANGENT:
-                model = std::make_unique<Model<VertexWithNormalAndTan>>();
-                break;
-            default:
-                throw std::runtime_error("Remember to add new vertex layout in model loading code");
-        }
-
+        std::unique_ptr<BaseModel> model = createEmptyModel(vertexType);
         model->init(_bp, &_vertexDescriptors.find(vertexType)->second.first, fileName, modelType);
         _models.insert({name, TModel(std::move(model), vertexType)});
 
@@ -121,6 +106,22 @@ namespace fmwk {
     std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>>& ModelSystem::getAllVertexDescriptors(){
         return _vertexDescriptors;
     }
+
+    std::unique_ptr<BaseModel> ModelSystem::createEmptyModel(VertexType vertexType) {
+        switch (vertexType) {
+            case VERTEX: {
+                return std::make_unique<Model<Vertex>>();
+            }
+            case VERTEX_WITH_NORMAL:
+                return std::make_unique<Model<VertexWithNormal>>();
+            case VERTEX_WITH_NORMAL_AND_TANGENT:
+                return std::make_unique<Model<VertexWithNormalAndTan>>();
+            default:
+                throw std::runtime_error("Remember to add new vertex layout in model loading code");
+        }
+    }
+
+
 
     TModel::TModel(std::unique_ptr<BaseModel> model, VertexType type) {
         _model = std::move(model);

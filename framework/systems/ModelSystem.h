@@ -59,10 +59,25 @@ namespace fmwk {
         std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>> _vertexDescriptors;
         std::unordered_map<std::string, TModel> _models;
 
+        static std::unique_ptr<BaseModel> createEmptyModel(VertexType vertexType);
+
     public:
         explicit ModelSystem(BaseProject *bp);
 
         void addModel(std::string const& name, VertexType vertexType, std::string const& fileName);
+
+        template<class Vert>
+        void addModel(const std::string &name, VertexType vertexType, std::vector<Vert> const& vertices,
+                                   std::vector<uint32_t> const& indices) {
+
+            std::unique_ptr<Model<Vert>> rawModel = std::make_unique<Model<Vert>>();
+            rawModel->vertices = vertices;
+            rawModel->indices = indices;
+            rawModel->initMesh(_bp, &_vertexDescriptors.find(vertexType)->second.first);
+
+            std::unique_ptr<BaseModel> model = std::move(rawModel);
+            _models.insert({name, TModel(std::move(model), vertexType)});
+        }
 
         TModel& getModelByName(std::string const& name);
 
