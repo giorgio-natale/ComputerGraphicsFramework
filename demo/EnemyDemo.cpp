@@ -64,35 +64,37 @@ void EnemyDemo::localInit() {
     gameEngine->addTexture("sphereNormal", "textures/Metals_09_normal.png");
     gameEngine->addTexture("sphereMaterial", "textures/Metals_09_met_rough_ao.png");
 
-    auto cameraEntity = std::make_unique<fmwk::Entity>("Camera", glm::vec3(0, 10, 0), fmwk::createQuat(fmwk::X, 270));
+    auto cameraEntity = std::make_unique<fmwk::Entity>("Camera", glm::vec3(0, 50, 0), fmwk::createQuat(fmwk::X, 270));
     auto cameraComponent = std::make_unique<fmwk::PerspectiveCamera>(0.1f, 100.0f, glm::radians(45.0f));
     cameraEntity->addComponent(std::move(cameraComponent));
 
-    auto sphereEntity = std::make_unique<fmwk::Entity>("spawnedSphere");
-    sphereEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("mySphere")));
-    sphereEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("sphereTexture")));
-    sphereEntity->addComponent(std::make_unique<fmwk::DefaultMaterial>(1.0));
+    auto cubeEntityMain = std::make_unique<fmwk::Entity>("Cube", glm::vec3(0,0,0), glm::quat(1, 0, 0, 0));
+    cubeEntityMain->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("myCube")));
+    cubeEntityMain->addComponent(
+            std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("cubeTexture")));
+    cubeEntityMain->addComponent(std::make_unique<fmwk::DefaultMaterial>(1.0));
+
     std::vector<glm::vec3> targetPositions;
-    targetPositions.emplace_back(0, 0, 2);
-    targetPositions.emplace_back(2, 0, 2);
-    targetPositions.emplace_back(2, 0, -2);
-    targetPositions.emplace_back(-2, 0, -2);
-    sphereEntity->addComponent(std::make_unique<fmwk::EnemyController>(targetPositions, 1.0, 6.0, 1.8));
+    targetPositions.emplace_back(0, 0, 0);
+    targetPositions.emplace_back(-6, 0, 0);
+    targetPositions.emplace_back(-6, 0, 18);
+    targetPositions.emplace_back(12, 0, 18);
+    targetPositions.emplace_back(12, 0, -18);
+    targetPositions.emplace_back(-12, 0, -18);
+    cubeEntityMain->addComponent(std::make_unique<fmwk::EnemyController>(targetPositions, 1.0, 6.0, 1.0));
 
     for(int i = 0; i < targetPositions.size(); i++) {
-        auto cubeEntity = std::make_unique<fmwk::Entity>("Cube" + std::to_string(i), targetPositions[i],
-                                                         glm::quat(1, 0, 0, 0));
-        //cubeEntity->getTransform().setScale(glm::vec3(0.95f, 0.95f, 0.95f));
-        cubeEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("myCube")));
-        cubeEntity->addComponent(
-                std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("cubeTexture")));
-        cubeEntity->addComponent(std::make_unique<fmwk::DefaultMaterial>(1.0));
-        gameEngine->addEntity(std::move(cubeEntity));
+        auto sphereEntity = std::make_unique<fmwk::Entity>("Sphere" + std::to_string(i), targetPositions[i],
+                                                           glm::quat(1, 0, 0, 0));
+        sphereEntity->getTransform().setScale(glm::vec3(0.5f, 0.5f, 0.5f));
+        sphereEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("mySphere")));
+        sphereEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("sphereTexture")));
+        sphereEntity->addComponent(std::make_unique<fmwk::DefaultMaterial>(1.0));
+        gameEngine->addEntity(std::move(sphereEntity));
     }
 
-
     gameEngine->addEntity(std::move(cameraEntity));
-    gameEngine->addEntity(std::move(sphereEntity));
+    gameEngine->addEntity(std::move(cubeEntityMain));;
 
     // Init local variables
     gameEngine->provisionResources(false);

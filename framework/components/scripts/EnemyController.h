@@ -26,6 +26,8 @@ namespace fmwk {
         float _meshRadius;
 
         static void processVector(std::vector<glm::vec3> &targetPositions);
+
+        static void findZPath(std::vector<glm::vec3> &targetPositions, float laneWidth, float meshRadius);
     };
 
 } // fmwk
