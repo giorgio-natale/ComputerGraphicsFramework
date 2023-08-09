@@ -11,12 +11,12 @@ namespace fmwk {
 
     class Collider : public Component{
     public:
-        Collider(const std::string &name, float radius, std::string const& tag);
+        Collider(float radius, std::string  tag);
         void provision();
         [[nodiscard]] bool isProvisioned() const override;
         [[nodiscard]] float getRadius() const;
 
-        const std::string &getTag() const;
+        [[nodiscard]] const std::string &getTag() const;
 
     private:
         float _radius;

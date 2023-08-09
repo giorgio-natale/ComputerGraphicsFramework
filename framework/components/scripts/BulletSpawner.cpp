@@ -46,7 +46,7 @@ namespace fmwk {
                 std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("sphereTexture")));
         bulletEntity->addComponent(
                 std::make_unique<fmwk::DefaultMaterial>(2.5f));
-        bulletEntity->addComponent(std::make_unique<fmwk::Collider>("bulletCollider", 0.5f, "BULLET"));
+        bulletEntity->addComponent(std::make_unique<fmwk::Collider>(0.5f, "BULLET"));
         std::unordered_set<std::string> targetTags = {"ENEMY"};
         bulletEntity->addComponent(std::make_unique<fmwk::BulletAI>("bulletAI", bulletSpeed, direction, &targetTags));
 

@@ -11,7 +11,7 @@ namespace fmwk {
     void TestCollisionChecker::update() {
         GameEngine *gameEngine = GameEngine::getInstance();
         std::vector<Entity *> collidingEntities = gameEngine->getCollidingEntities(
-                static_cast<Collider *>(&(getParent()->getComponentByName("CharacterCollider"))), nullptr);
+                &_parentEntity->getCollider(), nullptr);
         for (Entity *entity: collidingEntities) {
             std::cout << "COLLISION WITH " << entity->getName() << std::endl;
         }

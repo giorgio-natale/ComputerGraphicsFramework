@@ -9,6 +9,7 @@
 #include "components/scripts/Component.h"
 #include "utils.h"
 #include "components/transform/Transform.h"
+#include "components/collision/Collider.h"
 
 namespace fmwk {
 
@@ -22,6 +23,9 @@ namespace fmwk {
         [[nodiscard]] Component& getComponentByName(std::string const& name) const;
         [[nodiscard]] Transform& getTransform() const{
             return dynamic_cast<Transform&>(getComponentByName("Transform"));
+        }
+        [[nodiscard]] Collider& getCollider() const{
+            return dynamic_cast<Collider&>(getComponentByName("Collider"));
         }
         void addComponent(std::unique_ptr<Component> component);
         void enqueueComponent(std::unique_ptr<Component> component);

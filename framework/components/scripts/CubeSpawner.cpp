@@ -26,7 +26,7 @@ namespace fmwk {
 
             auto sphereEntity = std::make_unique<fmwk::Entity>("spawnedSphere" + std::to_string(id), transform.getPosition(), transform.getRotation());
             //sphereEntity->getTransform().setScale(glm::vec3(0.5f, 0.5f, 0.5f));
-            sphereEntity->addComponent(std::make_unique<fmwk::Collider>("SphereCollider", 1.0f, "BULLET"));
+            sphereEntity->addComponent(std::make_unique<fmwk::Collider>(1.0f, "BULLET"));
             sphereEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("mySphere")));
             sphereEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("sphereTexture")));
             sphereEntity->addComponent(std::make_unique<fmwk::GGXMaterial>(gameEngine->getBoundTextureByName("sphereNormal").getTexture(), gameEngine->getBoundTextureByName("sphereMaterial").getTexture()));

@@ -187,7 +187,7 @@ char *mazeIn[] = {
         }
     }
 
-    mgen::Maze myMaze = mgen::Maze(vec, 3.0f);
+    mgen::Maze myMaze = mgen::Maze(vec, 6.0f);
     myMaze.buildBoxes();
     myMaze.deleteUselessFaces();
     auto vertexDict = mgen::VertexDictionary();

@@ -23,7 +23,7 @@ namespace fmwk {
         transform.translate(deltaPosition);
 
         std::vector<Entity *> collidingEntities = gameEngine->getCollidingEntities(
-                static_cast<Collider *>(&(_parentEntity->getComponentByName("bulletCollider"))),
+                &_parentEntity->getCollider(),
                 &_targetTags);
         for (Entity *entity: collidingEntities) {
             std::cout << "BULLET " << _parentEntity->getName() << " COLLIDED WITH " << entity->getName() << std::endl;

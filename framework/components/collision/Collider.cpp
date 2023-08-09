@@ -4,15 +4,17 @@
 
 #include "Collider.h"
 
+#include <utility>
+
 namespace fmwk {
     bool Collider::isProvisioned() const {
         return _alreadyProvisioned;
     }
 
-    Collider::Collider(const std::string &name, float radius, std::string const &tag) : Component(name),
+    Collider::Collider(float radius, std::string  tag) : Component("Collider"),
                                                                                         _radius(radius),
                                                                                         _alreadyProvisioned(false),
-                                                                                        _tag(tag) {}
+                                                                                        _tag(std::move(tag)) {}
 
     void Collider::provision() {
         _alreadyProvisioned = true;
