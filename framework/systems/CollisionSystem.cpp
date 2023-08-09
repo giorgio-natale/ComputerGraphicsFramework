@@ -43,7 +43,7 @@ namespace fmwk {
     Entity *CollisionSystem::getCharacterCollidingEntity(Collider *collider) {
         GameEngine *gameEngine = GameEngine::getInstance();
 
-        auto elem = _colliders.find("Character-CharacterCollider");
+        auto elem = _colliders.find("Character-Collider");
         if (elem != _colliders.end()) {
             Collider *characterCollider = elem->second;
             if (checkCollision(collider, characterCollider))
