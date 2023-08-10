@@ -11,8 +11,10 @@
 
 namespace fmwk {
     BulletSpawner::BulletSpawner(const std::string &name, const glm::vec3 &centerOffset, float bulletCoolDown,
-                                 float bulletSpeed) : Component(name), _centerOffset(centerOffset),
-                                                      _bulletCoolDown(bulletCoolDown), _bulletSpeed(bulletSpeed) {
+                                 float bulletSpeed, std::unordered_set<std::string> const* targetTags) : Component(name),
+                                    _centerOffset(centerOffset),
+                                    _bulletCoolDown(bulletCoolDown), _bulletSpeed(bulletSpeed),
+                                    _targetTags(*targetTags){
         _spawnEnabled = true;
         _timeFromLastSpawn = 0;
     }
@@ -47,8 +49,7 @@ namespace fmwk {
         bulletEntity->addComponent(
                 std::make_unique<fmwk::DefaultMaterial>(2.5f));
         bulletEntity->addComponent(std::make_unique<fmwk::Collider>(0.5f, "BULLET"));
-        std::unordered_set<std::string> targetTags = {"ENEMY"};
-        bulletEntity->addComponent(std::make_unique<fmwk::BulletAI>("bulletAI", bulletSpeed, direction, &targetTags));
+        bulletEntity->addComponent(std::make_unique<fmwk::BulletAI>("bulletAI", bulletSpeed, direction, &_targetTags));
 
         gameEngine->enqueueEntity(std::move(bulletEntity));
         bulletId++;
