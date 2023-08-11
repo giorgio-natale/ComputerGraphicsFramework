@@ -56,7 +56,14 @@ demo/MovingCube.cpp
         demo/EnemyDemo.h
         framework/components/scripts/EnemyController.cpp
         framework/components/scripts/EnemyController.h
-        MazeEscape.cpp MazeEscape.h framework/components/scripts/MazeCharacterController.cpp framework/components/scripts/MazeCharacterController.h)
+        MazeEscape.cpp MazeEscape.h
+        framework/components/scripts/MazeCharacterController.cpp
+        framework/components/scripts/MazeCharacterController.h
+        framework/components/scripts/CharacterBulletSpawner.cpp
+        framework/components/scripts/CharacterBulletSpawner.h
+        framework/components/scripts/EnemyBulletSpawner.cpp
+        framework/components/scripts/EnemyBulletSpawner.h
+        )
 target_link_libraries(${PROJECT_NAME})
 find_package(Vulkan REQUIRED)
 foreach(dir IN LISTS Vulkan_INCLUDE_DIR INCLUDE_DIRS)

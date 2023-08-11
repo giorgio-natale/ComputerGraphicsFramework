@@ -11,20 +11,18 @@
 
 namespace fmwk {
 
-    class BulletSpawner: public Component{
+    class BulletSpawner : public Component {
     public:
-        BulletSpawner(const std::string &name, const glm::vec3 &centerOffset, float bulletCoolDown, float bulletSpeed,
-                      std::unordered_set<std::string> const* targetTags);
+        BulletSpawner(const std::string &name, const glm::vec3 &centerOffset, float bulletSpeed, float bulletCoolDown,
+                      std::unordered_set<std::string> const *targetTags);
 
-        void update() override;
-
-    private:
+    protected:
         glm::vec3 _centerOffset;
         std::unordered_set<std::string> _targetTags;
-        float _bulletCoolDown;
         float _bulletSpeed;
-        bool _spawnEnabled;
+        float _bulletCoolDown;
         float _timeFromLastSpawn;
+
         void spawnBullet(float bulletSpeed, glm::vec3 direction);
     };
 

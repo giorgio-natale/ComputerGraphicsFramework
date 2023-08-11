@@ -10,29 +10,12 @@
 #include "BulletAI.h"
 
 namespace fmwk {
-    BulletSpawner::BulletSpawner(const std::string &name, const glm::vec3 &centerOffset, float bulletCoolDown,
-                                 float bulletSpeed, std::unordered_set<std::string> const* targetTags) : Component(name),
+    BulletSpawner::BulletSpawner(const std::string &name, const glm::vec3 &centerOffset, float bulletSpeed,
+                                 float bulletCoolDown, std::unordered_set<std::string> const* targetTags) : Component(name),
                                     _centerOffset(centerOffset),
                                     _bulletCoolDown(bulletCoolDown), _bulletSpeed(bulletSpeed),
                                     _targetTags(*targetTags){
-        _spawnEnabled = true;
         _timeFromLastSpawn = 0;
-    }
-
-    void BulletSpawner::update() {
-        GameEngine *gameEngine = GameEngine::getInstance();
-        _timeFromLastSpawn += gameEngine->getInput().deltaTime;
-
-        if (_timeFromLastSpawn >= _bulletCoolDown) {
-            _spawnEnabled = true;
-        }
-
-        if (gameEngine->getInput().spacePressed && _spawnEnabled) {
-            spawnBullet(_bulletSpeed, -1.0f * (_parentEntity->getTransform().getLocalDirections()[2]));
-            _timeFromLastSpawn = 0;
-            _spawnEnabled = false;
-        }
-
     }
 
     void BulletSpawner::spawnBullet(float bulletSpeed, glm::vec3 direction) {
@@ -41,7 +24,8 @@ namespace fmwk {
         auto &transform = _parentEntity->getTransform();
 
         auto bulletEntity = std::make_unique<fmwk::Entity>("spawnedBullet" + std::to_string(bulletId),
-                                                           transform.getPosition(), transform.getRotation());
+                                                           transform.getPosition() + _centerOffset,
+                                                           transform.getRotation());
         bulletEntity->getTransform().setScale(glm::vec3(0.5f, 0.5f, 0.5f));
         bulletEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("mySphere")));
         bulletEntity->addComponent(
