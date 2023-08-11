@@ -3,6 +3,7 @@
 //
 
 #include <vector>
+#include <cmath>
 #include "Position.h"
 
 namespace mgen {
@@ -16,5 +17,9 @@ namespace mgen {
     glm::vec3 toGlm(Position position, float unit){
         glm::vec3 res = {(float)position[0], (float)position[2], -(float)position[1]};
         return res * unit;
+    }
+
+    Position fromGlm(glm::vec3 position, float unit){
+        return {(int)(std::floor(position.x / unit)), (int)(std::floor(-position.z / unit)), (int)(std::floor(position.y / unit))};
     }
 } // mgen

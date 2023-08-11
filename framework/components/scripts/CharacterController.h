@@ -7,6 +7,7 @@
 
 #include "Component.h"
 #include "../transform/Transform.h"
+#include "MazeRepresentation.h"
 
 namespace fmwk {
 
@@ -18,6 +19,7 @@ namespace fmwk {
     private:
         Transform const& _cameraTransform;
         float const _maxSpeed;
+        bool _spacePressConsidered;
     };
 
 } // fmwk

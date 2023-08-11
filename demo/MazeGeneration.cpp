@@ -18,6 +18,7 @@
 #include "../framework/components/materials/SimplePhongMaterial.h"
 #include "../maze_generation/Maze.h"
 #include "../maze_generation/VertexDictionary.h"
+#include "../framework/components/scripts/MazeCharacterController.h"
 
 
 // The uniform buffer objects data structures
@@ -59,15 +60,47 @@ void MazeGeneration::onWindowResize(int w, int h) {
 void MazeGeneration::localInit() {
     auto gameEngine = fmwk::GameEngine::getInstance();
 
-    //SETUP SCENE
-
     gameEngine->addModel("myCube", fmwk::VERTEX_WITH_NORMAL, "Models/Cube.obj");
     gameEngine->addModel("mySphere", fmwk::VERTEX_WITH_NORMAL_AND_TANGENT, "models/Sphere.gltf");
     gameEngine->addTexture("cubeTexture", "textures/Checker.png");
     gameEngine->addTexture("mainMazeTexture", "textures/maze_main.png");
 
+    //SETUP SCENE
+
+    //LOAD MAZE
+    auto mazeEntity = std::make_unique<fmwk::Entity>("Maze");
+    char *mazeIn[] = {
+
+            (char*)("### ###########"),
+            (char*)("# #   #       #"),
+            (char*)("# # ### ### ###"),
+            (char*)("#   #     #   #"),
+            (char*)("# ### ####### #"),
+            (char*)("#   # #       #"),
+            (char*)("### ### #######"),
+            (char*)("# #   #       #"),
+            (char*)("# ### ####### #"),
+            (char*)("# #   #   #   #"),
+            (char*)("# # ### # # # #"),
+            (char*)("#   #   # # # #"),
+            (char*)("# ##### # # # #"),
+            (char*)("#       #   # #"),
+            (char*)("############# #")
+    };
+    int row = 15;
+    int col = 15;
+    auto mazeRepresentation = std::make_unique<fmwk::MazeRepresentation>(row, col, 6.0f, mazeIn);
+    auto [vertices, faces] = mazeRepresentation->buildMesh();
+    gameEngine->addModel<fmwk::VertexWithNormal>("MazeModel", fmwk::VERTEX_WITH_NORMAL, vertices, faces);
+
+    mazeEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("MazeModel")));
+    mazeEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("mainMazeTexture")));
+    mazeEntity->addComponent(std::make_unique<fmwk::SimplePhongMaterial>());
+    mazeEntity->addComponent(std::move(mazeRepresentation));
+
+
     auto cameraEntity = std::make_unique<fmwk::Entity>("Camera", glm::vec3(0, 10, 0), fmwk::createQuat(fmwk::X, 270));
-    auto cameraComponent = std::make_unique<fmwk::PerspectiveCamera>(0.1f, 100.0f, glm::radians(45.0f));
+    auto cameraComponent = std::make_unique<fmwk::PerspectiveCamera>(0.1f, 50.0f, glm::radians(45.0f));
     cameraEntity->addComponent(std::move(cameraComponent));
 
     auto cubeEntity = std::make_unique<fmwk::Entity>("Cube", glm::vec3(0,0.5f,0), glm::quat(1,0,0,0));
@@ -76,22 +109,16 @@ void MazeGeneration::localInit() {
     cubeEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("cubeTexture")));
     cubeEntity->addComponent(std::make_unique<fmwk::DefaultMaterial>(1.0f));
 
-    cubeEntity->addComponent(std::make_unique<fmwk::CharacterController>("CharacterController", cameraEntity->getTransform(), 4.0f));
+    cubeEntity->addComponent(std::make_unique<fmwk::MazeCharacterController>(cameraEntity->getTransform(),
+                                                                             dynamic_cast<fmwk::MazeRepresentation&>(mazeEntity->getComponentByName(
+                                                                                     "MazeRepresentation")), 4.0f));
     cameraEntity->addComponent(std::make_unique<fmwk::CameraController>("CameraController", cubeEntity->getTransform(), glm::radians(120.0f), 3.0f, 0.25f));
 
     gameEngine->addEntity(std::move(cameraEntity));
     gameEngine->addEntity(std::move(cubeEntity));
-
-    //LOAD MAZE
-    auto [vertices, faces] = buildMazeModel();
-    gameEngine->addModel<fmwk::VertexWithNormal>("MazeModel", fmwk::VERTEX_WITH_NORMAL, vertices, faces);
-
-    auto mazeEntity = std::make_unique<fmwk::Entity>("Maze");
-    mazeEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("MazeModel")));
-    mazeEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("mainMazeTexture")));
-    mazeEntity->addComponent(std::make_unique<fmwk::SimplePhongMaterial>());
-
     gameEngine->addEntity(std::move(mazeEntity));
+
+
 
 
     auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(0,3,0), glm::rotate(glm::quat(1,0,0,0), glm::radians(-90.0f), fmwk::X));
@@ -172,7 +199,7 @@ char *mazeIn[] = {
 	(char*)("# #   #       #"),
 	(char*)("# ### ####### #"),
 	(char*)("# #   #   #   #"),
-	(char*)("# # ### # # # #"),
+    (char*)("# # ### # # # #"),
 	(char*)("#   #   # # # #"),
 	(char*)("# ##### # # # #"),
 	(char*)("#       #   # #"),
@@ -187,7 +214,7 @@ char *mazeIn[] = {
         }
     }
 
-    mgen::Maze myMaze = mgen::Maze(vec, 6.0f);
+    mgen::Maze myMaze = mgen::Maze(vec, row, col, 6.0f);
     myMaze.buildBoxes();
     myMaze.deleteUselessFaces();
     auto vertexDict = mgen::VertexDictionary();

@@ -13,7 +13,9 @@ namespace mgen {
 
     class Maze{
     public:
-        explicit Maze(std::vector<std::vector<char>> const& matrix, float unit);
+        Maze();
+
+        Maze(std::vector<std::vector<char>> const& matrix, int rowCount, int colCount, float unit);
         void buildBoxes();
 
         void deleteUselessFaces();

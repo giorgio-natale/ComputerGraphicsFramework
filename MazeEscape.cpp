@@ -201,7 +201,7 @@ std::pair<std::vector<fmwk::VertexWithNormal>, std::vector<uint32_t>> MazeEscape
         }
     }
 
-    mgen::Maze myMaze = mgen::Maze(vec, 6.0f);
+    mgen::Maze myMaze = mgen::Maze(vec, row, col, 6.0f);
     myMaze.buildBoxes();
     myMaze.deleteUselessFaces();
     auto vertexDict = mgen::VertexDictionary();

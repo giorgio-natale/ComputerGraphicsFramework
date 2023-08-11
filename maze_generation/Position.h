@@ -63,6 +63,7 @@ namespace mgen {
 
     Position scalar(Direction const& dir, int scalar);
     glm::vec3 toGlm(Position position, float unit);
+    Position fromGlm(glm::vec3 position, float unit);
 
 } // mgen
 

@@ -5,7 +5,8 @@
 #include "Maze.h"
 
 namespace mgen {
-    Maze::Maze(std::vector<std::vector<char>> const& matrix, float unit): _width(matrix[0].size()), _height(matrix.size()){
+    Maze::Maze(): Maze({}, 0, 0, 1.0f) {}
+    Maze::Maze(std::vector<std::vector<char>>const& matrix, int rowCount, int colCount, float unit): _width(colCount), _height(rowCount){
         _unit = unit;
         for(int i = 0; i < _height; i++) {
             _matrix.emplace_back();
@@ -23,7 +24,7 @@ namespace mgen {
         }
     }
 
-    void Maze::buildBoxes(){
+    void Maze::buildBoxes() {
         //build north-south boxes
         for(Position startSlide = Position(0,0,0); isValidPosition(startSlide); startSlide = startSlide + Direction::EAST){
             auto slices = getSlices(startSlide, Direction::NORTH);
@@ -167,4 +168,5 @@ namespace mgen {
 
         return slice;
     }
+
 } // mgen
