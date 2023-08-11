@@ -18,6 +18,7 @@
 #include "BulletSpawnerTest.h"
 #include "../framework/components/scripts/TestCollisionChecker.h"
 #include "../framework/components/scripts/BulletSpawner.h"
+#include "../framework/components/scripts/EnemyBulletSpawner.h"
 
 
 // The uniform buffer objects data structures
@@ -83,7 +84,8 @@ void BulletSpawnerTest::localInit() {
             std::make_unique<fmwk::TestCollisionChecker>("TestCollisionChecker"));
     std::unordered_set<std::string> characterBulletTags = std::unordered_set<std::string>{"ENEMY"};
     cubeEntity->addComponent(
-            std::make_unique<fmwk::BulletSpawner>("TestBulletSpawner", glm::vec3(0,0,0), 3.0f, 4.0f, &characterBulletTags));
+            std::make_unique<fmwk::BulletSpawner>("TestBulletSpawner", glm::vec3(0, 0, 0), 3.0f, 4.0f,
+                                                  &characterBulletTags));
     cameraEntity->addComponent(std::make_unique<fmwk::CameraController>("CameraController", cubeEntity->getTransform(),
                                                                         glm::radians(120.0f), 8.0f, 0.25f));
     gameEngine->addEntity(std::move(cameraEntity));
@@ -96,6 +98,12 @@ void BulletSpawnerTest::localInit() {
     sphereEntity1->addComponent(
             std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("sphereTexture")));
     sphereEntity1->addComponent(std::make_unique<fmwk::DefaultMaterial>(1.0f));
+    std::unordered_set<std::string> enemyBulletTags = std::unordered_set<std::string>{"CHARACTER"};
+    sphereEntity1->addComponent(std::make_unique<fmwk::EnemyBulletSpawner>(
+            glm::vec3(0, 0, 0), 4.0f, 2.0f,
+            gameEngine->getEntityByName("Character").getTransform(),
+            &enemyBulletTags
+            ));
 
     gameEngine->addEntity(std::move(sphereEntity1));
 
