@@ -64,7 +64,9 @@ void MazeGeneration::localInit() {
     gameEngine->addModel("mySphere", fmwk::VERTEX_WITH_NORMAL_AND_TANGENT, "models/Sphere.gltf");
     gameEngine->addTexture("cubeTexture", "textures/Checker.png");
     gameEngine->addTexture("mainMazeTexture", "textures/maze_main.png");
-
+    gameEngine->addTexture("sphereTexture", "textures/Metals_09_basecolor.png");
+    gameEngine->addTexture("sphereNormal", "textures/Metals_09_normal.png");
+    gameEngine->addTexture("sphereMaterial", "textures/Metals_09_met_rough_ao.png");
     //SETUP SCENE
 
     //LOAD MAZE
@@ -103,19 +105,19 @@ void MazeGeneration::localInit() {
     auto cameraComponent = std::make_unique<fmwk::PerspectiveCamera>(0.1f, 50.0f, glm::radians(45.0f));
     cameraEntity->addComponent(std::move(cameraComponent));
 
-    auto cubeEntity = std::make_unique<fmwk::Entity>("Cube", glm::vec3(0,0.5f,0), glm::quat(1,0,0,0));
-    cubeEntity->getTransform().setScale({0.5, 0.5, 0.5});
-    cubeEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("myCube")));
-    cubeEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("cubeTexture")));
-    cubeEntity->addComponent(std::make_unique<fmwk::DefaultMaterial>(1.0f));
-
-    cubeEntity->addComponent(std::make_unique<fmwk::MazeCharacterController>(cameraEntity->getTransform(),
+    auto sphereEntity = std::make_unique<fmwk::Entity>("Sphere", glm::vec3(10,0.5f,0),glm::quat(1, 0, 0, 0));
+    sphereEntity->getTransform().setScale(glm::vec3(0.5f, 0.5f, 0.5f));
+    sphereEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("mySphere")));
+    sphereEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("sphereTexture")));
+    sphereEntity->addComponent(std::make_unique<fmwk::DefaultMaterial>(1.0));
+    sphereEntity->addComponent(std::make_unique<fmwk::MazeCharacterController>(cameraEntity->getTransform(),
                                                                              dynamic_cast<fmwk::MazeRepresentation&>(mazeEntity->getComponentByName(
                                                                                      "MazeRepresentation")), 4.0f));
-    cameraEntity->addComponent(std::make_unique<fmwk::CameraController>("CameraController", cubeEntity->getTransform(), glm::radians(120.0f), 3.0f, 0.25f));
 
+    cameraEntity->addComponent(std::make_unique<fmwk::CameraController>("CameraController", sphereEntity->getTransform(), glm::radians(120.0f), 3.0f, 0.25f));
+
+    gameEngine->addEntity(std::move(sphereEntity));
     gameEngine->addEntity(std::move(cameraEntity));
-    gameEngine->addEntity(std::move(cubeEntity));
     gameEngine->addEntity(std::move(mazeEntity));
 
 
