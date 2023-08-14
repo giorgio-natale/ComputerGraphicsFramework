@@ -19,8 +19,8 @@ namespace fmwk {
     }
 
     bool CollisionSystem::checkCollision(Collider *colliderA, Collider *colliderB) {
-        glm::vec3 centerA = colliderA->getParent()->getTransform().getPosition();
-        glm::vec3 centerB = colliderB->getParent()->getTransform().getPosition();
+        glm::vec3 centerA = colliderA->getParent()->getTransform().getPosition() + colliderA->getCenterOffset();
+        glm::vec3 centerB = colliderB->getParent()->getTransform().getPosition() + colliderB->getCenterOffset();
         return glm::distance(centerA, centerB) < colliderA->getRadius() + colliderB->getRadius();
     }
 
