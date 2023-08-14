@@ -129,7 +129,7 @@ namespace fmwk {
          _modelTransform = std::make_unique<Transform>(position, quaternion, scale);
      }
 
-    TModel::TModel(std::unique_ptr<BaseModel> model, VertexType type): TModel(std::move(model), type, glm::vec3(0,0,0),createQuat(Y, 180), glm::vec3(1,1,1)) {}
+    TModel::TModel(std::unique_ptr<BaseModel> model, VertexType type): TModel(std::move(model), type, glm::vec3(0,0,0),glm::quat(1,0,0,0), glm::vec3(1,1,1)) {}
 
     VertexType TModel::getType() {
         return _type;
