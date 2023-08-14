@@ -1,5 +1,6 @@
 #version 450
 #extension GL_ARB_separate_shader_objects : enable
+#define PI 3.1415926535897932384626433832795
 
 #define DIRECT_LIGHTS_MAX 10
 #define POINT_LIGHTS_MAX 10
@@ -45,9 +46,11 @@ layout(location = 0) out vec4 outColor;
 
 layout(set = 1, binding = 0) uniform sampler2D tex;
 
-layout(set = 2, binding = 0) uniform SimplePhongUniformBlock {
-    vec3 eyePos;
-} phongMaterial;
+layout(set = 2, binding = 0) uniform SimplePhongBlinkMaterialUniformBlock {
+    bool isBlinking;
+    float frequency;
+    float t;
+} phongBlinkMaterial;
 
 vec3 BRDF(vec3 V, vec3 N, vec3 L, vec3 Md, vec3 Ms, float gamma) {
     //vec3 V  - direction of the viewer
@@ -97,6 +100,8 @@ void main() {
     }
 
     vec3 Ambient = texture(tex, fragUV).rgb * 0.15f;
-
-    outColor = vec4(clamp(0.95 * (DiffSpec) + Ambient,0.0,1.0), 1.0f);
+    float alpha = 1.0f;
+    if(phongBlinkMaterial.isBlinking)
+        alpha = abs(cos(2 * PI * phongBlinkMaterial.frequency * phongBlinkMaterial.t));
+    outColor = vec4(clamp(0.95 * (DiffSpec) + Ambient,0.0,1.0), alpha);
 }

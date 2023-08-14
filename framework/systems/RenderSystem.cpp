@@ -55,6 +55,11 @@ namespace fmwk {
                                                           effectVal.shaderName,
                                                           {&_globalDescriptorSetLayout, &_textureDescriptorSetLayout,
                                                            &effectVal.layout, &_modelDescriptorSetLayout});
+                    if(effectVal.isTransparent){
+                        insertedPipelineIterator->second.setAdvancedFeatures(VK_COMPARE_OP_LESS,
+                                                                             VK_POLYGON_MODE_FILL ,
+                                                                             VK_CULL_MODE_BACK_BIT, true);
+                    }
 
                     std::cout << "[PIPELINE CREATED]: Vertex Shader: " + bestVertexShader->fileName +
                                  ", Fragment Shader: " + effectVal.shaderName << std::endl;

@@ -64,7 +64,7 @@ demo/MovingCube.cpp
         framework/components/scripts/EnemyBulletSpawner.cpp
         framework/components/scripts/EnemyBulletSpawner.h
         demo/ModelTransformationAndMaterialDemo.cpp
-        demo/ModelTransformationAndMaterialDemo.h)
+        demo/ModelTransformationAndMaterialDemo.h framework/components/materials/SimplePhongBlinkMaterial.cpp framework/components/materials/SimplePhongBlinkMaterial.h)
 target_link_libraries(${PROJECT_NAME})
 find_package(Vulkan REQUIRED)
 foreach(dir IN LISTS Vulkan_INCLUDE_DIR INCLUDE_DIRS)

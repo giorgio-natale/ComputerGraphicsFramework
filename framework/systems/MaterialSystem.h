@@ -9,13 +9,14 @@
 #include "ModelSystem.h"
 
 namespace fmwk {
-    enum EffectType{DEFAULT, COLOR_BLEND, SIMPLE_PHONG, GGX};
+    enum EffectType{DEFAULT, COLOR_BLEND, SIMPLE_PHONG, GGX, SIMPLE_PHONG_BLINK};
 
     struct Effect{
         DescriptorSetLayout layout;
         EffectType type;
         std::string shaderName;
         std::set<VertexShaderOutputFeature> requiredFeatures;
+        bool isTransparent;
     };
 
     class MaterialSystem {

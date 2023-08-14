@@ -16,6 +16,7 @@
 #include "../framework/components/lights/SpotLightComponent.h"
 #include "../framework/components/materials/SimplePhongMaterial.h"
 #include "ModelTransformationAndMaterialDemo.h"
+#include "../framework/components/materials/SimplePhongBlinkMaterial.h"
 
 
 // The uniform buffer objects data structures
@@ -77,7 +78,7 @@ void ModelTransformationAndMaterialDemo::localInit() {
     auto cubeEntity = std::make_unique<fmwk::Entity>("Cube", glm::vec3(0, 0, 3), glm::quat(1,0,0,0));
     cubeEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("myCube")));
     cubeEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("cubeTexture")));
-    cubeEntity->addComponent(std::make_unique<fmwk::SimplePhongMaterial>());
+    cubeEntity->addComponent(std::make_unique<fmwk::SimplePhongBlinkMaterial>(1.5f));
 
     cubeEntity->addComponent(std::make_unique<fmwk::CharacterController>("CharacterController", cameraEntity->getTransform(), 4.0f));
     cameraEntity->addComponent(std::make_unique<fmwk::CameraController>("CameraController", cubeEntity->getTransform(), glm::radians(120.0f), 8.0f, 0.25f));

@@ -59,6 +59,19 @@ namespace fmwk {
         _effects.insert({GGX, ggxEffect});
 
 
+        DescriptorSetLayout blinkLayout{};
+
+        //blink effect
+        blinkLayout.init(_bp, {{0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT}});
+        Effect blinkEffect;
+        blinkEffect.type = SIMPLE_PHONG_BLINK;
+        blinkEffect.layout = blinkLayout;
+        blinkEffect.shaderName = "shaders/compiled/SimplePhongBlink.spv";
+        blinkEffect.requiredFeatures = {FRAG_POSITION, FRAG_UV, FRAG_NORMAL};
+        blinkEffect.isTransparent = true;
+        _effects.insert({blinkEffect.type, blinkEffect});
+
+
     }
 
     Effect &MaterialSystem::getEffectByType(EffectType type) {

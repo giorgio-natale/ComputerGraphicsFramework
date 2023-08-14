@@ -199,6 +199,23 @@ namespace fmwk {
         DescriptorSet *globalDescriptorSet = &_renderSystem.getGlobalDescriptorSet();
         BoundTexture *oldTexture = nullptr;
 
+
+        std::vector<Entity*> nonTransparentEntities{};
+        std::vector<Entity*> transparentEntities{};
+
+        for(auto entity : entities){
+            if(entity->hasComponent("Material") && _materialSystem.getEffectByType(reinterpret_cast<MaterialComponent&>(entity->getComponentByName("Material")).getEffectType()).isTransparent)
+                transparentEntities.push_back(entity);
+            else
+                nonTransparentEntities.push_back(entity);
+        }
+
+        entities.clear();
+        for(auto entity : nonTransparentEntities)
+            entities.push_back(entity);
+        for(auto entity : transparentEntities)
+            entities.push_back(entity);
+
         bool needToBindGlobalDescriptor = true;
         for (Entity *entity: entities) {
             if (entity->hasComponent("Mesh")) {
