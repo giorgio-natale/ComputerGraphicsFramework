@@ -64,7 +64,7 @@ demo/MovingCube.cpp
         framework/components/scripts/EnemyBulletSpawner.cpp
         framework/components/scripts/EnemyBulletSpawner.h
         demo/ModelTransformationAndMaterialDemo.cpp
-        demo/ModelTransformationAndMaterialDemo.h framework/components/materials/SimplePhongBlinkMaterial.cpp framework/components/materials/SimplePhongBlinkMaterial.h framework/components/materials/DefaultTransparent.cpp framework/components/materials/DefaultTransparent.h)
+        demo/ModelTransformationAndMaterialDemo.h framework/components/materials/SimplePhongBlinkMaterial.cpp framework/components/materials/SimplePhongBlinkMaterial.h framework/components/materials/DefaultTransparent.cpp framework/components/materials/DefaultTransparent.h framework/components/materials/SimplePhongColorBlendMaterial.cpp framework/components/materials/SimplePhongColorBlendMaterial.h)
 target_link_libraries(${PROJECT_NAME})
 find_package(Vulkan REQUIRED)
 foreach(dir IN LISTS Vulkan_INCLUDE_DIR INCLUDE_DIRS)

@@ -18,6 +18,7 @@
 #include "ModelTransformationAndMaterialDemo.h"
 #include "../framework/components/materials/SimplePhongBlinkMaterial.h"
 #include "../framework/components/materials/DefaultTransparent.h"
+#include "../framework/components/materials/SimplePhongColorBlendMaterial.h"
 
 
 // The uniform buffer objects data structures
@@ -90,9 +91,9 @@ void ModelTransformationAndMaterialDemo::localInit() {
     pumpkinEntity->addComponent(std::make_unique<fmwk::SimplePhongBlinkMaterial>(2.0f, 0.4f));
 
     auto ghostEntity = std::make_unique<fmwk::Entity>("Ghost", glm::vec3(1, 0, 0), glm::quat(1, 0, 0, 0));
-    ghostEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("mySphere")));
+    ghostEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("ghost")));
     ghostEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("dungeonTexture")));
-    ghostEntity->addComponent(std::make_unique<fmwk::DefaultMaterial>(1.0f));
+    ghostEntity->addComponent(std::make_unique<fmwk::SimplePhongColorBlendMaterial>(glm::vec3(1,0,0)));
 
     auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(0,3,0), glm::rotate(glm::quat(1,0,0,0), glm::radians(-90.0f), fmwk::X));
     lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight1", glm::vec3(-1, 0, 0), glm::vec4(1)));

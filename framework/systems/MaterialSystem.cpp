@@ -85,6 +85,19 @@ namespace fmwk {
         defaultTransparentEffect.requiredFeatures = {FRAG_UV};
         defaultTransparentEffect.isTransparent = true;
         _effects.insert({defaultTransparentEffect.type, defaultTransparentEffect});
+
+        DescriptorSetLayout phongBlendColorLayout{};
+
+        //simple phong color blend
+        phongBlendColorLayout.init(_bp, {{0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT}});
+        Effect phongBlendColorEffect;
+        phongBlendColorEffect.type = SIMPLE_PHONG_COLOR_BLEND;
+        phongBlendColorEffect.layout = phongBlendColorLayout;
+        phongBlendColorEffect.shaderName = "shaders/compiled/SimplePhongColorBlend.spv";
+        phongBlendColorEffect.requiredFeatures = {FRAG_POSITION, FRAG_UV, FRAG_NORMAL};
+        phongBlendColorEffect.isTransparent = false;
+        _effects.insert({phongBlendColorEffect.type, phongBlendColorEffect});
+
     }
 
     Effect &MaterialSystem::getEffectByType(EffectType type) {
