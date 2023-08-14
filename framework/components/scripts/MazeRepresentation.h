@@ -15,7 +15,10 @@ namespace fmwk {
         bool isNear;
         float distance;
     };
-
+    struct Square{
+        glm::vec3 bottomLeftCorner;
+        float edgeSize;
+    };
 
 
     class MazeRepresentation : public Component{
@@ -25,6 +28,8 @@ namespace fmwk {
 
         [[nodiscard]] DirectionCollisionInfo getMazeCollisions(glm::vec3 position, glm::vec3 direction) const;
         [[nodiscard]] std::pair<std::vector<fmwk::VertexWithNormal>, std::vector<uint32_t>> buildMesh() const;
+        [[nodiscard]] std::vector<Square> getBlocksAroundPoint(glm::vec3 point) const;
+
 
     private:
         mgen::Maze _maze;

@@ -62,4 +62,21 @@ namespace fmwk {
         }
         return {vertexes, indices};
     }
+
+    std::vector<Square> MazeRepresentation::getBlocksAroundPoint(glm::vec3 point) const{
+        std::vector<Square> nearestBlockSquares{};
+        mgen::Position mazePosition = mgen::fromGlm(point, _unit);
+        for(int x = -1; x <= 1; x++)
+            for(int y = -1; y <= 1; y++){
+                mgen::Position deltaMazePosition = mgen::Position(x, y, 0);
+                mgen::Position targetPosition = mazePosition + deltaMazePosition;
+                if(_maze.isBlock(targetPosition)){
+                    glm::vec3 bottomLeftFloorPosition = mgen::toGlm(targetPosition, _unit);
+                    bottomLeftFloorPosition.y = point.y;
+                    nearestBlockSquares.push_back({bottomLeftFloorPosition, _unit});
+                }
+            }
+
+        return nearestBlockSquares;
+    }
 } // fmwk
