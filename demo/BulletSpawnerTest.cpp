@@ -79,7 +79,7 @@ void BulletSpawnerTest::localInit() {
     cubeEntity->addComponent(
             std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("cubeTexture")));
     cubeEntity->addComponent(std::make_unique<fmwk::DefaultMaterial>(1.0f));
-    cubeEntity->addComponent(std::make_unique<fmwk::Collider>(1.0f, "CHARACTER"));
+    cubeEntity->addComponent(std::make_unique<fmwk::Collider>(1.0f, "CHARACTER", glm::vec3(0,0,0)));
     cubeEntity->addComponent(
             std::make_unique<fmwk::CharacterController>("CharacterController", cameraEntity->getTransform(), 4.0f));
     cubeEntity->addComponent(
@@ -94,7 +94,7 @@ void BulletSpawnerTest::localInit() {
 
     auto sphereEntity1 = std::make_unique<fmwk::Entity>("spawnedSphere1", glm::vec3(3.0f, 0.0f, -3.0f),
                                                         glm::quat(1, 0, 0, 0));
-    sphereEntity1->addComponent(std::make_unique<fmwk::Collider>(0.8f, "ENEMY"));
+    sphereEntity1->addComponent(std::make_unique<fmwk::Collider>(0.8f, "ENEMY", glm::vec3(0,0,0)));
     sphereEntity1->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("mySphere")));
     sphereEntity1->addComponent(
             std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("sphereTexture")));
@@ -110,7 +110,7 @@ void BulletSpawnerTest::localInit() {
 
     auto sphereEntity2 = std::make_unique<fmwk::Entity>("spawnedSphere2", glm::vec3(5.0f, 0.0f, 1.0f),
                                                         glm::quat(1, 0, 0, 0));
-    sphereEntity2->addComponent(std::make_unique<fmwk::Collider>(0.8f, "ENEMY"));
+    sphereEntity2->addComponent(std::make_unique<fmwk::Collider>(0.8f, "ENEMY", glm::vec3(0,0,0)));
     sphereEntity2->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("mySphere")));
     sphereEntity2->addComponent(
             std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("sphereTexture")));

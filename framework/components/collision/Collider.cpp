@@ -11,10 +11,11 @@ namespace fmwk {
         return _alreadyProvisioned;
     }
 
-    Collider::Collider(float radius, std::string  tag) : Component("Collider"),
-                                                                                        _radius(radius),
-                                                                                        _alreadyProvisioned(false),
-                                                                                        _tag(std::move(tag)) {}
+    Collider::Collider(float radius, std::string tag, glm::vec3 centerOffset) : Component("Collider"),
+                                                                                _radius(radius),
+                                                                                _alreadyProvisioned(false),
+                                                                                _tag(std::move(tag)),
+                                                                                _centerOffset(centerOffset) {}
 
     void Collider::provision() {
         _alreadyProvisioned = true;
@@ -26,5 +27,9 @@ namespace fmwk {
 
     const std::string &Collider::getTag() const {
         return _tag;
+    }
+
+    const glm::vec3 &Collider::getCenterOffset() const {
+        return _centerOffset;
     }
 } // fmwk

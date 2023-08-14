@@ -65,7 +65,6 @@ void ColliderTest::localInit() {
     gameEngine->addTexture("sphereNormal", "textures/Metals_09_normal.png");
     gameEngine->addTexture("sphereMaterial", "textures/Metals_09_met_rough_ao.png");
 
-
     auto cameraEntity = std::make_unique<fmwk::Entity>("Camera", glm::vec3(0, 0, 10), glm::quat(1, 0, 0, 0));
     auto cameraComponent = std::make_unique<fmwk::PerspectiveCamera>(0.1f, 100.0f, glm::radians(45.0f));
     cameraEntity->addComponent(std::move(cameraComponent));
@@ -75,7 +74,7 @@ void ColliderTest::localInit() {
     cubeEntity->addComponent(
             std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("cubeTexture")));
     cubeEntity->addComponent(std::make_unique<fmwk::DefaultMaterial>(1.0f));
-    cubeEntity->addComponent(std::make_unique<fmwk::Collider>(1.0f, "CHARACTER"));
+    cubeEntity->addComponent(std::make_unique<fmwk::Collider>(1.0f, "CHARACTER", glm::vec3(0,0,0)));
     cubeEntity->addComponent(
             std::make_unique<fmwk::CharacterController>("CharacterController", cameraEntity->getTransform(), 4.0f));
     cubeEntity->addComponent(
@@ -87,7 +86,7 @@ void ColliderTest::localInit() {
 
     auto sphereEntity1 = std::make_unique<fmwk::Entity>("spawnedSphere1", glm::vec3(3.0f, 0.0f, -3.0f),
                                                         glm::quat(1, 0, 0, 0));
-    sphereEntity1->addComponent(std::make_unique<fmwk::Collider>(0.8f, "ENEMY"));
+    sphereEntity1->addComponent(std::make_unique<fmwk::Collider>(0.8f, "ENEMY", glm::vec3(0,0,0)));
     sphereEntity1->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("mySphere")));
     sphereEntity1->addComponent(
             std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("sphereTexture")));
@@ -97,7 +96,7 @@ void ColliderTest::localInit() {
 
     auto sphereEntity2 = std::make_unique<fmwk::Entity>("spawnedSphere2", glm::vec3(5.0f, 0.0f, 1.0f),
                                                         glm::quat(1, 0, 0, 0));
-    sphereEntity2->addComponent(std::make_unique<fmwk::Collider>(0.8f, "ENEMY"));
+    sphereEntity2->addComponent(std::make_unique<fmwk::Collider>(0.8f, "ENEMY", glm::vec3(0,0,0)));
     sphereEntity2->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("mySphere")));
     sphereEntity2->addComponent(
             std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("sphereTexture")));
