@@ -17,6 +17,7 @@
 #include "../framework/components/materials/SimplePhongMaterial.h"
 #include "ModelTransformationAndMaterialDemo.h"
 #include "../framework/components/materials/SimplePhongBlinkMaterial.h"
+#include "../framework/components/materials/DefaultTransparent.h"
 
 
 // The uniform buffer objects data structures
@@ -60,7 +61,7 @@ void ModelTransformationAndMaterialDemo::localInit() {
 
     gameEngine->addModel("myCube", fmwk::VERTEX_WITH_NORMAL, "Models/Cube.obj");
     gameEngine->addModel("mySphere", fmwk::VERTEX_WITH_NORMAL_AND_TANGENT, "models/Sphere.gltf");
-    gameEngine->addModel("pumpkin", fmwk::VERTEX_WITH_NORMAL, "Models/pumpkin.007_Mesh.5391.mgcg");
+    gameEngine->addModel("pumpkin", fmwk::VERTEX_WITH_NORMAL, "Models/pumpkin.008_Mesh.483.mgcg");
     gameEngine->addModel("ghost", fmwk::VERTEX_WITH_NORMAL, "Models/cast_Mesh.6268.mgcg");
 
 
@@ -78,7 +79,7 @@ void ModelTransformationAndMaterialDemo::localInit() {
     auto cubeEntity = std::make_unique<fmwk::Entity>("Cube", glm::vec3(0, 0, 3), glm::quat(1,0,0,0));
     cubeEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("myCube")));
     cubeEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("cubeTexture")));
-    cubeEntity->addComponent(std::make_unique<fmwk::SimplePhongBlinkMaterial>(1.5f));
+    cubeEntity->addComponent(std::make_unique<fmwk::DefaultMaterial>(1.0f));
 
     cubeEntity->addComponent(std::make_unique<fmwk::CharacterController>("CharacterController", cameraEntity->getTransform(), 4.0f));
     cameraEntity->addComponent(std::make_unique<fmwk::CameraController>("CameraController", cubeEntity->getTransform(), glm::radians(120.0f), 8.0f, 0.25f));
@@ -86,12 +87,12 @@ void ModelTransformationAndMaterialDemo::localInit() {
     auto pumpkinEntity = std::make_unique<fmwk::Entity>("Pumpkin");
     pumpkinEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("pumpkin")));
     pumpkinEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("dungeonTexture")));
-    pumpkinEntity->addComponent(std::make_unique<fmwk::SimplePhongMaterial>());
+    pumpkinEntity->addComponent(std::make_unique<fmwk::SimplePhongBlinkMaterial>(2.0f, 0.4f));
 
     auto ghostEntity = std::make_unique<fmwk::Entity>("Ghost", glm::vec3(1, 0, 0), glm::quat(1, 0, 0, 0));
-    ghostEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("ghost")));
+    ghostEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("mySphere")));
     ghostEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("dungeonTexture")));
-    ghostEntity->addComponent(std::make_unique<fmwk::SimplePhongMaterial>());
+    ghostEntity->addComponent(std::make_unique<fmwk::DefaultMaterial>(1.0f));
 
     auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(0,3,0), glm::rotate(glm::quat(1,0,0,0), glm::radians(-90.0f), fmwk::X));
     lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight1", glm::vec3(-1, 0, 0), glm::vec4(1)));

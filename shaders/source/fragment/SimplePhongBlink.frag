@@ -47,9 +47,7 @@ layout(location = 0) out vec4 outColor;
 layout(set = 1, binding = 0) uniform sampler2D tex;
 
 layout(set = 2, binding = 0) uniform SimplePhongBlinkMaterialUniformBlock {
-    bool isBlinking;
-    float frequency;
-    float t;
+    float alpha;
 } phongBlinkMaterial;
 
 vec3 BRDF(vec3 V, vec3 N, vec3 L, vec3 Md, vec3 Ms, float gamma) {
@@ -100,8 +98,5 @@ void main() {
     }
 
     vec3 Ambient = texture(tex, fragUV).rgb * 0.15f;
-    float alpha = 1.0f;
-    if(phongBlinkMaterial.isBlinking)
-        alpha = abs(cos(2 * PI * phongBlinkMaterial.frequency * phongBlinkMaterial.t));
-    outColor = vec4(clamp(0.95 * (DiffSpec) + Ambient,0.0,1.0), alpha);
+    outColor = vec4(clamp(0.95 * (DiffSpec) + Ambient,0.0,1.0), phongBlinkMaterial.alpha);
 }

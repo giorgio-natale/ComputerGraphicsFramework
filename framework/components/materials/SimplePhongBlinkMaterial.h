@@ -10,14 +10,12 @@
 namespace fmwk {
 
     struct SimplePhongBlinkMaterialUniformBlock{
-        alignas(4) bool isBlinking;
-        alignas(4) float frequency;
-        alignas(4) float t;
+        alignas(4) float alpha;
     };
 
     class SimplePhongBlinkMaterial : public MaterialComponent{
     public:
-        explicit SimplePhongBlinkMaterial(float frequency);
+        SimplePhongBlinkMaterial(float frequency, float dutyCycle);
 
         void updateDescriptorSet(int currentImage) override;
 
@@ -27,6 +25,7 @@ namespace fmwk {
 
     private:
         float _frequency;
+        float _dutyCycle;
         float _t;
         bool _isBlinking;
     };

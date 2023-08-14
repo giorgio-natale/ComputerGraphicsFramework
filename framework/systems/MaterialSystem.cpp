@@ -17,6 +17,7 @@ namespace fmwk {
         defaultEffect.layout = defaultLayout;
         defaultEffect.shaderName = "shaders/compiled/Default.spv";
         defaultEffect.requiredFeatures = {FRAG_UV};
+        defaultEffect.isTransparent = false;
         _effects.insert({defaultEffect.type, defaultEffect});
 
         DescriptorSetLayout colorBlendLayout{};
@@ -28,6 +29,7 @@ namespace fmwk {
         colorBlendEffect.layout = colorBlendLayout;
         colorBlendEffect.shaderName = "shaders/compiled/ColorBlend.spv";
         colorBlendEffect.requiredFeatures = {FRAG_UV};
+        colorBlendEffect.isTransparent = false;
         _effects.insert({COLOR_BLEND, colorBlendEffect});
 
         //simple phong effect
@@ -38,7 +40,7 @@ namespace fmwk {
         simplePhongEffect.layout = simplePhongLayout;
         simplePhongEffect.shaderName = "shaders/compiled/SimplePhong.spv";
         simplePhongEffect.requiredFeatures = {FRAG_POSITION, FRAG_UV, FRAG_NORMAL};
-
+        simplePhongEffect.isTransparent = false;
         _effects.insert({SIMPLE_PHONG, simplePhongEffect});
 
         //ggx effect
@@ -54,7 +56,7 @@ namespace fmwk {
         ggxEffect.layout = ggxLayout;
         ggxEffect.shaderName = "shaders/compiled/GGXTest.spv";
         ggxEffect.requiredFeatures = {FRAG_POSITION, FRAG_UV, FRAG_NORMAL, FRAG_TANGENT};
-
+        ggxEffect.isTransparent = false;
 
         _effects.insert({GGX, ggxEffect});
 
@@ -72,6 +74,17 @@ namespace fmwk {
         _effects.insert({blinkEffect.type, blinkEffect});
 
 
+        DescriptorSetLayout defaultTransparentLayout{};
+
+        //default transparent effect
+        defaultTransparentLayout.init(_bp, {{0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT}});
+        Effect defaultTransparentEffect;
+        defaultTransparentEffect.type = DEFAULT_TRANSPARENT;
+        defaultTransparentEffect.layout = defaultTransparentLayout;
+        defaultTransparentEffect.shaderName = "shaders/compiled/DefaultTransparent.spv";
+        defaultTransparentEffect.requiredFeatures = {FRAG_UV};
+        defaultTransparentEffect.isTransparent = true;
+        _effects.insert({defaultTransparentEffect.type, defaultTransparentEffect});
     }
 
     Effect &MaterialSystem::getEffectByType(EffectType type) {

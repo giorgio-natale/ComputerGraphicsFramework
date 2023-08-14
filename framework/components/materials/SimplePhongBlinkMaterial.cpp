@@ -6,16 +6,22 @@
 #include "../../GameEngine.h"
 
 namespace fmwk {
-    SimplePhongBlinkMaterial::SimplePhongBlinkMaterial(float frequency) : MaterialComponent(SIMPLE_PHONG_BLINK),
+    SimplePhongBlinkMaterial::SimplePhongBlinkMaterial(float frequency, float dutyCycle) : MaterialComponent(SIMPLE_PHONG_BLINK),
                                                                           _frequency(frequency),
                                                                           _t(0),
-                                                                          _isBlinking(false){}
+                                                                          _isBlinking(true),
+                                                                          _dutyCycle(dutyCycle){}
 
     void SimplePhongBlinkMaterial::updateDescriptorSet(int currentImage) {
         SimplePhongBlinkMaterialUniformBlock ubo{};
-        ubo.frequency = _frequency;
-        ubo.t = _t;
-        ubo.isBlinking = _isBlinking;
+        ubo.alpha = 1.0f;
+        if(_isBlinking){
+            float period = 1/_frequency;
+            int periodsAlreadyDone = (int)(_t / period);
+            float normalizedTime = _t - (float)periodsAlreadyDone * period;
+            if(normalizedTime/period > _dutyCycle)
+                ubo.alpha = 0;
+        }
         _descriptorSet->map(currentImage, &ubo, sizeof(ubo), 0);
     }
 
