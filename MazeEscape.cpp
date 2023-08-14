@@ -21,6 +21,7 @@
 #include "framework/components/scripts/BulletSpawner.h"
 #include "framework/components/scripts/EnemyController.h"
 #include "framework/components/scripts/EnemyCollisionBehaviour.h"
+#include "framework/components/scripts/CharacterBulletSpawner.h"
 
 // The uniform buffer objects data structures
 // Remember to use the correct alignas(...) value
@@ -84,7 +85,7 @@ void MazeEscape::localInit() {
     characterEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("cubeTexture")));
     characterEntity->addComponent(std::make_unique<fmwk::SimplePhongMaterial>());
     std::unordered_set<std::string> characterBulletTags = std::unordered_set<std::string>{"ENEMY"};
-    characterEntity->addComponent(std::make_unique<fmwk::BulletSpawner>("BulletSpawner", glm::vec3(0,0,0), 1.0f, 8.5f, &characterBulletTags));
+    characterEntity->addComponent(std::make_unique<fmwk::CharacterBulletSpawner>(glm::vec3(0,0,0), 8.5f, 1.0f, &characterBulletTags));
     characterEntity->addComponent(std::make_unique<fmwk::CharacterController>("CharacterController", cameraEntity->getTransform(), 5.0f));
     cameraEntity->addComponent(std::make_unique<fmwk::CameraController>("CameraController", characterEntity->getTransform(), glm::radians(120.0f), 3.0f, 0.25f));
 
