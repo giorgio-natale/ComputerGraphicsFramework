@@ -24,6 +24,7 @@
 #include "systems/RenderSystem.h"
 #include "systems/InputSystem.h"
 #include "systems/CollisionSystem.h"
+#include "components/materials/MaterialComponent.h"
 
 namespace fmwk {
 

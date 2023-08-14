@@ -6,6 +6,8 @@
 
 #include <utility>
 #include "../../utils.h"
+#include "../../Entity.h"
+#include "../mesh/MeshComponent.h"
 
 namespace fmwk {
 
@@ -90,7 +92,11 @@ namespace fmwk {
 
     void Transform::updateDescriptorSet(int currentImage) {
         EntityTransformUniformBlock ubo{};
-        ubo.mMat = getWorldMatrix();
+        glm::mat4 modelMatrix = I;
+        if(_parentEntity->hasComponent("Mesh")){
+            modelMatrix = dynamic_cast<MeshComponent&>(_parentEntity->getComponentByName("Mesh")).getModel().getModelTransform().getWorldMatrix();
+        }
+        ubo.mMat = getWorldMatrix() * modelMatrix;
         ubo.nMat = glm::transpose(glm::inverse(glm::mat3(ubo.mMat)));
         _descriptorSet->map(currentImage, &ubo, sizeof(ubo), 0);
     }

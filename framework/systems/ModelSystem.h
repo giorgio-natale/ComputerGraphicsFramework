@@ -9,6 +9,7 @@
 #include <glm/vec2.hpp>
 #include <memory>
 #include "../../Starter.hpp"
+#include "../components/transform/Transform.h"
 
 namespace fmwk {
 
@@ -47,10 +48,13 @@ namespace fmwk {
     private:
         std::unique_ptr<BaseModel> _model;
         VertexType _type;
+        std::unique_ptr<Transform> _modelTransform;
     public:
         TModel(std::unique_ptr<BaseModel> model, VertexType type);
+        TModel(std::unique_ptr<BaseModel> model, VertexType type, glm::vec3 position, glm::quat quaternion, glm::vec3 scale);
         VertexType getType();
         BaseModel& getTypedModel();
+        Transform& getModelTransform();
     };
 
     class ModelSystem {

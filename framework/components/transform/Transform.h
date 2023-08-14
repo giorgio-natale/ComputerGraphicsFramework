@@ -10,7 +10,7 @@
 #include "../scripts/Component.h"
 #include "../../utils.h"
 #include "../../../Starter.hpp"
-#include "../materials/MaterialComponent.h"
+
 
 namespace fmwk {
     struct EntityTransformUniformBlock{
