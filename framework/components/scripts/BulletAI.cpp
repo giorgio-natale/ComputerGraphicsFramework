@@ -27,6 +27,11 @@ namespace fmwk {
                 &_targetTags);
         for (Entity *entity: collidingEntities) {
             std::cout << "BULLET " << _parentEntity->getName() << " COLLIDED WITH " << entity->getName() << std::endl;
+            entity->getHealth().takeDamage(10);
+            std::cout << entity->getName() << " LIFE IS NOW " << entity->getHealth().getCurrentLifeQuantity() << std::endl;
+        }
+        if(collidingEntities.size() > 0) {
+            _parentEntity->markForRemoval();
         }
     }
 } // fmwk

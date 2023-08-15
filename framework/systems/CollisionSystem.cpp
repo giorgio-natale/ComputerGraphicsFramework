@@ -31,7 +31,7 @@ namespace fmwk {
 
         std::vector<Entity *> collidingEntities;
         for (auto const &[key, otherCollider]: _colliders) {
-            std::string collidingEntityName = key.substr(0, key.find("-"));
+            std::string collidingEntityName = key.substr(0, key.find('-'));
             if (selfEntityName != collidingEntityName && checkCollision(collider, otherCollider) &&
                 (targetTags == nullptr || targetTags->find(otherCollider->getTag()) != targetTags->end())) {
                 collidingEntities.push_back(&gameEngine->getEntityByName(collidingEntityName));

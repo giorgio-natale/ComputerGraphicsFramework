@@ -48,15 +48,33 @@ demo/MovingCube.cpp
         framework/components/scripts/BulletAI.h
         demo/BulletSpawnerTest.cpp
         demo/BulletSpawnerTest.h
-        demo/MazeGeneration.cpp demo/MazeGeneration.h maze_generation/Direction.cpp maze_generation/Direction.h maze_generation/Position.cpp maze_generation/Position.h maze_generation/mazeUtils.h maze_generation/FragmentedFace.cpp maze_generation/FragmentedFace.h maze_generation/FragmentedBox.cpp maze_generation/FragmentedBox.h maze_generation/VertexDictionary.cpp maze_generation/VertexDictionary.h maze_generation/MazeCell.cpp maze_generation/MazeCell.h maze_generation/Maze.cpp maze_generation/Maze.h
-        framework/components/scripts/MazeRepresentation.cpp framework/components/scripts/MazeRepresentation.h
+        demo/MazeGeneration.cpp
+        demo/MazeGeneration.h
+        maze_generation/Direction.cpp
+        maze_generation/Direction.h
+        maze_generation/Position.cpp
+        maze_generation/Position.h
+        maze_generation/mazeUtils.h
+        maze_generation/FragmentedFace.cpp
+        maze_generation/FragmentedFace.h
+        maze_generation/FragmentedBox.cpp
+        maze_generation/FragmentedBox.h
+        maze_generation/VertexDictionary.cpp
+        maze_generation/VertexDictionary.h
+        maze_generation/MazeCell.cpp
+        maze_generation/MazeCell.h
+        maze_generation/Maze.cpp
+        maze_generation/Maze.h
+        framework/components/scripts/MazeRepresentation.cpp
+        framework/components/scripts/MazeRepresentation.h
         framework/components/scripts/EnemyCollisionBehaviour.cpp
         framework/components/scripts/EnemyCollisionBehaviour.h
         demo/EnemyDemo.cpp
         demo/EnemyDemo.h
         framework/components/scripts/EnemyController.cpp
         framework/components/scripts/EnemyController.h
-        MazeEscape.cpp MazeEscape.h
+        MazeEscape.cpp
+        MazeEscape.h
         framework/components/scripts/MazeCharacterController.cpp
         framework/components/scripts/MazeCharacterController.h
         framework/components/scripts/CharacterBulletSpawner.cpp
@@ -64,7 +82,15 @@ demo/MovingCube.cpp
         framework/components/scripts/EnemyBulletSpawner.cpp
         framework/components/scripts/EnemyBulletSpawner.h
         demo/ModelTransformationAndMaterialDemo.cpp
-        demo/ModelTransformationAndMaterialDemo.h framework/components/materials/SimplePhongBlinkMaterial.cpp framework/components/materials/SimplePhongBlinkMaterial.h framework/components/materials/DefaultTransparent.cpp framework/components/materials/DefaultTransparent.h framework/components/materials/SimplePhongColorBlendMaterial.cpp framework/components/materials/SimplePhongColorBlendMaterial.h)
+        demo/ModelTransformationAndMaterialDemo.h
+        framework/components/materials/SimplePhongBlinkMaterial.cpp
+        framework/components/materials/SimplePhongBlinkMaterial.h
+        framework/components/materials/DefaultTransparent.cpp
+        framework/components/materials/DefaultTransparent.h
+        framework/components/materials/SimplePhongColorBlendMaterial.cpp
+        framework/components/materials/SimplePhongColorBlendMaterial.h
+        framework/components/scripts/Health.cpp
+        framework/components/scripts/Health.h)
 target_link_libraries(${PROJECT_NAME})
 find_package(Vulkan REQUIRED)
 foreach(dir IN LISTS Vulkan_INCLUDE_DIR INCLUDE_DIRS)

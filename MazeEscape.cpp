@@ -84,6 +84,7 @@ void MazeEscape::localInit() {
     characterEntity->addComponent(std::make_unique<fmwk::Collider>(1.0f, "CHARACTER", glm::vec3(0,0,0)));
     characterEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("cubeTexture")));
     characterEntity->addComponent(std::make_unique<fmwk::SimplePhongMaterial>());
+    characterEntity->addComponent(std::make_unique<fmwk::Health>(30.0f,1.0f));
     std::unordered_set<std::string> characterBulletTags = std::unordered_set<std::string>{"ENEMY"};
     characterEntity->addComponent(std::make_unique<fmwk::CharacterBulletSpawner>(glm::vec3(0,0,0), 8.5f, 1.0f, &characterBulletTags));
     characterEntity->addComponent(std::make_unique<fmwk::CharacterController>("CharacterController", cameraEntity->getTransform(), 5.0f));
@@ -100,6 +101,7 @@ void MazeEscape::localInit() {
 
     auto enemyEntity = std::make_unique<fmwk::Entity>("Enemy", enemyTargetPoints[0], glm::quat(1,0,0,0));
     //enemyEntity->getTransform().setScale({0.5, 0.5, 0.5});
+    enemyEntity->addComponent(std::make_unique<fmwk::Health>(50.0f,1.0f));
     enemyEntity->addComponent(std::make_unique<fmwk::Collider>(1.0f, "ENEMY", glm::vec3(0,0,0)));
     enemyEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("mySphere")));
     enemyEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("sphereTexture")));

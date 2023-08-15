@@ -22,7 +22,7 @@ namespace fmwk {
 
     private:
         std::map<std::string, Collider*> _colliders;
-        bool checkCollision(Collider* colliderA, Collider* colliderB);
+        static bool checkCollision(Collider* colliderA, Collider* colliderB);
     };
 
 } // fmwk
