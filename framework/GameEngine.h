@@ -109,6 +109,8 @@ namespace fmwk {
 
         void cleanupResources();
 
+        void flushPendingResources();
+
         void destroyResources();
 
 
@@ -126,6 +128,7 @@ namespace fmwk {
         std::map<std::string, std::unique_ptr<Entity>> _entities;
         std::map<std::string, std::unique_ptr<Entity>> _enqueuedEntities;
         std::map<std::string, std::pair<DescriptorSet, DescriptorSetInitializationInfo>> _entitiesDescriptorSets;
+        std::vector<std::pair<DescriptorSet, int>> _descriptorSetsToClear;
         ModelSystem _modelSystem;
         TextureSystem _textureSystem;
         MaterialSystem _materialSystem;

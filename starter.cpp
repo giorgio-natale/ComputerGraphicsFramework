@@ -1364,6 +1364,7 @@ void BaseProject::drawFrame() {
         throw std::runtime_error("failed to present swap chain image!");
     }
 
+    fmwk::GameEngine::getInstance()->flushPendingResources();
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 }
 
