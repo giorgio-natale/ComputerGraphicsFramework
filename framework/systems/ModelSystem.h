@@ -50,7 +50,6 @@ namespace fmwk {
         VertexType _type;
         std::unique_ptr<Transform> _modelTransform;
     public:
-        TModel(std::unique_ptr<BaseModel> model, VertexType type);
         TModel(std::unique_ptr<BaseModel> model, VertexType type, glm::vec3 position, glm::quat quaternion, glm::vec3 scale);
         VertexType getType();
         BaseModel& getTypedModel();
@@ -69,10 +68,18 @@ namespace fmwk {
         explicit ModelSystem(BaseProject *bp);
 
         void addModel(std::string const& name, VertexType vertexType, std::string const& fileName);
+        void addModel(std::string const& name, VertexType vertexType, std::string const& fileName, glm::vec3 position, glm::quat quaternion, glm::vec3 scale);
 
         template<class Vert>
         void addModel(const std::string &name, VertexType vertexType, std::vector<Vert> const& vertices,
                                    std::vector<uint32_t> const& indices) {
+
+            addModel(name, vertexType, vertices, indices, glm::vec3(0,0,0), createQuat(Y, 180), glm::vec3(1));
+        }
+
+        template<class Vert>
+        void addModel(const std::string &name, VertexType vertexType, std::vector<Vert> const& vertices,
+                      std::vector<uint32_t> const& indices, glm::vec3 position, glm::quat quaternion, glm::vec3 scale) {
 
             std::unique_ptr<Model<Vert>> rawModel = std::make_unique<Model<Vert>>();
             rawModel->vertices = vertices;
@@ -80,8 +87,9 @@ namespace fmwk {
             rawModel->initMesh(_bp, &_vertexDescriptors.find(vertexType)->second.first);
 
             std::unique_ptr<BaseModel> model = std::move(rawModel);
-            _models.insert({name, TModel(std::move(model), vertexType)});
+            _models.insert({name, TModel(std::move(model), vertexType, position, quaternion, scale)});
         }
+
 
         TModel& getModelByName(std::string const& name);
 

@@ -70,10 +70,19 @@ namespace fmwk {
         Entity& getEntityByName(const std::string& name) override;
         std::vector<Entity*> getAllEntities() override;
         void addModel(std::string const& name, VertexType vertexType, std::string const& fileName);
+        void addModel(std::string const& name, VertexType vertexType, std::string const& fileName, glm::vec3 position, glm::quat quaternion, glm::vec3 scale);
+
         template<class Vert>
         void addModel(const std::string &name, VertexType vertexType, const std::vector<Vert> &vertices,
                                   const std::vector<uint32_t> &indices) {
             _modelSystem.addModel(name, vertexType, vertices, indices);
+        }
+
+        template<class Vert>
+        void addModel(const std::string &name, VertexType vertexType, std::vector<Vert> const& vertices,
+                      std::vector<uint32_t> const& indices, glm::vec3 position, glm::quat quaternion, glm::vec3 scale) {
+
+            _modelSystem.addModel(name, vertexType, vertices, indices, position, quaternion, scale);
         }
         TModel& getModelByName(std::string const& name);
         void addTexture(std::string const& name, std::string const& fileName);

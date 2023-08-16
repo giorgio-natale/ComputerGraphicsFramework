@@ -76,6 +76,11 @@ namespace fmwk {
     }
 
     void ModelSystem::addModel(std::string const& name, VertexType vertexType, std::string const& fileName){
+         addModel(name, vertexType, fileName, glm::vec3(0,0,0), createQuat(Y, 180), glm::vec3(1));
+    }
+
+    void ModelSystem::addModel(const std::string &name, VertexType vertexType, const std::string &fileName,
+                               glm::vec3 position, glm::quat quaternion, glm::vec3 scale) {
         if(_models.find(name) != _models.end())
             throw std::runtime_error("Could not add model with name '" + name + "' because there was another model with the same name");
         auto extension = fileName.substr(fileName.find_last_of('.') + 1);
@@ -92,8 +97,7 @@ namespace fmwk {
 
         std::unique_ptr<BaseModel> model = createEmptyModel(vertexType);
         model->init(_bp, &_vertexDescriptors.find(vertexType)->second.first, fileName, modelType);
-        _models.insert({name, TModel(std::move(model), vertexType)});
-
+        _models.insert({name, TModel(std::move(model), vertexType, position, quaternion, scale)});
     }
 
     TModel& ModelSystem::getModelByName(std::string const& name){
@@ -123,13 +127,12 @@ namespace fmwk {
 
 
 
+
     TModel::TModel(std::unique_ptr<BaseModel> model, VertexType type, glm::vec3 position, glm::quat quaternion, glm::vec3 scale){
          _model = std::move(model);
          _type = type;
          _modelTransform = std::make_unique<Transform>(position, quaternion, scale);
      }
-
-    TModel::TModel(std::unique_ptr<BaseModel> model, VertexType type): TModel(std::move(model), type, glm::vec3(0,0,0),glm::quat(1,0,0,0), glm::vec3(1,1,1)) {}
 
     VertexType TModel::getType() {
         return _type;
