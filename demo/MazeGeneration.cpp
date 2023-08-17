@@ -105,7 +105,7 @@ void MazeGeneration::localInit() {
     auto cameraComponent = std::make_unique<fmwk::PerspectiveCamera>(0.1f, 50.0f, glm::radians(45.0f));
     cameraEntity->addComponent(std::move(cameraComponent));
 
-    auto sphereEntity = std::make_unique<fmwk::Entity>("Sphere", glm::vec3(10,0.5f,0),glm::quat(1, 0, 0, 0));
+    auto sphereEntity = std::make_unique<fmwk::Entity>("Sphere", glm::vec3(80,0.5f,3),glm::quat(1, 0, 0, 0));
     sphereEntity->getTransform().setScale(glm::vec3(0.5f, 0.5f, 0.5f));
     sphereEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("mySphere")));
     sphereEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("sphereTexture")));

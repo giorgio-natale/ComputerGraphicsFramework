@@ -23,7 +23,6 @@ namespace fmwk {
         if(!input.spacePressed)
             _spacePressConsidered = true;
         if(input.spacePressed && _spacePressConsidered){
-            // getMazeCollisions si aspetta sempre un vettore normalizzato e un semiasse
             auto info1 = _mazeRepresentation.getMazeCollisions(characterTransform.getPosition(), X);
             std::cout << "[->] Is near: " << std::boolalpha << info1.isNear << " distance: " << info1.distance << std::endl;
             auto info2 = _mazeRepresentation.getMazeCollisions(characterTransform.getPosition(), -X);
@@ -65,15 +64,38 @@ namespace fmwk {
         }
 
         characterTransform.translate(input.deltaTime * _maxSpeed * constrainedDirection);
-        if(localDirection != glm::vec3(0))
-            characterTransform.setRotation(glm::quatLookAt(localDirection, Y));
+        auto blocksAround = _mazeRepresentation.getBlocksAroundPoint(characterTransform.getPosition());
+        for (auto &square: blocksAround) {
+            characterTransform.setPosition(getDistanceFromCharacter(square, characterTransform.getPosition()));
+        }
+        if(localDirection != glm::vec3(0)){
+            characterTransform.setRotation(glm::quatLookAt(localDirection, Y));}
     }
 
-    // issues
-    // se vado contro il muro rallenta la velocità perché una delle componenti è azzerata. Può aver senso compensare sull'altra
-    // se ho il centro del cubo oltre lo spigolo di un'intersezione, ma ho ancora la metà posteriore del cubo entro il corridoio,
-    // il getMazeCollisions mi dice che non ho nessun muro vicino, poiché calcola le distanze dal centro del cubo.
-    // Si potrebbe risolvere calcolando le distanze da due punti invece che uno solo
-
+    glm::vec3 MazeCharacterController::getDistanceFromCharacter(Square &square, glm::vec3 position) {
+        float distance = 0;
+        if(position.x > square.bottomLeftCorner.x && position.x > square.bottomLeftCorner.x + square.edgeSize
+            && position.z < square.bottomLeftCorner.z && position.z > square.bottomLeftCorner.z - square.edgeSize) {
+            distance = position.x - square.bottomLeftCorner.x - square.edgeSize;
+            if (distance < 0.5)
+                position.x += 0.5 - distance;
+        } else if(position.x < square.bottomLeftCorner.x
+                  && position.z < square.bottomLeftCorner.z && position.z > square.bottomLeftCorner.z - square.edgeSize) {
+            distance = square.bottomLeftCorner.x - position.x;
+            if (distance < 0.5)
+                position.x -= 0.5 - distance;
+        } else if (position.z < square.bottomLeftCorner.z
+                    && position.x > square.bottomLeftCorner.x && position.x < square.bottomLeftCorner.x + square.edgeSize) {
+            distance = (square.bottomLeftCorner.z - square.edgeSize) - position.z;
+            if (distance < 0.5)
+                position.z -= 0.5 - distance;
+        } else if (position.z > square.bottomLeftCorner.z
+                   && position.x > square.bottomLeftCorner.x && position.x < square.bottomLeftCorner.x + square.edgeSize) {
+            distance = position.z - square.bottomLeftCorner.z;
+            if (distance < 0.5)
+                position.z += 0.5 - distance;
+        }
+        return position;
+    }
 
 } // fmwk

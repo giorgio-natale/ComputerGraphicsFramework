@@ -22,6 +22,8 @@ namespace fmwk {
         MazeRepresentation const& _mazeRepresentation;
         float const _maxSpeed;
         bool _spacePressConsidered;
+
+        glm::vec3 getDistanceFromCharacter(Square &square, glm::vec3 vec1);
     };
 
 } // fmwk
