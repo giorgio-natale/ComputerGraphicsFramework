@@ -94,6 +94,7 @@ namespace fmwk {
         _modelSystem.addModel(name, vertexType, fileName);
     }
 
+
     TModel &GameEngine::getModelByName(const std::string &name) {
         return _modelSystem.getModelByName(name);
     }
@@ -302,7 +303,7 @@ namespace fmwk {
         auto key = component->getParent()->getName() + "-" + component->getName();
         auto elem = _entitiesDescriptorSets.find(key);
         if (elem != _entitiesDescriptorSets.end()) {
-            elem->second.first.cleanup();
+            _descriptorSetsToClear.emplace_back(elem->second.first, 3);
             _entitiesDescriptorSets.erase(key);
         }
 
@@ -367,6 +368,22 @@ namespace fmwk {
 
     Entity *GameEngine::getCharacterCollidingEntity(Collider *collider) {
         return _collisionSystem.getCharacterCollidingEntity(collider);
+    }
+
+    void GameEngine::flushPendingResources() {
+        auto it = _descriptorSetsToClear.begin();
+        while(it != _descriptorSetsToClear.end()){
+            it->second--;
+            if(it->second <= 0){
+                it -> first.cleanup();
+                it = _descriptorSetsToClear.erase(it);
+            }else it++;
+        }
+    }
+
+    void GameEngine::addModel(const std::string &name, VertexType vertexType, const std::string &fileName,
+                              glm::vec3 position, glm::quat quaternion, glm::vec3 scale) {
+        _modelSystem.addModel(name, vertexType, fileName, position, quaternion, scale);
     }
 
 

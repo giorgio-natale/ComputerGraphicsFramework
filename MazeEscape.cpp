@@ -71,7 +71,7 @@ void MazeEscape::localInit() {
     gameEngine->addTexture("mainMazeTexture", "textures/maze_main.png");
 
     auto [vertices, faces] = buildMazeModel();
-    gameEngine->addModel<fmwk::VertexWithNormal>("MazeModel", fmwk::VERTEX_WITH_NORMAL, vertices, faces);
+    gameEngine->addModel<fmwk::VertexWithNormal>("MazeModel", fmwk::VERTEX_WITH_NORMAL, vertices, faces, glm::vec3(0), glm::quat(1,0,0,0), glm::vec3(1));
 
     auto cameraEntity = std::make_unique<fmwk::Entity>("Camera", glm::vec3(0, 0, 10), glm::quat(1, 0, 0, 0));
     auto cameraComponent = std::make_unique<fmwk::PerspectiveCamera>(0.1f, 100.0f, glm::radians(45.0f));
