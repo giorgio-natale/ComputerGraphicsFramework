@@ -124,7 +124,7 @@ namespace fmwk {
 
 
     private:
-        explicit GameEngine(BaseProject *bp) : _window(nullptr), _modelSystem(ModelSystem(bp)),
+        explicit GameEngine(BaseProject *bp) : _window(nullptr), _virtualScreenWidthUnits(30.0f),_modelSystem(ModelSystem(bp)),
                                                _textureSystem(TextureSystem(bp)),
                                                _materialSystem(MaterialSystem(bp)), _renderSystem(RenderSystem(bp)),
                                                _inputSystem(), _collisionSystem() {
@@ -134,6 +134,7 @@ namespace fmwk {
         static GameEngine *_instance;
         GLFWwindow *_window;
         std::pair<int, int> _windowSize = {800, 600};
+        float _virtualScreenWidthUnits;
         std::map<std::string, std::unique_ptr<Entity>> _entities;
         std::map<std::string, std::unique_ptr<Entity>> _enqueuedEntities;
         std::map<std::string, std::pair<DescriptorSet, DescriptorSetInitializationInfo>> _entitiesDescriptorSets;

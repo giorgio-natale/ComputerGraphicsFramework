@@ -98,6 +98,20 @@ namespace fmwk {
         phongBlendColorEffect.isTransparent = false;
         _effects.insert({phongBlendColorEffect.type, phongBlendColorEffect});
 
+
+        DescriptorSetLayout defaultSpriteLayout{};
+
+        //default sprite
+        defaultSpriteLayout.init(_bp, {{0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT}});
+        Effect defaultSpriteEffect;
+        defaultSpriteEffect.type = DEFAULT_SPRITE;
+        defaultSpriteEffect.layout = defaultSpriteLayout;
+        defaultSpriteEffect.shaderName = "shaders/compiled/OverlayFrag.spv";
+        defaultSpriteEffect.requiredFeatures = {FRAG_UV};
+        defaultSpriteEffect.isTransparent = true;
+        _effects.insert({defaultSpriteEffect.type, defaultSpriteEffect});
+
+
     }
 
     Effect &MaterialSystem::getEffectByType(EffectType type) {

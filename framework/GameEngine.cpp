@@ -7,6 +7,7 @@
 #include "components/mesh/MeshComponent.h"
 #include "components/texture/TextureComponent.h"
 #include "components/collision/Collider.h"
+#include "components/sprite/Sprite.h"
 
 namespace fmwk {
     GameEngine *GameEngine::_instance = nullptr;
@@ -167,6 +168,18 @@ namespace fmwk {
                 } else if (auto *colliderComponent = dynamic_cast<Collider *>(component)) {
                     _collisionSystem.addCollider(colliderComponent);
                     colliderComponent->provision();
+                } else if (auto *spriteComponent = dynamic_cast<Sprite *>(component)) {
+                    DescriptorSet descriptorSet;
+                    DescriptorSetLayout &dsl = _renderSystem.getModelOverlayDescriptorSetLayout();
+                    DescriptorSetInitializationInfo initializationInfo = {&dsl, {{0, UNIFORM,
+                                                                                  sizeof(SpriteUniformBlock)}}};
+                    auto [insertedElement, ok] = _entitiesDescriptorSets.insert(
+                            {component->getParent()->getName() + "-" + component->getName(),
+                             {descriptorSet, initializationInfo}});
+                    if (initializeDescriptorSets)
+                        insertedElement->second.first.init(_bp, &dsl,
+                                                           {{0, UNIFORM, sizeof(SpriteUniformBlock)}});
+                    spriteComponent->provision(&insertedElement->second.first);
                 } else {
                     throw std::runtime_error("Provision of component '" + component->getName() + "' not implemented");
                 }
@@ -183,12 +196,14 @@ namespace fmwk {
                 lights.push_back(lightComponent);
         }
         auto *cameraComponent = dynamic_cast<Camera *>(&getEntityByName("Camera").getComponentByName("Camera"));
-        _renderSystem.updateGlobalDescriptor(cameraComponent, lights, currentImage);
+        _renderSystem.updateGlobalDescriptor(cameraComponent, lights, getAspectRatio(), _virtualScreenWidthUnits, currentImage);
         for (Component *component: getAllComponents()) {
             if (auto *materialComponent = dynamic_cast<MaterialComponent *>(component)) {
                 materialComponent->updateDescriptorSet(currentImage);
             } else if (auto *transformComponent = dynamic_cast<Transform *>(component)) {
                 transformComponent->updateDescriptorSet(currentImage);
+            } else if(auto *spriteComponent = dynamic_cast<Sprite *>(component)){
+                spriteComponent->updateDescriptorSet(currentImage, _virtualScreenWidthUnits, getAspectRatio());
             }
         }
     }
@@ -197,7 +212,7 @@ namespace fmwk {
         std::vector<Entity *> entities = getAllEntities();
         Pipeline *oldPipeline = nullptr;
         BaseModel *oldModel = nullptr;
-        DescriptorSet *globalDescriptorSet = &_renderSystem.getGlobalDescriptorSet();
+        DescriptorSet *oldGlobalDescriptorSet = nullptr;
         BoundTexture *oldTexture = nullptr;
 
 
@@ -217,10 +232,26 @@ namespace fmwk {
         for(auto entity : transparentEntities)
             entities.push_back(entity);
 
-        bool needToBindGlobalDescriptor = true;
         for (Entity *entity: entities) {
             if (entity->hasComponent("Mesh")) {
-                Transform &transform = entity->getTransform();
+                Transform *transform = nullptr;
+                Sprite *sprite = nullptr;
+                DescriptorSet *globalDescriptorSet = nullptr;
+                if(entity->hasComponent("Transform")) {
+                    transform = &entity->getTransform();
+                    if(globalDescriptorSet != &_renderSystem.getGlobalDescriptorSet()) {
+                        globalDescriptorSet = &_renderSystem.getGlobalDescriptorSet();
+                        oldTexture = nullptr;
+                    }
+                }
+                else {
+                    sprite = reinterpret_cast<Sprite *>(&entity->getComponentByName("Sprite"));
+                    if(globalDescriptorSet != &_renderSystem.getGlobalOverlayDescriptorSet()) {
+                        globalDescriptorSet = &_renderSystem.getGlobalOverlayDescriptorSet();
+                        oldTexture = nullptr;
+                    }
+                }
+
                 MeshComponent &meshComponent = reinterpret_cast<MeshComponent &>(entity->getComponentByName("Mesh"));
                 MaterialComponent &materialComponent = reinterpret_cast<MaterialComponent &>(entity->getComponentByName(
                         "Material"));
@@ -237,17 +268,21 @@ namespace fmwk {
                     oldPipeline = materialComponent.getPipeline();
                 }
 
-                if (needToBindGlobalDescriptor) {
+                if (globalDescriptorSet != oldGlobalDescriptorSet) {
                     globalDescriptorSet->bind(commandBuffer, *oldPipeline, 0, currentImage);
-                    needToBindGlobalDescriptor = false;
+                    oldGlobalDescriptorSet = globalDescriptorSet;
                 }
+
                 if (&textureComponent.getBoundTexture() != oldTexture) {
                     textureComponent.getBoundTexture().getDescriptorSet().bind(commandBuffer, *oldPipeline, 1,
                                                                                currentImage);
                     oldTexture = &textureComponent.getBoundTexture();
                 }
                 materialComponent.getDescriptorSet().bind(commandBuffer, *oldPipeline, 2, currentImage);
-                transform.getDescriptorSet().bind(commandBuffer, *oldPipeline, 3, currentImage);
+                if(transform != nullptr)
+                    transform->getDescriptorSet().bind(commandBuffer, *oldPipeline, 3, currentImage);
+                else
+                    sprite->getDescriptorSet().bind(commandBuffer, *oldPipeline, 3, currentImage);
 
                 vkCmdDrawIndexed(commandBuffer, oldModel->getVertexCount(), 1, 0, 0, 0);
             }

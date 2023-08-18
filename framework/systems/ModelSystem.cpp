@@ -73,6 +73,22 @@ namespace fmwk {
          _vertexDescriptors.insert({VERTEX_WITH_NORMAL_AND_TANGENT, {vd, posUvNormTanShaders}});
 
 
+         vd.init(_bp,
+                 {
+                    {0, sizeof(VertexOverlay), VK_VERTEX_INPUT_RATE_VERTEX}
+                 },
+                 {
+                         {0, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(VertexOverlay, pos),
+                                 sizeof(glm::vec2), OTHER},
+                         {0, 1, VK_FORMAT_R32G32_SFLOAT, offsetof(VertexOverlay, UV),
+                                 sizeof(glm::vec2), UV}
+                 });
+
+         std::set<VertexShader> overlayShaders = {
+                 {"shaders/compiled/OverlayVert.spv", {FRAG_UV}},
+         };
+
+         _vertexDescriptors.insert({VERTEX_OVERLAY, {vd, overlayShaders}});
     }
 
     void ModelSystem::addModel(std::string const& name, VertexType vertexType, std::string const& fileName){

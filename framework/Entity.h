@@ -11,6 +11,7 @@
 #include "components/transform/Transform.h"
 #include "components/collision/Collider.h"
 #include "components/scripts/Health.h"
+#include "components/sprite/SpriteUtils.h"
 
 namespace fmwk {
 
@@ -19,6 +20,7 @@ namespace fmwk {
     public:
         explicit Entity(std::string const& name);
         Entity(std::string const& name, glm::vec3 const& initialPosition, glm::quat const& initialRotation);
+        Entity(std::string const& name, glm::vec2 preferredSize, const std::vector<UiAnchor>& anchors, bool stretchable);
 
         [[nodiscard]] std::string getName() const;
         [[nodiscard]] Component& getComponentByName(std::string const& name) const;

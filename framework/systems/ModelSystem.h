@@ -29,7 +29,12 @@ namespace fmwk {
         glm::vec3 norm;
         glm::vec4 tan;
     };
-    enum VertexType{VERTEX, VERTEX_WITH_NORMAL, VERTEX_WITH_NORMAL_AND_TANGENT};
+
+    struct VertexOverlay{
+        glm::vec2 pos;
+        glm::vec2 UV;
+    };
+    enum VertexType{VERTEX, VERTEX_WITH_NORMAL, VERTEX_WITH_NORMAL_AND_TANGENT, VERTEX_OVERLAY};
 
     enum VertexShaderOutputFeature{FRAG_UV, FRAG_POSITION, FRAG_NORMAL, FRAG_TANGENT};
 

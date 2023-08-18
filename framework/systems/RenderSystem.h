@@ -63,13 +63,25 @@ namespace fmwk {
         alignas(4) int spotLightsCount;
     };
 
+    struct GlobalOverlayUniformBlock{
+        alignas(16) glm::mat4 overlayProjectionMatrix;
+    };
+
     class RenderSystem {
     private:
         BaseProject *_bp;
+
         DescriptorSetLayout _globalDescriptorSetLayout{};
         DescriptorSetLayout _textureDescriptorSetLayout{};
         DescriptorSetLayout _modelDescriptorSetLayout{};
+
         DescriptorSet _globalDescriptorSet;
+
+        DescriptorSetLayout _globalOverlayDescriptorSetLayout{};
+        DescriptorSetLayout _modelOverlayDescriptorSetLayout{};
+
+        DescriptorSet _globalOverlayDescriptorSet;
+
         std::unordered_map<std::pair<VertexType, EffectType>, Pipeline> _pipelines;
 
     public:
@@ -82,7 +94,10 @@ namespace fmwk {
         Pipeline& getPipeline(VertexType vertexType, EffectType effectType);
         DescriptorSet& getGlobalDescriptorSet();
         DescriptorSetLayout& getModelDescriptorSetLayout();
-        void updateGlobalDescriptor(Camera* cameraComponent, std::vector<LightComponent*>& lights, int currentImage) ;
+
+        DescriptorSet& getGlobalOverlayDescriptorSet();
+        DescriptorSetLayout& getModelOverlayDescriptorSetLayout();
+        void updateGlobalDescriptor(Camera* cameraComponent, std::vector<LightComponent*>& lights, float aspectRatio, float virtualScreenWidthUnits, int currentImage) ;
 
         void rebuildPipelines();
         void resetPipelines();

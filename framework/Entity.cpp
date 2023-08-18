@@ -4,6 +4,7 @@
 
 #include "Entity.h"
 #include "components/transform/Transform.h"
+#include "components/sprite/Sprite.h"
 
 #include <stdexcept>
 #include <algorithm>
@@ -17,6 +18,13 @@ namespace fmwk {
         _name = name;
         auto transform = std::make_unique<Transform>(initialPosition, initialRotation, glm::vec3(1));
         addComponent(std::move(transform));
+        _toBeRemoved = false;
+    }
+
+    Entity::Entity(const std::string &name, glm::vec2 preferredSize, const std::vector<UiAnchor>& anchors, bool stretchable) {
+        _name = name;
+        auto sprite = std::make_unique<Sprite>(preferredSize, anchors, stretchable);
+        addComponent(std::move(sprite));
         _toBeRemoved = false;
     }
 
@@ -112,6 +120,5 @@ namespace fmwk {
                        });
         return components;
     }
-
 
 } // fmwk

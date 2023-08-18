@@ -90,7 +90,7 @@ demo/MovingCube.cpp
         framework/components/materials/SimplePhongColorBlendMaterial.cpp
         framework/components/materials/SimplePhongColorBlendMaterial.h
         framework/components/scripts/Health.cpp
-        framework/components/scripts/Health.h)
+        framework/components/scripts/Health.h framework/components/sprite/Sprite.cpp framework/components/sprite/Sprite.h framework/components/materials/DefaultSprite.cpp framework/components/materials/DefaultSprite.h demo/HudDemo.cpp demo/HudDemo.h framework/components/sprite/SpriteUtils.cpp framework/components/sprite/SpriteUtils.h)
 target_link_libraries(${PROJECT_NAME})
 find_package(Vulkan REQUIRED)
 foreach(dir IN LISTS Vulkan_INCLUDE_DIR INCLUDE_DIRS)
