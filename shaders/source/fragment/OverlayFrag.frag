@@ -11,5 +11,5 @@ layout(set = 2, binding = 0) uniform DefaultSpriteUniformBlock{
 }spriteUbo;
 
 void main() {
-    outColor = vec4(texture(tex, fragUV).rgb, 1.0f);		// main color
+    outColor = texture(tex, fragUV);		// main color
 }

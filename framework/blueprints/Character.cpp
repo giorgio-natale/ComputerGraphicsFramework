@@ -28,6 +28,8 @@ namespace fmwk {
         auto characterEntity = std::make_unique<fmwk::Entity>("Character", _position, glm::quat(1,0,0,0));
         characterEntity->getTransform().setScale({0.5, 0.5, 0.5});
 
+        characterEntity->setPreferredRenderOrder(0);
+
         characterEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("myCube")));
         characterEntity->addComponent(std::make_unique<fmwk::Collider>(1.0f, "CHARACTER", glm::vec3(0,0,0)));
         characterEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("cubeTexture")));

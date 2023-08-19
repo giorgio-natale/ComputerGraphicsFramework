@@ -226,6 +226,10 @@ namespace fmwk {
                 nonTransparentEntities.push_back(entity);
         }
 
+        std::sort(transparentEntities.begin(), transparentEntities.end(), [](Entity const* a, Entity const* b){
+            return a->getPreferredRenderOrder() >= 0 && a->getPreferredRenderOrder() < b->getPreferredRenderOrder();
+        });
+
         entities.clear();
         for(auto entity : nonTransparentEntities)
             entities.push_back(entity);

@@ -78,14 +78,16 @@ void ModelTransformationAndMaterialDemo::localInit() {
     cameraEntity->addComponent(std::move(cameraComponent));
 
     auto cubeEntity = std::make_unique<fmwk::Entity>("Cube", glm::vec3(0, 0, 3), glm::quat(1,0,0,0));
+    cubeEntity->setPreferredRenderOrder(1000);
     cubeEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("myCube")));
     cubeEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("cubeTexture")));
-    cubeEntity->addComponent(std::make_unique<fmwk::DefaultMaterial>(1.0f));
+    cubeEntity->addComponent(std::make_unique<fmwk::DefaultTransparent>(1.0f, 0.5f));
 
     cubeEntity->addComponent(std::make_unique<fmwk::CharacterController>("CharacterController", cameraEntity->getTransform(), 4.0f));
     cameraEntity->addComponent(std::make_unique<fmwk::CameraController>("CameraController", cubeEntity->getTransform(), glm::radians(120.0f), 8.0f, 0.25f));
 
     auto pumpkinEntity = std::make_unique<fmwk::Entity>("Pumpkin");
+    pumpkinEntity->setPreferredRenderOrder(100);
     pumpkinEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("pumpkin")));
     pumpkinEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("dungeonTexture")));
     pumpkinEntity->addComponent(std::make_unique<fmwk::SimplePhongBlinkMaterial>(2.0f, 0.4f));

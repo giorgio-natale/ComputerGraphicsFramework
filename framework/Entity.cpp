@@ -19,6 +19,7 @@ namespace fmwk {
         auto transform = std::make_unique<Transform>(initialPosition, initialRotation, glm::vec3(1));
         addComponent(std::move(transform));
         _toBeRemoved = false;
+        _preferredRenderOrder = -1;
     }
 
     Entity::Entity(const std::string &name, glm::vec2 preferredSize, const std::vector<UiAnchor>& anchors, bool stretchable) {
@@ -26,6 +27,7 @@ namespace fmwk {
         auto sprite = std::make_unique<Sprite>(preferredSize, anchors, stretchable);
         addComponent(std::move(sprite));
         _toBeRemoved = false;
+        _preferredRenderOrder = -1;
     }
 
     std::string Entity::getName() const{
@@ -119,6 +121,14 @@ namespace fmwk {
                            return entry.second.get();
                        });
         return components;
+    }
+
+    void Entity::setPreferredRenderOrder(int preferredRenderOrder) {
+        _preferredRenderOrder = preferredRenderOrder;
+    }
+
+    int Entity::getPreferredRenderOrder() const {
+        return _preferredRenderOrder;
     }
 
 } // fmwk

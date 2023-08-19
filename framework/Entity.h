@@ -38,6 +38,8 @@ namespace fmwk {
         void removeComponentByName(std::string const& name);
         void enqueueComponentRemoval(std::string const& name) const;
         void flushEnqueuedComponents();
+        void setPreferredRenderOrder(int preferredRenderOrder);
+        [[nodiscard]] int getPreferredRenderOrder() const;
 
         std::vector<Component*> getAllEnqueuedComponents();
 
@@ -53,6 +55,7 @@ namespace fmwk {
         std::map<std::string, std::unique_ptr<Component>> _components;
         std::map<std::string, std::unique_ptr<Component>> _enqueuedComponents;
         bool _toBeRemoved;
+        int _preferredRenderOrder;
 
         //utils
         void addComponentToContainer(std::unique_ptr<Component> component, std::map<std::string, std::unique_ptr<Component>>& container);

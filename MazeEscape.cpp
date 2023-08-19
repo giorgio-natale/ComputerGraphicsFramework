@@ -25,6 +25,7 @@
 #include "framework/blueprints/BlockMaze.h"
 #include "framework/blueprints/Character.h"
 #include "framework/blueprints/BasicEnemy.h"
+#include "framework/blueprints/HeartUI.h"
 
 // The uniform buffer objects data structures
 // Remember to use the correct alignas(...) value
@@ -72,10 +73,27 @@ void MazeEscape::localInit() {
     gameEngine->addTexture("sphereNormal", "textures/Metals_09_normal.png");
     gameEngine->addTexture("sphereMaterial", "textures/Metals_09_met_rough_ao.png");
     gameEngine->addTexture("mainMazeTexture", "textures/maze_main.png");
+    gameEngine->addTexture("heart", "textures/heart.png");
+
+
+    gameEngine->addModel<fmwk::VertexOverlay>("spriteModel", fmwk::VERTEX_OVERLAY,
+                                              {
+                                                      {{0.0f, 0.0f}, {0,1}},
+                                                      {{1.0f, 0.0f}, {1,1}},
+                                                      {{1.0f, 1.0f}, {1,0}},
+                                                      {{0.0f, 1.0f}, {0,0}}
+
+                                              }
+            , {0, 1, 2,  2, 3, 0}, glm::vec3(0,0,0), glm::quat(1,0,0,0), glm::vec3(1));
 
 
     fmwk::Character(glm::vec3(1.5f,0.5f, 1.5f)).addInstance();
+
     fmwk::BlockMaze().addInstance();
+
+    fmwk::HeartUI(0).addInstance();
+    fmwk::HeartUI(1).addInstance();
+    fmwk::HeartUI(2).addInstance();
 
 
     std::vector<glm::vec3> enemyTargetPoints = {6.0f * glm::vec3(7.5, 0.5/6.0f, -3.5), 6.0f * glm::vec3(7.5, 0.5/6.0f, -1.5), 6.0f * glm::vec3(1.5, 0.5/6.0f, -1.5), 6.0f * glm::vec3(1.5, 0.5/6.0f, -4.5)};
