@@ -14,7 +14,7 @@ namespace fmwk {
         _timeElapsed += gameEngine->getInput().deltaTime;
         if(_timeElapsed >= _delay){
             //gameEngine->enqueueEntityRemoval(_parentEntity->getName());
-            _parentEntity->enqueueComponentRemoval("SphereCollider");
+            _parentEntity->enqueueComponentRemoval("Collider");
             _parentEntity->enqueueComponentRemoval(_name);
             std::cout << "COLLIDER REMOVED" << std::endl;
         }
