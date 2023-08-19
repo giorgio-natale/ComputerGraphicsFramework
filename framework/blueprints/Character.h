@@ -11,14 +11,13 @@ namespace fmwk {
 
     class Character : public Blueprint{
     public:
-        Character(glm::vec3 position, glm::quat orientation);
+        explicit Character(glm::vec3 position);
 
     protected:
         void buildEntity() override;
 
     private:
         glm::vec3 _position;
-        glm::quat _orientation;
     };
 
 } // fmwk

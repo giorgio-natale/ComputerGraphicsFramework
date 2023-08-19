@@ -65,7 +65,7 @@ void BlueprintDemo::localInit() {
     gameEngine->addTexture("sphereNormal", "textures/Metals_09_normal.png");
     gameEngine->addTexture("sphereMaterial", "textures/Metals_09_met_rough_ao.png");
 
-    fmwk::Character character(glm::vec3(0,0,0), glm::quat(1,0,0,0));
+    fmwk::Character character(glm::vec3(0,0,0));
     character.addInstance();
 
 

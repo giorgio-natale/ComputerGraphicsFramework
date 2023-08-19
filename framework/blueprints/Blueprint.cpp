@@ -20,4 +20,8 @@ namespace fmwk {
     int Blueprint::getNewNumber() {
         return _uniqueNumber++;
     }
+
+    Entity *Blueprint::getMainEntity() {
+        return nullptr;
+    }
 } // fmwk

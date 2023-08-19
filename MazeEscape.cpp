@@ -22,6 +22,9 @@
 #include "framework/components/scripts/EnemyController.h"
 #include "framework/components/scripts/EnemyCollisionBehaviour.h"
 #include "framework/components/scripts/CharacterBulletSpawner.h"
+#include "framework/blueprints/BlockMaze.h"
+#include "framework/blueprints/Character.h"
+#include "framework/blueprints/BasicEnemy.h"
 
 // The uniform buffer objects data structures
 // Remember to use the correct alignas(...) value
@@ -70,52 +73,16 @@ void MazeEscape::localInit() {
     gameEngine->addTexture("sphereMaterial", "textures/Metals_09_met_rough_ao.png");
     gameEngine->addTexture("mainMazeTexture", "textures/maze_main.png");
 
-    auto [vertices, faces] = buildMazeModel();
-    gameEngine->addModel<fmwk::VertexWithNormal>("MazeModel", fmwk::VERTEX_WITH_NORMAL, vertices, faces, glm::vec3(0), glm::quat(1,0,0,0), glm::vec3(1));
 
-    auto cameraEntity = std::make_unique<fmwk::Entity>("Camera", glm::vec3(0, 0, 10), glm::quat(1, 0, 0, 0));
-    auto cameraComponent = std::make_unique<fmwk::PerspectiveCamera>(0.1f, 100.0f, glm::radians(45.0f));
-    cameraEntity->addComponent(std::move(cameraComponent));
-
-    auto characterEntity = std::make_unique<fmwk::Entity>("Character", glm::vec3(1.5f,0.5f, 1.5f), glm::quat(1,0,0,0));
-    characterEntity->getTransform().setScale({0.5, 0.5, 0.5});
-
-    characterEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("myCube")));
-    characterEntity->addComponent(std::make_unique<fmwk::Collider>(1.0f, "CHARACTER", glm::vec3(0,0,0)));
-    characterEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("cubeTexture")));
-    characterEntity->addComponent(std::make_unique<fmwk::SimplePhongMaterial>());
-    characterEntity->addComponent(std::make_unique<fmwk::Health>(30.0f,1.0f));
-    std::unordered_set<std::string> characterBulletTags = std::unordered_set<std::string>{"ENEMY"};
-    characterEntity->addComponent(std::make_unique<fmwk::CharacterBulletSpawner>(glm::vec3(0,0,0), 8.5f, 1.0f, &characterBulletTags));
-    characterEntity->addComponent(std::make_unique<fmwk::CharacterController>("CharacterController", cameraEntity->getTransform(), 5.0f));
-    cameraEntity->addComponent(std::make_unique<fmwk::CameraController>("CameraController", characterEntity->getTransform(), glm::radians(120.0f), 3.0f, 0.25f));
-
-
-    auto mazeEntity = std::make_unique<fmwk::Entity>("Maze");
-    mazeEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("MazeModel")));
-    mazeEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("mainMazeTexture")));
-    mazeEntity->addComponent(std::make_unique<fmwk::SimplePhongMaterial>());
+    fmwk::Character(glm::vec3(1.5f,0.5f, 1.5f)).addInstance();
+    fmwk::BlockMaze().addInstance();
 
 
     std::vector<glm::vec3> enemyTargetPoints = {6.0f * glm::vec3(7.5, 0.5/6.0f, -3.5), 6.0f * glm::vec3(7.5, 0.5/6.0f, -1.5), 6.0f * glm::vec3(1.5, 0.5/6.0f, -1.5), 6.0f * glm::vec3(1.5, 0.5/6.0f, -4.5)};
-
-    auto enemyEntity = std::make_unique<fmwk::Entity>("Enemy", enemyTargetPoints[0], glm::quat(1,0,0,0));
-    //enemyEntity->getTransform().setScale({0.5, 0.5, 0.5});
-    enemyEntity->addComponent(std::make_unique<fmwk::Health>(50.0f,1.0f));
-    enemyEntity->addComponent(std::make_unique<fmwk::Collider>(1.0f, "ENEMY", glm::vec3(0,0,0)));
-    enemyEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("mySphere")));
-    enemyEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("sphereTexture")));
-    enemyEntity->addComponent(std::make_unique<fmwk::DefaultMaterial>(1.0f));
-    enemyEntity->addComponent(std::make_unique<fmwk::EnemyController>(enemyTargetPoints, 2.0f, 6.0f, 1.0f));
-    enemyEntity->addComponent(std::make_unique<fmwk::EnemyCollisionBehaviour>());
-
+    fmwk::BasicEnemy(enemyTargetPoints).addInstance();
 
     auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(0,3,0), glm::rotate(glm::quat(1,0,0,0), glm::radians(-90.0f), fmwk::X));
     lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight", glm::normalize(glm::vec3(-1, -1, 1)), glm::vec4(1)));
-    gameEngine->addEntity(std::move(cameraEntity));
-    gameEngine->addEntity(std::move(characterEntity));
-    gameEngine->addEntity(std::move(mazeEntity));
-    gameEngine->addEntity(std::move(enemyEntity));
     gameEngine->addEntity(std::move(lightEntity));
 
 

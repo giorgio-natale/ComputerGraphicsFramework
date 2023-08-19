@@ -8,6 +8,7 @@
 #include <glm/vec3.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <string>
+#include "../Entity.h"
 
 namespace fmwk {
 
@@ -17,6 +18,7 @@ namespace fmwk {
         void addInstance();
     protected:
         virtual void buildEntity() = 0;
+        virtual Entity* getMainEntity();
         static int getNewNumber();
     private:
         static int _uniqueNumber;
