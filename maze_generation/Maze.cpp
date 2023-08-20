@@ -169,4 +169,12 @@ namespace mgen {
         return slice;
     }
 
+    int Maze::getWidth() const {
+        return _width;
+    }
+
+    int Maze::getHeight() const {
+        return _height;
+    }
+
 } // mgen

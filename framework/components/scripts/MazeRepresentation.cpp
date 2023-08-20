@@ -40,7 +40,7 @@ namespace fmwk {
         return {true, distance};
     }
 
-    std::pair<std::vector<fmwk::VertexWithNormal>, std::vector<uint32_t>> MazeRepresentation::buildMesh() const {
+    std::pair<std::vector<fmwk::VertexWithNormalAndTan>, std::vector<uint32_t>> MazeRepresentation::buildMesh() const {
         auto vertexDict = mgen::VertexDictionary();
         for(auto const& box : _maze.getBoxes()){
             for(auto& r : box->buildRectangles()){
@@ -48,18 +48,38 @@ namespace fmwk {
             }
         }
 
-        std::vector<fmwk::VertexWithNormal> vertexes{};
+        std::vector<fmwk::VertexWithNormalAndTan> vertexes{};
         std::vector<uint32_t> indices{};
 
 
         for(auto& vertex : vertexDict.getVertices()){
-            vertexes.push_back({vertex.pos, vertex.UV, vertex.norm});
+            vertexes.push_back({vertex.pos, vertex.UV, vertex.norm, vertex.tan});
         }
 
         for(auto& triangle : vertexDict.getTriangles()){
             for(int i = 0; i < 3; i++)
                 indices.push_back(triangle[i]);
         }
+
+        //adding floor
+        std::vector<VertexWithNormalAndTan> floorVertices{};
+        floorVertices.push_back({{0,0,0}, {0, (float)_maze.getHeight() * _unit},fmwk::Y , {fmwk::X, 1.0f}}); //00
+        floorVertices.push_back({{(float)_maze.getWidth() * _unit,0,0}, {(float)_maze.getWidth() * _unit, (float)_maze.getHeight() * _unit},fmwk::Y , {fmwk::X, 1.0f}}); //10
+        floorVertices.push_back({{(float)_maze.getWidth() * _unit,0,-(float)_maze.getHeight() * _unit}, {(float)_maze.getWidth() * _unit, 0},fmwk::Y , {fmwk::X, 1.0f}}); //11
+        floorVertices.push_back({{0,0,-(float)_maze.getHeight() * _unit}, {0, 0},fmwk::Y , {fmwk::X, 1.0f}}); //11
+
+        int nextFreeIndex = vertexes.size();
+        for(auto const& v : floorVertices)
+            vertexes.push_back(v);
+        indices.push_back(nextFreeIndex);
+        indices.push_back(nextFreeIndex+1);
+        indices.push_back(nextFreeIndex+2);
+        indices.push_back(nextFreeIndex+2);
+        indices.push_back(nextFreeIndex+3);
+        indices.push_back(nextFreeIndex);
+
+
+
         return {vertexes, indices};
     }
 

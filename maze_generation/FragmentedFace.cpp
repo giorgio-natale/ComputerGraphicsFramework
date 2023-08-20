@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <glm/geometric.hpp>
 #include "FragmentedFace.h"
+#include "../framework/utils.h"
 
 namespace mgen {
 
@@ -60,23 +61,30 @@ namespace mgen {
         std::vector<glm::vec3> points = {point1, point2, point3, point4};
 
         MazeVertex vertex00{}, vertex10{}, vertex11{}, vertex01{};
+        glm::vec4 tangent;
         if(_side == Direction::SOUTH){
+            tangent = glm::vec4(fmwk::X, 1);
             std::sort(points.begin(), points.end(), [](const auto& p1, const auto& p2){
                 return p1.y < p2.y || (p1.y == p2.y) && p1.x < p2.x;
             });
         }else if(_side == Direction::EAST){
+            tangent = glm::vec4(-fmwk::Z, 1);
             std::sort(points.begin(), points.end(), [](const auto& p1, const auto& p2){
                 return p1.y < p2.y || (p1.y == p2.y) && p1.z > p2.z;
             });
         }else if(_side == Direction::WEST){
+            tangent = glm::vec4(fmwk::Z, 1);
             std::sort(points.begin(), points.end(), [](const auto& p1, const auto& p2){
                 return p1.y < p2.y || (p1.y == p2.y) && p1.z < p2.z;
             });
         }else if(_side == Direction::NORTH){
+            tangent = glm::vec4(-fmwk::X, 1);
             std::sort(points.begin(), points.end(), [](const auto& p1, const auto& p2){
                 return p1.y < p2.y || (p1.y == p2.y) && p1.x > p2.x;
             });
         }else if(_side == Direction::TOP){
+            tangent = glm::vec4(fmwk::X, 1);
+
             std::sort(points.begin(), points.end(), [](const auto& p1, const auto& p2){
                 return p1.z > p2.z || (p1.z == p2.z) && p1.x < p2.x;
             });
@@ -87,20 +95,24 @@ namespace mgen {
         glm::vec3 normal = glm::normalize(toGlm(_side, 1.0f));
 
         vertex00.pos = points[0];
-        vertex00.UV = {0,0};
+        vertex00.UV = {0,1*_unit};
         vertex00.norm = normal;
+        vertex00.tan = tangent;
 
         vertex10.pos = points[1];
-        vertex10.UV = {glm::distance(points[0], points[3]) / _unit,0};
+        vertex10.UV = {glm::distance(points[0], points[3]),1*_unit};
         vertex10.norm = normal;
+        vertex10.tan = tangent;
 
         vertex11.pos = points[3];
-        vertex11.UV = {glm::distance(points[0], points[3]) / _unit,1 * _unit};
+        vertex11.UV = {glm::distance(points[0], points[3]),0};
         vertex11.norm = normal;
+        vertex11.tan = tangent;
 
         vertex01.pos = points[2];
-        vertex01.UV = {0,_unit};
+        vertex01.UV = {0,0};
         vertex01.norm = normal;
+        vertex01.tan = tangent;
 
 
         return {vertex00, vertex10, vertex11, vertex01};

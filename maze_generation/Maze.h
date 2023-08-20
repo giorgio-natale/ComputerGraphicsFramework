@@ -26,6 +26,9 @@ namespace mgen {
         [[nodiscard]] bool isBlock(Position position) const;
         [[nodiscard]] bool isEmpty(Position position) const;
         [[nodiscard]] MazeCell& getCell(Position position) const;
+        [[nodiscard]] int getWidth() const;
+        [[nodiscard]] int getHeight() const;
+
 
     private:
         std::vector<std::vector<std::unique_ptr<MazeCell>>> _matrix;

@@ -46,7 +46,7 @@ void MazeEscape::setWindowParameters() {
     windowHeight = 600;
     windowTitle = "Simple Cube";
     windowResizable = GLFW_TRUE;
-    initialBackgroundColor = {0.0f, 0.005f, 0.01f, 1.0f};
+    initialBackgroundColor = {2.0f/255.0f,204.0f/255.0f,254.0f/255.0f, 1.0f};
 
     // Descriptor pool sizes
     uniformBlocksInPool = 10000;
@@ -75,6 +75,15 @@ void MazeEscape::localInit() {
     gameEngine->addTexture("mainMazeTexture", "textures/maze_main.png");
     gameEngine->addTexture("heart", "textures/heart.png");
 
+    gameEngine->addTexture("bushColor", "textures/Grass_001_COLOR.jpg");
+    gameEngine->addTexture("bushNormal", "textures/Grass_001_NORM.jpg");
+    gameEngine->addTexture("bushRoughness", "textures/Grass_001_ROUGH.jpg");
+
+    gameEngine->addTexture("rockColor", "textures/Stylized_Stone_Floor_005_basecolor.jpg");
+    gameEngine->addTexture("rockNormal", "textures/Stylized_Stone_Floor_005_normal.jpg");
+    gameEngine->addTexture("rockRoughness", "textures/Stylized_Stone_Floor_005_roughness.jpg");
+
+
 
     gameEngine->addModel<fmwk::VertexOverlay>("spriteModel", fmwk::VERTEX_OVERLAY,
                                               {
@@ -100,7 +109,13 @@ void MazeEscape::localInit() {
     fmwk::BasicEnemy(enemyTargetPoints).addInstance();
 
     auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(0,3,0), glm::rotate(glm::quat(1,0,0,0), glm::radians(-90.0f), fmwk::X));
-    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight", glm::normalize(glm::vec3(-1, -1, 1)), glm::vec4(1)));
+    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight", glm::normalize(glm::vec3(1, -1, 0)), glm::vec4(1)));
+    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight2", glm::normalize(glm::vec3(-1, -1, 0)), glm::vec4(1)));
+    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight3", glm::normalize(glm::vec3(0, -1, -1)), glm::vec4(1)));
+    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight4", glm::normalize(glm::vec3(0, -1, 1)), glm::vec4(1)));
+
+
+
     gameEngine->addEntity(std::move(lightEntity));
 
 

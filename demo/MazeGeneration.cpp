@@ -93,7 +93,7 @@ void MazeGeneration::localInit() {
     int col = 15;
     auto mazeRepresentation = std::make_unique<fmwk::MazeRepresentation>(row, col, 6.0f, mazeIn);
     auto [vertices, faces] = mazeRepresentation->buildMesh();
-    gameEngine->addModel<fmwk::VertexWithNormal>("MazeModel", fmwk::VERTEX_WITH_NORMAL, vertices, faces, glm::vec3(0), glm::quat(1,0,0,0), glm::vec3(1));
+    gameEngine->addModel<fmwk::VertexWithNormalAndTan>("MazeModel", fmwk::VERTEX_WITH_NORMAL_AND_TANGENT, vertices, faces, glm::vec3(0), glm::quat(1,0,0,0), glm::vec3(1));
 
     mazeEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("MazeModel")));
     mazeEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("mainMazeTexture")));
