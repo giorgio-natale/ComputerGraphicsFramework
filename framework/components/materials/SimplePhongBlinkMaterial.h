@@ -23,6 +23,8 @@ namespace fmwk {
 
         void update() override;
 
+        void postUpdate() override;
+
     private:
         float _frequency;
         float _dutyCycle;
