@@ -237,7 +237,7 @@ namespace fmwk {
             entities.push_back(entity);
 
         for (Entity *entity: entities) {
-            if (entity->hasComponent("Mesh")) {
+            if (entity->hasComponent("Mesh") && entity->isVisible()) {
                 Transform *transform = nullptr;
                 Sprite *sprite = nullptr;
                 DescriptorSet *globalDescriptorSet = nullptr;
@@ -423,6 +423,10 @@ namespace fmwk {
     void GameEngine::addModel(const std::string &name, VertexType vertexType, const std::string &fileName,
                               glm::vec3 position, glm::quat quaternion, glm::vec3 scale) {
         _modelSystem.addModel(name, vertexType, fileName, position, quaternion, scale);
+    }
+
+    bool GameEngine::doesEntityExist(const std::string &name) {
+        return _entities.find(name) != _entities.end();
     }
 
 

@@ -20,6 +20,7 @@ namespace fmwk {
         addComponent(std::move(transform));
         _toBeRemoved = false;
         _preferredRenderOrder = -1;
+        _visible = true;
     }
 
     Entity::Entity(const std::string &name, glm::vec2 preferredSize, const std::vector<UiAnchor>& anchors, bool stretchable) {
@@ -28,6 +29,8 @@ namespace fmwk {
         addComponent(std::move(sprite));
         _toBeRemoved = false;
         _preferredRenderOrder = -1;
+        _visible = true;
+
     }
 
     std::string Entity::getName() const{
@@ -129,6 +132,14 @@ namespace fmwk {
 
     int Entity::getPreferredRenderOrder() const {
         return _preferredRenderOrder;
+    }
+
+    void Entity::setVisible(bool visible) {
+        _visible = visible;
+    }
+
+    bool Entity::isVisible() const{
+        return _visible;
     }
 
 } // fmwk

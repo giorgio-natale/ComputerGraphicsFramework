@@ -47,6 +47,8 @@ namespace fmwk {
         [[nodiscard]] bool isMarkedForRemoval() const;
         [[nodiscard]] std::vector<Component*> getAllComponents() const;
         [[nodiscard]] bool hasComponent(std::string const& name) const;
+        void setVisible(bool visible);
+        [[nodiscard]] bool isVisible() const;
 
         Entity (const Entity&) = delete;
         Entity& operator= (const Entity&) = delete;
@@ -56,6 +58,7 @@ namespace fmwk {
         std::map<std::string, std::unique_ptr<Component>> _enqueuedComponents;
         bool _toBeRemoved;
         int _preferredRenderOrder;
+        bool _visible;
 
         //utils
         void addComponentToContainer(std::unique_ptr<Component> component, std::map<std::string, std::unique_ptr<Component>>& container);

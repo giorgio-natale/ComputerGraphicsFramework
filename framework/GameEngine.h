@@ -68,6 +68,7 @@ namespace fmwk {
 
         void logicUpdate() override;
         Entity& getEntityByName(const std::string& name) override;
+        bool doesEntityExist(const std::string& name);
         std::vector<Entity*> getAllEntities() override;
         void addModel(std::string const& name, VertexType vertexType, std::string const& fileName);
         void addModel(std::string const& name, VertexType vertexType, std::string const& fileName, glm::vec3 position, glm::quat quaternion, glm::vec3 scale);
