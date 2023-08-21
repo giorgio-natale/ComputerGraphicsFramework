@@ -21,6 +21,8 @@ namespace fmwk {
 
         DescriptorSetClaim getDescriptorSetClaim() override;
 
+        void postUpdate() override;
+
     private:
         glm::vec3 _color;
         float _percentage;

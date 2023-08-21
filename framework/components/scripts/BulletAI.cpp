@@ -30,7 +30,7 @@ namespace fmwk {
             entity->getHealth().takeDamage(10);
             std::cout << entity->getName() << " LIFE IS NOW " << entity->getHealth().getCurrentLifeQuantity() << std::endl;
         }
-        if(collidingEntities.size() > 0) {
+        if(!collidingEntities.empty()) {
             _parentEntity->markForRemoval();
         }
     }
