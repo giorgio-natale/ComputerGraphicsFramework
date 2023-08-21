@@ -8,6 +8,7 @@
 #include <glm/vec3.hpp>
 #include <unordered_set>
 #include "Component.h"
+#include "../../systems/TextureSystem.h"
 
 namespace fmwk {
 
@@ -23,7 +24,7 @@ namespace fmwk {
         float _bulletCoolDown;
         float _timeFromLastSpawn;
 
-        void spawnBullet(float bulletSpeed, glm::vec3 direction);
+        void spawnBullet(float bulletSpeed, glm::vec3 direction, BoundTexture& texture);
     };
 
 } // fmwk

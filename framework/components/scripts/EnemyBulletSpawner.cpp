@@ -21,7 +21,7 @@ namespace fmwk {
             if(dir == glm::vec3(0,0,0)) {
                 dir = X;
             }
-            spawnBullet(_bulletSpeed, glm::normalize(dir));
+            spawnBullet(_bulletSpeed, glm::normalize(dir), gameEngine->getBoundTextureByName("white"));
             _timeFromLastSpawn = 0;
         }
 

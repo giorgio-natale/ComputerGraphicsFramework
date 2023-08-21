@@ -22,7 +22,7 @@ namespace fmwk {
         }
 
         if (gameEngine->getInput().spacePressed && _spawnEnabled) {
-            spawnBullet(_bulletSpeed, -1.0f * (_parentEntity->getTransform().getLocalDirections()[2]));
+            spawnBullet(_bulletSpeed, -1.0f * (_parentEntity->getTransform().getLocalDirections()[2]), gameEngine->getBoundTextureByName("red"));
             _timeFromLastSpawn = 0;
             _spawnEnabled = false;
         }

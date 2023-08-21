@@ -11,10 +11,6 @@ namespace fmwk {
         findZPath(const_cast<std::vector<glm::vec3> &>(targetPositions), laneWidth, meshRadius);
         processVector(const_cast<std::vector<glm::vec3> &>(targetPositions));
         _targetPositions = targetPositions;
-        // print target positions
-        for (int i = 0; i < _targetPositions.size(); ++i) {
-            std::cout << "Target position " << i << ": " << _targetPositions[i].x << " " << _targetPositions[i].y << " " << _targetPositions[i].z << std::endl;
-        }
     }
 
     void EnemyController::update() {
@@ -117,31 +113,4 @@ namespace fmwk {
     }
 } // fmwk
 
-//----------- Target position 0: 0 0 -18
-//Target position 1: 2 0 -15
-//Target position 2: -2 0 -9
-//Target position 3: 2 0 -3
-//----------- Target position 4: 0 0 -6
-//Target position 5: 2 0 -3
-//Target position 6: -2 0 3
-//----------- Target position 7: 0 0 0
-//Target position 8: 2 0 3
-//Target position 9: -2 0 9
-//Target position 10: 2 0 15
-//Target position 11: -2 0 21
-//----------- Target position 12: 0 0 18
 
-
-//----------- Target position 0: 0 0 -18
-//Target position 1: 2 0 -15
-//Target position 2: -5 0 -9
-//Target position 3: 5 0 -3
-//----------- Target position 4: 0 0 -6
-//Target position 5: 2 0 -3
-//Target position 6: -5 0 3
-//----------- Target position 7: 0 0 0
-//Target position 8: 2 0 3
-//Target position 9: -5 0 9
-//Target position 10: 5 0 15
-//Target position 11: -5 0 21
-//----------- Target position 12: 0 0 18

@@ -6,18 +6,20 @@
 #define DEMO_CHARACTER_H
 
 #include "Blueprint.h"
+#include "../components/scripts/MazeRepresentation.h"
 
 namespace fmwk {
 
     class Character : public Blueprint{
     public:
-        explicit Character(glm::vec3 position);
+        Character(glm::vec3 position, MazeRepresentation& mazeRepresentation);
 
     protected:
         void buildEntity() override;
 
     private:
         glm::vec3 _position;
+        MazeRepresentation &_mazeRepresentation;
     };
 
 } // fmwk

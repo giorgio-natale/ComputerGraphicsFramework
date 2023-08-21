@@ -62,6 +62,7 @@ void FinalBoss::onWindowResize(int w, int h) {
 // Here you load and setup all your Vulkan Models and Textures.
 // Here you also create your Descriptor set layouts and load the shaders for the pipelines
 void FinalBoss::localInit() {
+    /*
     auto gameEngine = fmwk::GameEngine::getInstance();
 
     gameEngine->addModel("myCube", fmwk::VERTEX_WITH_NORMAL, "Models/Cube.obj");
@@ -139,9 +140,9 @@ void FinalBoss::localInit() {
 
 
 
-
+*/
     // Init local variables
-    gameEngine->provisionResources(false);
+    //gameEngine->provisionResources(false);
 }
 
 // Here you create your pipelines and Descriptor Sets!

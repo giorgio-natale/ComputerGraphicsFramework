@@ -26,6 +26,7 @@
 #include "framework/blueprints/Character.h"
 #include "framework/blueprints/BasicEnemy.h"
 #include "framework/blueprints/HeartUI.h"
+#include "framework/blueprints/BossEnemy.h"
 
 // The uniform buffer objects data structures
 // Remember to use the correct alignas(...) value
@@ -46,7 +47,9 @@ void MazeEscape::setWindowParameters() {
     windowHeight = 600;
     windowTitle = "Simple Cube";
     windowResizable = GLFW_TRUE;
-    initialBackgroundColor = {2.0f/255.0f,204.0f/255.0f,254.0f/255.0f, 1.0f};
+    //initialBackgroundColor = {2.0f/255.0f,204.0f/255.0f,254.0f/255.0f, 1.0f};
+    initialBackgroundColor = {17.0f/255.0f,17.0f/255.0f,61.0f/255.0f, 1.0f};
+
 
     // Descriptor pool sizes
     uniformBlocksInPool = 10000;
@@ -67,13 +70,23 @@ void MazeEscape::localInit() {
     auto gameEngine = fmwk::GameEngine::getInstance();
 
     gameEngine->addModel("myCube", fmwk::VERTEX_WITH_NORMAL, "Models/Cube.obj");
-    gameEngine->addModel("mySphere", fmwk::VERTEX_WITH_NORMAL_AND_TANGENT, "models/Sphere.gltf");
+    gameEngine->addModel("mySphere", fmwk::VERTEX_WITH_NORMAL_AND_TANGENT, "models/Sphere.gltf",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.195f));
+    gameEngine->addModel("smoothPumpkin", fmwk::VERTEX_WITH_NORMAL, "models/pumpkin.007_Mesh.5391.mgcg",
+                         glm::vec3(0, -0.1f, 0), fmwk::createQuat(fmwk::Y, 180), glm::vec3(1.5f));
+    gameEngine->addModel("ghost", fmwk::VERTEX_WITH_NORMAL, "Models/cast_Mesh.6268.mgcg",
+                         glm::vec3(0, 0.5f, 0), fmwk::createQuat(fmwk::Y, 180), glm::vec3(1.5f));
+
     gameEngine->addTexture("cubeTexture", "textures/Checker.png");
     gameEngine->addTexture("sphereTexture", "textures/Metals_09_basecolor.png");
     gameEngine->addTexture("sphereNormal", "textures/Metals_09_normal.png");
     gameEngine->addTexture("sphereMaterial", "textures/Metals_09_met_rough_ao.png");
     gameEngine->addTexture("mainMazeTexture", "textures/maze_main.png");
     gameEngine->addTexture("heart", "textures/heart.png");
+    gameEngine->addTexture("dungeonTexture", "textures/Textures_Dungeon.png");
+    gameEngine->addTexture("red", "textures/red.png");
+    gameEngine->addTexture("white", "textures/white.jpg");
+
 
     gameEngine->addTexture("bushColor", "textures/Grass_001_COLOR.jpg");
     gameEngine->addTexture("bushNormal", "textures/Grass_001_NORM.jpg");
@@ -96,17 +109,171 @@ void MazeEscape::localInit() {
             , {0, 1, 2,  2, 3, 0}, glm::vec3(0,0,0), glm::quat(1,0,0,0), glm::vec3(1));
 
 
-    fmwk::Character(glm::vec3(1.5f,0.5f, 1.5f)).addInstance();
 
     fmwk::BlockMaze().addInstance();
 
-    fmwk::HeartUI(0).addInstance();
-    fmwk::HeartUI(1).addInstance();
-    fmwk::HeartUI(2).addInstance();
+   fmwk::Character(glm::vec3(87.0f,0.5f, -15.0f),
+                    reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
 
+    /*
+   fmwk::Character(glm::vec3(75.0f,0.5f, -87.0f),
+              reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
 
-    std::vector<glm::vec3> enemyTargetPoints = {6.0f * glm::vec3(7.5, 0.5/6.0f, -3.5), 6.0f * glm::vec3(7.5, 0.5/6.0f, -1.5), 6.0f * glm::vec3(1.5, 0.5/6.0f, -1.5), 6.0f * glm::vec3(1.5, 0.5/6.0f, -4.5)};
-    fmwk::BasicEnemy(enemyTargetPoints).addInstance();
+    */
+    std::vector<glm::vec3> e1 = {
+          glm::vec3(9, 0.5, -9),
+          glm::vec3(27, 0.5, -9),
+          glm::vec3(27, 0.5, -33),
+          glm::vec3(15, 0.5, -33),
+          glm::vec3(15, 0.5, -21),
+          glm::vec3(9, 0.5, -21)
+    };
+
+    std::vector<glm::vec3> e2 = {
+          glm::vec3(27, 0.5, -27),
+          glm::vec3(39, 0.5, -27),
+          glm::vec3(39, 0.5, -21),
+          glm::vec3(63, 0.5, -21),
+    };
+
+    std::vector<glm::vec3> e3 = {
+          glm::vec3(15, 0.5, -33),
+          glm::vec3(15, 0.5, -39),
+          glm::vec3(9, 0.5, -39),
+          glm::vec3(9, 0.5, -51),
+          glm::vec3(15, 0.5, -51),
+          glm::vec3(15, 0.5, -63),
+          glm::vec3(9, 0.5, -63),
+    };
+    std::vector<glm::vec3> e4 = {
+            glm::vec3(9, 0.5, -63),
+            glm::vec3(9, 0.5, -75),
+            glm::vec3(15, 0.5, -75),
+            glm::vec3(15, 0.5, -87),
+            glm::vec3(9, 0.5, -87),
+            glm::vec3(9, 0.5, -99)
+    };
+
+    std::vector<glm::vec3> e5 = {
+            glm::vec3(63, 0.5, -9),
+            glm::vec3(63, 0.5, -33),
+            glm::vec3(75, 0.5, -33),
+            glm::vec3(75, 0.5, -9),
+    };
+
+    std::vector<glm::vec3> e6 = {
+            glm::vec3(63, 0.5, -33),
+            glm::vec3(51, 0.5, -33),
+            glm::vec3(51, 0.5, -39),
+            glm::vec3(45, 0.5, -39),
+            glm::vec3(45, 0.5, -51)
+    };
+
+    std::vector<glm::vec3> e7 = {
+            glm::vec3(27, 0.5, -57),
+            glm::vec3(39, 0.5, -57),
+            glm::vec3(39, 0.5, -51),
+            glm::vec3(69, 0.5, -51)
+    };
+
+    std::vector<glm::vec3> e8 = {
+            glm::vec3(39, 0.5, -69),
+            glm::vec3(51, 0.5, -69),
+            glm::vec3(51, 0.5, -63),
+            glm::vec3(63, 0.5, -63),
+            glm::vec3(63, 0.5, -51)
+    };
+
+    std::vector<glm::vec3> e9 = {
+            glm::vec3(63, 0.5, -81),
+            glm::vec3(63, 0.5, -75),
+            glm::vec3(75, 0.5, -75),
+            glm::vec3(75, 0.5, -57),
+            glm::vec3(87, 0.5, -57)
+    };
+
+    std::vector<glm::vec3> e10 = {
+            glm::vec3(69, 0.5, -45),
+            glm::vec3(111, 0.5, -45)
+    };
+
+    std::vector<glm::vec3> e11 = {
+            glm::vec3(87, 0.5, -69),
+            glm::vec3(87, 0.5, -75),
+            glm::vec3(99, 0.5, -75),
+            glm::vec3(99, 0.5, -57),
+            glm::vec3(87, 0.5, -57),
+    };
+
+    std::vector<glm::vec3> e12 = {
+            glm::vec3(99, 0.5, -33),
+            glm::vec3(99, 0.5, -21),
+            glm::vec3(111, 0.5, -21),
+            glm::vec3(111, 0.5, -51),
+    };
+
+    std::vector<glm::vec3> e13 = {
+            glm::vec3(99, 0.5, -9),
+            glm::vec3(111, 0.5, -9),
+            glm::vec3(111, 0.5, -15),
+            glm::vec3(129, 0.5, -15),
+            glm::vec3(129, 0.5, -27)
+    };
+
+    std::vector<glm::vec3> e14 = {
+            glm::vec3(123, 0.5, -27),
+            glm::vec3(123, 0.5, -39),
+            glm::vec3(129, 0.5, -39),
+            glm::vec3(129, 0.5, -51),
+            glm::vec3(123, 0.5, -51),
+            glm::vec3(123, 0.5, -63)
+    };
+
+    std::vector<glm::vec3> e15 = {
+            glm::vec3(111, 0.5, -63),
+            glm::vec3(111, 0.5, -75),
+            glm::vec3(129, 0.5, -75),
+            glm::vec3(129, 0.5, -63),
+            glm::vec3(123, 0.5, -63)
+    };
+
+    std::vector<glm::vec3> e16 = {
+            glm::vec3(33, 0.5, -99),
+            glm::vec3(33, 0.5, -93),
+            glm::vec3(39, 0.5, -93),
+            glm::vec3(39, 0.5, -99),
+            glm::vec3(51, 0.5, -99),
+            glm::vec3(51, 0.5, -93)
+    };
+
+    std::vector<glm::vec3> e17 = {
+            glm::vec3(57, 0.5, -117),
+            glm::vec3(57, 0.5, -105),
+            glm::vec3(75, 0.5, -105),
+            glm::vec3(75, 0.5, -117),
+            glm::vec3(69, 0.5, -117)
+    };
+
+    fmwk::BasicEnemy(e1).addInstance();
+    fmwk::BasicEnemy(e2).addInstance();
+    fmwk::BasicEnemy(e3).addInstance();
+    fmwk::BasicEnemy(e4).addInstance();
+    fmwk::BasicEnemy(e5).addInstance();
+    fmwk::BasicEnemy(e6).addInstance();
+    fmwk::BasicEnemy(e7).addInstance();
+    fmwk::BasicEnemy(e8).addInstance();
+    fmwk::BasicEnemy(e9).addInstance();
+    fmwk::BasicEnemy(e10).addInstance();
+    fmwk::BasicEnemy(e11).addInstance();
+    fmwk::BasicEnemy(e12).addInstance();
+    fmwk::BasicEnemy(e13).addInstance();
+    fmwk::BasicEnemy(e14).addInstance();
+    fmwk::BasicEnemy(e15).addInstance();
+    fmwk::BasicEnemy(e16).addInstance();
+    fmwk::BasicEnemy(e17).addInstance();
+
+    fmwk::BossEnemy(gameEngine->getEntityByName("Character").getTransform()).addInstance();
+
 
     auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(0,3,0), glm::rotate(glm::quat(1,0,0,0), glm::radians(-90.0f), fmwk::X));
     lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight", glm::normalize(glm::vec3(1, -1, 0)), glm::vec4(1)));
@@ -125,17 +292,17 @@ void MazeEscape::localInit() {
 
 // Here you create your pipelines and Descriptor Sets!
 void MazeEscape::pipelinesAndDescriptorSetsInit() {
-    auto gameEngine = fmwk::GameEngine::getInstance();
-    gameEngine->rebuildResources();
+auto gameEngine = fmwk::GameEngine::getInstance();
+gameEngine->rebuildResources();
 
 }
 
 // Here you destroy your pipelines and Descriptor Sets!
 // All the object classes defined in Starter.hpp have a method .cleanup() for this purpose
 void MazeEscape::pipelinesAndDescriptorSetsCleanup() {
-    std::cout << "PIPELINES AND DESCRIPTOR SETS CLEANUP CALLED" << std::endl;
-    auto gameEngine = fmwk::GameEngine::getInstance();
-    gameEngine->cleanupResources();
+std::cout << "PIPELINES AND DESCRIPTOR SETS CLEANUP CALLED" << std::endl;
+auto gameEngine = fmwk::GameEngine::getInstance();
+gameEngine->cleanupResources();
 
 }
 
@@ -144,7 +311,7 @@ void MazeEscape::pipelinesAndDescriptorSetsCleanup() {
 // You also have to destroy the pipelines: since they need to be rebuilt, they have two different
 // methods: .cleanup() recreates them, while .destroy() delete them completely
 void MazeEscape::localCleanup() {
-    std::cout << "LOCAL CLEANUP CALLED" << std::endl;
+std::cout << "LOCAL CLEANUP CALLED" << std::endl;
 
 }
 
@@ -153,80 +320,80 @@ void MazeEscape::localCleanup() {
 // with their buffers and textures
 
 void MazeEscape::populateCommandBuffer(VkCommandBuffer commandBuffer, int currentImage) {
-    auto gameEngine = fmwk::GameEngine::getInstance();
-    gameEngine->renderFrame(commandBuffer, currentImage);
+auto gameEngine = fmwk::GameEngine::getInstance();
+gameEngine->renderFrame(commandBuffer, currentImage);
 }
 
 // Here is where you update the uniforms.
 // Very likely this will be where you will be writing the logic of your application.
 void MazeEscape::updateUniformBuffer(uint32_t currentImage) {
-    auto gameEngine = fmwk::GameEngine::getInstance();
-    gameEngine->logicUpdate();
-    gameEngine->provisionResources(true);
+auto gameEngine = fmwk::GameEngine::getInstance();
+gameEngine->logicUpdate();
+gameEngine->provisionResources(true);
 
-    // Standard procedure to quit when the ESC key is pressed
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE)) {
-        glfwSetWindowShouldClose(window, GL_TRUE);
-    }
+// Standard procedure to quit when the ESC key is pressed
+if(glfwGetKey(window, GLFW_KEY_ESCAPE)) {
+  glfwSetWindowShouldClose(window, GL_TRUE);
+}
 
-    gameEngine->updateGraphicResources(currentImage);
-    // the .map() method of a DataSet object, requires the current image of the swap chain as first parameter
-    // the second parameter is the pointer to the C++ data structure to transfer to the GPU
-    // the third parameter is its size
-    // the fourth parameter is the location inside the descriptor set of this uniform block
+gameEngine->updateGraphicResources(currentImage);
+// the .map() method of a DataSet object, requires the current image of the swap chain as first parameter
+// the second parameter is the pointer to the C++ data structure to transfer to the GPU
+// the third parameter is its size
+// the fourth parameter is the location inside the descriptor set of this uniform block
 }
 
 std::pair<std::vector<fmwk::VertexWithNormal>, std::vector<uint32_t>> MazeEscape::buildMazeModel() {
-    char *mazeIn[] = {
+char *mazeIn[] = {
 
-            (char*)("### ###########"),
-            (char*)("# #   #       #"),
-            (char*)("# # ### ### ###"),
-            (char*)("#   #     #   #"),
-            (char*)("# ### ####### #"),
-            (char*)("#   # #       #"),
-            (char*)("### ### #######"),
-            (char*)("# #   #       #"),
-            (char*)("# ### ####### #"),
-            (char*)("# #   #   #   #"),
-            (char*)("# # ### # # # #"),
-            (char*)("#   #   # # # #"),
-            (char*)("# ##### # # # #"),
-            (char*)("#       #   # #"),
-            (char*)("# #############")
-    };
-    int row = 15;
-    int col = 15;
-    auto vec = std::vector<std::vector<char>>(row, std::vector<char>(col, '#'));
-    for(int i = 0; i < row; i++){
-        for(int j = 0; j < col; j++){
-            vec[i][j] = mazeIn[row-1-i][j];
-        }
-    }
+      (char*)("### ###########"),
+      (char*)("# #   #       #"),
+      (char*)("# # ### ### ###"),
+      (char*)("#   #     #   #"),
+      (char*)("# ### ####### #"),
+      (char*)("#   # #       #"),
+      (char*)("### ### #######"),
+      (char*)("# #   #       #"),
+      (char*)("# ### ####### #"),
+      (char*)("# #   #   #   #"),
+      (char*)("# # ### # # # #"),
+      (char*)("#   #   # # # #"),
+      (char*)("# ##### # # # #"),
+      (char*)("#       #   # #"),
+      (char*)("# #############")
+};
+int row = 15;
+int col = 15;
+auto vec = std::vector<std::vector<char>>(row, std::vector<char>(col, '#'));
+for(int i = 0; i < row; i++){
+  for(int j = 0; j < col; j++){
+      vec[i][j] = mazeIn[row-1-i][j];
+  }
+}
 
-    mgen::Maze myMaze = mgen::Maze(vec, row, col, 6.0f);
-    myMaze.buildBoxes();
-    myMaze.deleteUselessFaces();
-    auto vertexDict = mgen::VertexDictionary();
-    for(auto const& box : myMaze.getBoxes()){
-        for(auto& r : box->buildRectangles()){
-            vertexDict.addRectangle(r);
-        }
-    }
+mgen::Maze myMaze = mgen::Maze(vec, row, col, 6.0f);
+myMaze.buildBoxes();
+myMaze.deleteUselessFaces();
+auto vertexDict = mgen::VertexDictionary();
+for(auto const& box : myMaze.getBoxes()){
+  for(auto& r : box->buildRectangles()){
+      vertexDict.addRectangle(r);
+  }
+}
 
-    std::vector<fmwk::VertexWithNormal> vertexes{};
-    std::vector<uint32_t> indices{};
+std::vector<fmwk::VertexWithNormal> vertexes{};
+std::vector<uint32_t> indices{};
 
-    for(auto& vertex : vertexDict.getVertices()){
-        vertexes.push_back({vertex.pos, vertex.UV, vertex.norm});
-    }
+for(auto& vertex : vertexDict.getVertices()){
+  vertexes.push_back({vertex.pos, vertex.UV, vertex.norm});
+}
 
-    for(auto& triangle : vertexDict.getTriangles()){
-        for(int i = 0; i < 3; i++)
-            indices.push_back(triangle[i]);
-    }
+for(auto& triangle : vertexDict.getTriangles()){
+  for(int i = 0; i < 3; i++)
+      indices.push_back(triangle[i]);
+}
 
-    return {vertexes, indices};
+return {vertexes, indices};
 
 
 

@@ -65,8 +65,8 @@ void BlueprintDemo::localInit() {
     gameEngine->addTexture("sphereNormal", "textures/Metals_09_normal.png");
     gameEngine->addTexture("sphereMaterial", "textures/Metals_09_met_rough_ao.png");
 
-    fmwk::Character character(glm::vec3(0,0,0));
-    character.addInstance();
+    //fmwk::Character character(glm::vec3(0,0,0));
+    //character.addInstance();
 
 
     auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(0,3,0), glm::rotate(glm::quat(1,0,0,0), glm::radians(-90.0f), fmwk::X));
