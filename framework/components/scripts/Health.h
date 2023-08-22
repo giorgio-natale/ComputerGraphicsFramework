@@ -13,7 +13,11 @@ namespace fmwk {
     public:
         Health(float lifeQuantity, float gracePeriod);
 
+        Health(float initialLifeQuantity, float gracePeriod, float totalLifeQuantity);
+
         void update() override;
+
+        void increaseLife(float lifeQuantity);
 
         void takeDamage(float damage);
 
@@ -28,7 +32,7 @@ namespace fmwk {
         [[nodiscard]] float getCurrentLifePercentage() const;
 
     private:
-        const float _initialLifeQuantity;
+        const float _totalLifeQuantity;
         float _currentLifeQuantity;
         float _timeout;
         bool _isAlwaysImmune;

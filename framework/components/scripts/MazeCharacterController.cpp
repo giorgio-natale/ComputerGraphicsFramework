@@ -98,4 +98,8 @@ namespace fmwk {
         return position;
     }
 
+    void MazeCharacterController::setMaxSpeed(float maxSpeed) {
+        _maxSpeed = maxSpeed;
+    }
+
 } // fmwk

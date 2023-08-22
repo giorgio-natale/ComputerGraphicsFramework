@@ -18,7 +18,7 @@ namespace fmwk {
         void addCollider(Collider* collider);
         void removeCollider(std::string const& entityName, std::string const& colliderName);
         std::vector<Entity*> getCollidingEntities(Collider* collider, std::unordered_set<std::string> const *targetTags);
-        Entity* getCharacterCollidingEntity(Collider* collider);
+        Entity const * getCharacterCollidingEntity(Collider* collider);
 
     private:
         std::map<std::string, Collider*> _colliders;

@@ -405,7 +405,7 @@ namespace fmwk {
         return _collisionSystem.getCollidingEntities(collider, targetTags);
     }
 
-    Entity *GameEngine::getCharacterCollidingEntity(Collider *collider) {
+    Entity const *GameEngine::getCharacterCollidingEntity(Collider *collider) {
         return _collisionSystem.getCharacterCollidingEntity(collider);
     }
 

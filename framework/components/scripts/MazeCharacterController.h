@@ -17,10 +17,12 @@ namespace fmwk {
 
         void update() override;
 
+        void setMaxSpeed(float maxSpeed);
+
     private:
         Transform const& _cameraTransform;
         MazeRepresentation const& _mazeRepresentation;
-        float const _maxSpeed;
+        float _maxSpeed;
         bool _spacePressConsidered;
 
         glm::vec3 getDistanceFromCharacter(Square &square, glm::vec3 vec1);

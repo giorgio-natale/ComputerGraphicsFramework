@@ -93,7 +93,7 @@ namespace fmwk {
         std::vector<Entity *>
         getCollidingEntities(Collider *collider, std::unordered_set<std::string> const *targetTags);
 
-        Entity *getCharacterCollidingEntity(Collider *collider);
+        Entity const *getCharacterCollidingEntity(Collider *collider);
 
         //TODO: remove these
         std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>> &getAllVertexDescriptors();

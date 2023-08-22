@@ -29,4 +29,8 @@ namespace fmwk {
         Bullet( _parentEntity->getTransform().getPosition(), glm::vec3(0), bulletSpeed, direction, _targetTags, texture).spawnInstance();
     }
 
+    void BulletSpawner::setBulletCoolDown(float bulletCoolDown) {
+        _bulletCoolDown = bulletCoolDown;
+    }
+
 } // fmwk

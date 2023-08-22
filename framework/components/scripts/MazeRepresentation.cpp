@@ -100,7 +100,6 @@ namespace fmwk {
         return nearestBlockSquares;
     }
     bool MazeRepresentation::isPositionInsideBlock(glm::vec3 point) const {
-        std::cout << "CALLED IS POSITION INSIDE BLOCK" << std::endl;
         return _maze.isBlock(mgen::fromGlm(point, _unit));
     }
 } // fmwk
