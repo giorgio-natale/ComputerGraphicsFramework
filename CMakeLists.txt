@@ -113,7 +113,7 @@ demo/MovingCube.cpp
         framework/blueprints/Shield.h
         framework/components/scripts/FollowEntity.cpp
         framework/components/scripts/FollowEntity.h
-        )
+        framework/blueprints/Decoration.cpp framework/blueprints/Decoration.h)
 target_link_libraries(${PROJECT_NAME})
 find_package(Vulkan REQUIRED)
 foreach(dir IN LISTS Vulkan_INCLUDE_DIR INCLUDE_DIRS)

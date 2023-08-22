@@ -27,6 +27,7 @@
 #include "framework/blueprints/BasicEnemy.h"
 #include "framework/blueprints/HeartUI.h"
 #include "framework/blueprints/BossEnemy.h"
+#include "framework/blueprints/Decoration.h"
 
 // The uniform buffer objects data structures
 // Remember to use the correct alignas(...) value
@@ -129,6 +130,7 @@ void MazeEscape::localInit() {
    fmwk::Character(glm::vec3(75.0f,0.5f, -87.0f),
               reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
 
+   //fmwk::Decoration(glm::vec3(75.0f,0.5f, -87.0f), glm::quat(1, 0, 0, 0), glm::vec3(1), "ghost").addInstance();
 
     std::vector<glm::vec3> e1 = {
           glm::vec3(9, 0.5, -9),
