@@ -11,6 +11,8 @@
 #include "../components/materials/SimplePhongColorBlendMaterial.h"
 #include "../components/scripts/EnemyBulletSpawner.h"
 #include "../components/scripts/EnemyCollisionBehaviour.h"
+#include "../components/materials/GGXMaterial.h"
+#include "BossBarUI.h"
 
 namespace fmwk {
     BossEnemy::BossEnemy(Transform &characterTransform) : _characterTransform(characterTransform) {}
@@ -20,11 +22,14 @@ namespace fmwk {
         auto gameEngine = GameEngine::getInstance();
         auto boss = std::make_unique<fmwk::Entity>("FinalBoss");
 
-        boss->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("ghost")));
-        boss->addComponent(std::make_unique<fmwk::Health>(50.0f,1.0f));
+        boss->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("death")));
+        auto bossHealth = std::make_unique<fmwk::Health>(50.0f,1.0f);
+        BossBarUI(*bossHealth.get()).spawnInstance();
+        boss->addComponent(std::move(bossHealth));
         boss->addComponent(std::make_unique<fmwk::Collider>(1.0f, "ENEMY", glm::vec3(0,0,0)));
-        boss->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("dungeonTexture")));
+        boss->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("death")));
         boss->addComponent(std::make_unique<fmwk::SimplePhongColorBlendMaterial>(glm::vec3(1,0,0)));
+
         boss->addComponent(std::make_unique<fmwk::FinalBossController>(glm::vec3(108.0f,0.5f,-102.0f), _characterTransform));
         std::unordered_set<std::string> targetTags = std::unordered_set<std::string>({"CHARACTER"});
         boss->addComponent(std::make_unique<EnemyBulletSpawner>(glm::vec3(0,0,0), 12.0f, 1.5f, _characterTransform, &targetTags));

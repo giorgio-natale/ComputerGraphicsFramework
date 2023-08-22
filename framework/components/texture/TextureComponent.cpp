@@ -10,4 +10,8 @@ namespace fmwk {
     BoundTexture &TextureComponent::getBoundTexture() {
         return _boundTexture;
     }
+
+    void TextureComponent::setBoundTexture(BoundTexture &boundTexture) {
+        _boundTexture = boundTexture;
+    }
 } // fmwk

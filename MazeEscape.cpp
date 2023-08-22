@@ -77,12 +77,22 @@ void MazeEscape::localInit() {
     gameEngine->addModel("ghost", fmwk::VERTEX_WITH_NORMAL, "Models/cast_Mesh.6268.mgcg",
                          glm::vec3(0, 0.5f, 0), fmwk::createQuat(fmwk::Y, 180), glm::vec3(1.5f));
 
+    gameEngine->addModel("death", fmwk::VERTEX_WITH_NORMAL, "Models/death.obj",
+                         glm::vec3(0, 0.5f, 0), glm::quat(1,0,0,0), glm::vec3(0.01f));
+
     gameEngine->addTexture("cubeTexture", "textures/Checker.png");
     gameEngine->addTexture("sphereTexture", "textures/Metals_09_basecolor.png");
     gameEngine->addTexture("sphereNormal", "textures/Metals_09_normal.png");
     gameEngine->addTexture("sphereMaterial", "textures/Metals_09_met_rough_ao.png");
     gameEngine->addTexture("mainMazeTexture", "textures/maze_main.png");
     gameEngine->addTexture("heart", "textures/heart.png");
+    gameEngine->addTexture("bossBar0", "textures/bossBar0.png");
+    gameEngine->addTexture("bossBar1", "textures/bossBar1.png");
+    gameEngine->addTexture("bossBar2", "textures/bossBar2.png");
+    gameEngine->addTexture("bossBar3", "textures/bossBar3.png");
+    gameEngine->addTexture("bossBar4", "textures/bossBar4.png");
+    gameEngine->addTexture("bossBar5", "textures/bossBar5.png");
+
     gameEngine->addTexture("dungeonTexture", "textures/Textures_Dungeon.png");
     gameEngine->addTexture("red", "textures/red.png");
     gameEngine->addTexture("white", "textures/white.jpg");
@@ -95,7 +105,7 @@ void MazeEscape::localInit() {
     gameEngine->addTexture("rockColor", "textures/Stylized_Stone_Floor_005_basecolor.jpg");
     gameEngine->addTexture("rockNormal", "textures/Stylized_Stone_Floor_005_normal.jpg");
     gameEngine->addTexture("rockRoughness", "textures/Stylized_Stone_Floor_005_roughness.jpg");
-
+    gameEngine->addTexture("death", "textures/death.png");
 
 
     gameEngine->addModel<fmwk::VertexOverlay>("spriteModel", fmwk::VERTEX_OVERLAY,
@@ -112,14 +122,14 @@ void MazeEscape::localInit() {
 
     fmwk::BlockMaze().addInstance();
 
-   fmwk::Character(glm::vec3(87.0f,0.5f, -15.0f),
-                    reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
+   /*fmwk::Character(glm::vec3(87.0f,0.5f, -15.0f),
+                    reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();*/
 
-    /*
+
    fmwk::Character(glm::vec3(75.0f,0.5f, -87.0f),
               reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
 
-    */
+
     std::vector<glm::vec3> e1 = {
           glm::vec3(9, 0.5, -9),
           glm::vec3(27, 0.5, -9),

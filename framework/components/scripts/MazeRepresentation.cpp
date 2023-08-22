@@ -62,6 +62,7 @@ namespace fmwk {
         }
 
         //adding floor
+
         std::vector<VertexWithNormalAndTan> floorVertices{};
         floorVertices.push_back({{0,0,0}, {0, (float)_maze.getHeight() * _unit},fmwk::Y , {fmwk::X, 1.0f}}); //00
         floorVertices.push_back({{(float)_maze.getWidth() * _unit,0,0}, {(float)_maze.getWidth() * _unit, (float)_maze.getHeight() * _unit},fmwk::Y , {fmwk::X, 1.0f}}); //10

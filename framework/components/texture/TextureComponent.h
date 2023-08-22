@@ -14,6 +14,9 @@ namespace fmwk {
     private:
         BoundTexture& _boundTexture;
     public:
+        void setBoundTexture(BoundTexture &boundTexture);
+
+    public:
         explicit TextureComponent(BoundTexture& boundTexture);
         BoundTexture& getBoundTexture();
     };
