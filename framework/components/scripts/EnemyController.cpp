@@ -18,7 +18,7 @@ namespace fmwk {
 
         Transform& transform = _parentEntity->getTransform();
 
-        bool needsToMove = glm::length(_targetPositions[_currentTargetIndex] - transform.getPosition()) >= 0.01f;
+        bool needsToMove = glm::length(_targetPositions[_currentTargetIndex] - transform.getPosition()) >= 0.1f;
 
         if(needsToMove) {
             glm::vec3 targetDirection = glm::normalize(_targetPositions[_currentTargetIndex] - transform.getPosition());
@@ -41,7 +41,7 @@ namespace fmwk {
 
     void EnemyController::findZPath(std::vector<glm::vec3> &targetPositions, float laneWidth, float meshRadius) {
         std::vector<glm::vec3> newPositions;
-        for (int i = 0; i < targetPositions.size(); i++) {
+        for (int i = 0; i < targetPositions.size() - 1; i++) {
             int x_pos = 0;
             int z_pos = 0;
             int cell_num = 0;
@@ -60,10 +60,12 @@ namespace fmwk {
                                               targetPositions[i].z + laneWidth / 2);
                     for (int j = 1; j < std::abs(cell_num); j++) {
                         if (j % 2 != 0) {
-                            newPositions.emplace_back(targetPositions[i].x - laneWidth / 2 + meshRadius, targetPositions[i].y,
+                            newPositions.emplace_back(targetPositions[i].x - laneWidth / 2 + meshRadius,
+                                                      targetPositions[i].y,
                                                       targetPositions[i].z + laneWidth / 2 + laneWidth * j);
                         } else {
-                            newPositions.emplace_back(targetPositions[i].x + laneWidth / 2 - meshRadius, targetPositions[i].y,
+                            newPositions.emplace_back(targetPositions[i].x + laneWidth / 2 - meshRadius,
+                                                      targetPositions[i].y,
                                                       targetPositions[i].z + laneWidth / 2 + laneWidth * j);
                         }
                     }
@@ -72,10 +74,12 @@ namespace fmwk {
                                               targetPositions[i].z - laneWidth / 2);
                     for (int j = 1; j < std::abs(cell_num); j++) {
                         if (j % 2 != 0) {
-                            newPositions.emplace_back(targetPositions[i].x + laneWidth / 2 - meshRadius, targetPositions[i].y,
+                            newPositions.emplace_back(targetPositions[i].x + laneWidth / 2 - meshRadius,
+                                                      targetPositions[i].y,
                                                       targetPositions[i].z - laneWidth / 2 - laneWidth * j);
                         } else {
-                            newPositions.emplace_back(targetPositions[i].x - laneWidth / 2 + meshRadius, targetPositions[i].y,
+                            newPositions.emplace_back(targetPositions[i].x - laneWidth / 2 + meshRadius,
+                                                      targetPositions[i].y,
                                                       targetPositions[i].z - laneWidth / 2 - laneWidth * j);
                         }
                     }
@@ -86,10 +90,12 @@ namespace fmwk {
                                               targetPositions[i].z - laneWidth / 2 + meshRadius);
                     for (int j = 1; j < std::abs(cell_num); j++) {
                         if (j % 2 != 0) {
-                            newPositions.emplace_back(targetPositions[i].x + laneWidth / 2 + laneWidth * j, targetPositions[i].y,
+                            newPositions.emplace_back(targetPositions[i].x + laneWidth / 2 + laneWidth * j,
+                                                      targetPositions[i].y,
                                                       targetPositions[i].z + laneWidth / 2 - meshRadius);
                         } else {
-                            newPositions.emplace_back(targetPositions[i].x + laneWidth / 2 + laneWidth * j, targetPositions[i].y,
+                            newPositions.emplace_back(targetPositions[i].x + laneWidth / 2 + laneWidth * j,
+                                                      targetPositions[i].y,
                                                       targetPositions[i].z - laneWidth / 2 + meshRadius);
                         }
                     }
@@ -98,10 +104,12 @@ namespace fmwk {
                                               targetPositions[i].z + laneWidth / 2 - meshRadius);
                     for (int j = 1; j < std::abs(cell_num); j++) {
                         if (j % 2 != 0) {
-                            newPositions.emplace_back(targetPositions[i].x - laneWidth / 2 - laneWidth * j, targetPositions[i].y,
+                            newPositions.emplace_back(targetPositions[i].x - laneWidth / 2 - laneWidth * j,
+                                                      targetPositions[i].y,
                                                       targetPositions[i].z - laneWidth / 2 + meshRadius);
                         } else {
-                            newPositions.emplace_back(targetPositions[i].x - laneWidth / 2 - laneWidth * j, targetPositions[i].y,
+                            newPositions.emplace_back(targetPositions[i].x - laneWidth / 2 - laneWidth * j,
+                                                      targetPositions[i].y,
                                                       targetPositions[i].z + laneWidth / 2 - meshRadius);
                         }
                     }
@@ -110,6 +118,7 @@ namespace fmwk {
         }
 
         targetPositions = newPositions;
+
     }
 } // fmwk
 
