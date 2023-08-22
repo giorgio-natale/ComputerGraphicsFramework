@@ -8,6 +8,7 @@
 #include <glm/vec3.hpp>
 #include <unordered_set>
 #include "Component.h"
+#include "MazeRepresentation.h"
 
 namespace fmwk {
 
@@ -22,6 +23,7 @@ namespace fmwk {
         float _bulletSpeed;
         glm::vec3 _direction;
         std::unordered_set<std::string> _targetTags;
+        MazeRepresentation * _mazeRepresentation;
     };
 
 } // fmwk
