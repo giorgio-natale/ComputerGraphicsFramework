@@ -6,12 +6,22 @@
 #include "../../GameEngine.h"
 
 namespace fmwk {
-    Health::Health(float initialLifeQuantity, float gracePeriod) : Component("Health"),
-                                                                   _initialLifeQuantity(initialLifeQuantity),
-                                                                   _gracePeriod(gracePeriod) {
+    Health::Health(float initialLifeQuantity, float gracePeriod) :
+            Component("Health"),
+            _totalLifeQuantity(initialLifeQuantity),
+            _gracePeriod(gracePeriod),
+            _currentLifeQuantity(initialLifeQuantity) {
         _isAlwaysImmune = false;
         _timeout = 0;
-        _currentLifeQuantity = initialLifeQuantity;
+    }
+
+    Health::Health(float initialLifeQuantity, float gracePeriod, float totalLifeQuantity) :
+            Component("Health"),
+            _totalLifeQuantity(totalLifeQuantity),
+            _currentLifeQuantity(initialLifeQuantity),
+            _gracePeriod(gracePeriod) {
+        _isAlwaysImmune = false;
+        _timeout = 0;
     }
 
     void Health::update() {
@@ -19,6 +29,7 @@ namespace fmwk {
         _timeout -= gameEngine->getInput().deltaTime;
         if (_timeout < 0)
             _timeout = 0;
+        // TODO add Despawner method
         if (_currentLifeQuantity <= 0)
             _parentEntity->markForRemoval();
     }
@@ -49,7 +60,11 @@ namespace fmwk {
     }
 
     float Health::getCurrentLifePercentage() const {
-        return _currentLifeQuantity / _initialLifeQuantity;
+        return _currentLifeQuantity / _totalLifeQuantity;
+    }
+
+    void Health::increaseLife(float lifeQuantity) {
+        _currentLifeQuantity += lifeQuantity;
     }
 
 } // fmwk

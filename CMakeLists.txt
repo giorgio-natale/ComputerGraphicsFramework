@@ -90,7 +90,30 @@ demo/MovingCube.cpp
         framework/components/materials/SimplePhongColorBlendMaterial.cpp
         framework/components/materials/SimplePhongColorBlendMaterial.h
         framework/components/scripts/Health.cpp
-        framework/components/scripts/Health.h framework/components/sprite/Sprite.cpp framework/components/sprite/Sprite.h framework/components/materials/DefaultSprite.cpp framework/components/materials/DefaultSprite.h demo/HudDemo.cpp demo/HudDemo.h framework/components/sprite/SpriteUtils.cpp framework/components/sprite/SpriteUtils.h framework/blueprints/Blueprint.cpp demo/BlueprintDemo.cpp demo/BlueprintDemo.h framework/blueprints/Character.cpp framework/blueprints/Character.h framework/blueprints/RoughSphere.cpp framework/blueprints/RoughSphere.h framework/blueprints/BlockMaze.cpp framework/blueprints/BlockMaze.h framework/blueprints/BasicEnemy.cpp framework/blueprints/BasicEnemy.h framework/blueprints/HeartUI.cpp framework/blueprints/HeartUI.h framework/components/scripts/HeartController.cpp framework/components/scripts/HeartController.h framework/blueprints/Bullet.cpp framework/blueprints/Bullet.h framework/blueprints/BossEnemy.cpp framework/blueprints/BossEnemy.h framework/components/scripts/FinalBossController.cpp framework/blueprints/BossBarUI.cpp framework/blueprints/BossBarUI.h framework/components/scripts/BossBarController.cpp framework/components/scripts/BossBarController.h)
+        framework/components/scripts/Health.h framework/components/sprite/Sprite.cpp framework/components/sprite/Sprite.h framework/components/materials/DefaultSprite.cpp framework/components/materials/DefaultSprite.h demo/HudDemo.cpp demo/HudDemo.h framework/components/sprite/SpriteUtils.cpp framework/components/sprite/SpriteUtils.h framework/blueprints/Blueprint.cpp demo/BlueprintDemo.cpp demo/BlueprintDemo.h framework/blueprints/Character.cpp framework/blueprints/Character.h framework/blueprints/RoughSphere.cpp framework/blueprints/RoughSphere.h framework/blueprints/BlockMaze.cpp framework/blueprints/BlockMaze.h framework/blueprints/BasicEnemy.cpp framework/blueprints/BasicEnemy.h framework/blueprints/HeartUI.cpp framework/blueprints/HeartUI.h framework/components/scripts/HeartController.cpp framework/components/scripts/HeartController.h framework/blueprints/Bullet.cpp framework/blueprints/Bullet.h framework/blueprints/BossEnemy.cpp framework/blueprints/BossEnemy.h framework/components/scripts/FinalBossController.cpp framework/blueprints/BossBarUI.cpp framework/blueprints/BossBarUI.h framework/components/scripts/BossBarController.cpp framework/components/scripts/BossBarController.h
+        framework/blueprints/PowerUpCube.cpp
+        framework/blueprints/PowerUpCube.h
+        framework/components/scripts/TriggerPowerUp.cpp
+        framework/components/scripts/TriggerPowerUp.h
+        framework/components/scripts/PowerUp.cpp
+        framework/components/scripts/PowerUp.h
+        framework/components/scripts/PowerUpAddLife.cpp
+        framework/components/scripts/PowerUpAddLife.h
+        framework/components/scripts/PowerUpSetShield.cpp
+        framework/components/scripts/PowerUpSetShield.h
+        framework/components/scripts/PowerUpIncreaseSpeed.cpp
+        framework/components/scripts/PowerUpIncreaseSpeed.h
+        framework/components/scripts/PowerUpDecreaseBulletCoolDown.cpp
+        framework/components/scripts/PowerUpDecreaseBulletCoolDown.h
+        framework/components/scripts/PowerUpMoveCameraUp.cpp
+        framework/components/scripts/PowerUpMoveCameraUp.h
+        framework/components/scripts/PowerUpSpawnBossEnemy.cpp
+        framework/components/scripts/PowerUpSpawnBossEnemy.h
+        framework/blueprints/Shield.cpp
+        framework/blueprints/Shield.h
+        framework/components/scripts/FollowEntity.cpp
+        framework/components/scripts/FollowEntity.h
+        )
 target_link_libraries(${PROJECT_NAME})
 find_package(Vulkan REQUIRED)
 foreach(dir IN LISTS Vulkan_INCLUDE_DIR INCLUDE_DIRS)

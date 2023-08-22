@@ -10,7 +10,7 @@ namespace fmwk {
         auto gameEngine = GameEngine::getInstance();
         if(gameEngine->doesEntityExist("Character")){
             auto&  health = gameEngine->getEntityByName("Character").getHealth();
-            if(health.getCurrentLifePercentage() > (float)(_index) / 3.0f)
+            if(health.getCurrentLifePercentage() > (float)(_index) / 6.0f)
                 _parentEntity->setVisible(true);
             else
                 _parentEntity->setVisible(false);

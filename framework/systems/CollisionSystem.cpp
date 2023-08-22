@@ -40,14 +40,16 @@ namespace fmwk {
         return collidingEntities;
     }
 
-    Entity *CollisionSystem::getCharacterCollidingEntity(Collider *collider) {
-        GameEngine *gameEngine = GameEngine::getInstance();
+    Entity const *CollisionSystem::getCharacterCollidingEntity(Collider *collider) {
+        auto elem = _colliders.find("Shield-Collider");
+        if (elem == _colliders.end()) {
+            elem = _colliders.find("Character-Collider");
+        }
 
-        auto elem = _colliders.find("Character-Collider");
         if (elem != _colliders.end()) {
             Collider *characterCollider = elem->second;
             if (checkCollision(collider, characterCollider))
-                return &gameEngine->getEntityByName("Character");
+                return characterCollider->getParent();
         }
         return nullptr;
     }

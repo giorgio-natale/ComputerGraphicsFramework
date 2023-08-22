@@ -17,6 +17,8 @@ namespace fmwk {
         BulletSpawner(const std::string &name, const glm::vec3 &centerOffset, float bulletSpeed, float bulletCoolDown,
                       std::unordered_set<std::string> const *targetTags);
 
+        void setBulletCoolDown(float bulletCoolDown);
+
     protected:
         glm::vec3 _centerOffset;
         std::unordered_set<std::string> _targetTags;
