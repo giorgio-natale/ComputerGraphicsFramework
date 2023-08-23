@@ -72,10 +72,11 @@ void MazeEscape::localInit() {
     auto gameEngine = fmwk::GameEngine::getInstance();
 
     gameEngine->addModel("myCube", fmwk::VERTEX_WITH_NORMAL, "Models/Cube.obj",
-                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+                         glm::vec3(0, 0.4, 0), glm::quat(1,0,0,0), glm::vec3(0.4f));
     gameEngine->addModel("mySphere", fmwk::VERTEX_WITH_NORMAL_AND_TANGENT, "models/Sphere.gltf",
                          glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.195f));
-    gameEngine->addModel("shieldSphere", fmwk::VERTEX_WITH_NORMAL_AND_TANGENT, "models/Sphere.gltf");
+    gameEngine->addModel("shieldSphere", fmwk::VERTEX_WITH_NORMAL_AND_TANGENT, "models/Sphere.gltf",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.7f));
     gameEngine->addModel("smoothPumpkin", fmwk::VERTEX_WITH_NORMAL, "models/pumpkin.007_Mesh.5391.mgcg",
                          glm::vec3(0, -0.1f, 0), fmwk::createQuat(fmwk::Y, 180), glm::vec3(1.5f));
     gameEngine->addModel("ghost", fmwk::VERTEX_WITH_NORMAL, "Models/cast_Mesh.6268.mgcg",
@@ -85,6 +86,10 @@ void MazeEscape::localInit() {
                          glm::vec3(0, 0.5f, 0), glm::quat(1,0,0,0), glm::vec3(0.01f));
 
     gameEngine->addTexture("cubeTexture", "textures/Checker.png");
+    gameEngine->addTexture("powerUpBullet", "textures/powerUpBullet.png");
+    gameEngine->addTexture("powerUpLife", "textures/powerUpLife.png");
+    gameEngine->addTexture("powerUpShield", "textures/powerUpShield.png");
+    gameEngine->addTexture("powerUpSpeedUp", "textures/powerUpSpeedUp.png");
     gameEngine->addTexture("sphereTexture", "textures/Metals_09_basecolor.png");
     gameEngine->addTexture("sphereNormal", "textures/Metals_09_normal.png");
     gameEngine->addTexture("sphereMaterial", "textures/Metals_09_met_rough_ao.png");
@@ -126,12 +131,12 @@ void MazeEscape::localInit() {
 
     fmwk::BlockMaze().addInstance();
 
-   /*fmwk::Character(glm::vec3(87.0f,0.5f, -15.0f),
-                    reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();*/
+   fmwk::Character(glm::vec3(87.0f,0.5f, -15.0f),
+                    reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
 
 
-   fmwk::Character(glm::vec3(75.0f,0.5f, -87.0f),
-              reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
+//   fmwk::Character(glm::vec3(75.0f,0.5f, -87.0f),
+//              reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
 
    //fmwk::Decoration(glm::vec3(75.0f,0.5f, -87.0f), glm::quat(1, 0, 0, 0), glm::vec3(1), "ghost").addInstance();
 
@@ -269,11 +274,22 @@ void MazeEscape::localInit() {
             glm::vec3(69, 0.5, -117)
     };
 
-//    fmwk::PowerUpCube(glm::vec3(81.0f,0.5f, -87.0f), fmwk::SET_SHIELD).addInstance();
-//    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -21.0f), fmwk::ADD_LIFE).addInstance();
-//    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -24.0f), fmwk::DECREASE_BULLET_COOL_DOWN).addInstance();
-//    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -27.0f), fmwk::INCREASE_SPEED).addInstance();
-//    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -30.0f), fmwk::MOVE_CAMERA_UP).addInstance();
+    fmwk::PowerUpCube(glm::vec3(90.0f,0.5f,-114.0f), fmwk::SET_SHIELD).addInstance();
+    fmwk::PowerUpCube(glm::vec3(123.0f,0.5f,-99.0f), fmwk::SET_SHIELD).addInstance();
+    fmwk::PowerUpCube(glm::vec3(111.0f,0.5f,-21.0f), fmwk::SET_SHIELD).addInstance();
+    fmwk::PowerUpCube(glm::vec3(75.0f,0.5f,-9.0f), fmwk::SET_SHIELD).addInstance();
+    fmwk::PowerUpCube(glm::vec3(85.0f,0.5f, -18.0f), fmwk::SET_SHIELD).addInstance();
+    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f,-69.0f), fmwk::SET_SHIELD).addInstance();
+    fmwk::PowerUpCube(glm::vec3(9.0f,0.5f,-111.0f), fmwk::SET_SHIELD).addInstance();
+
+    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f,-87.0f), fmwk::ADD_LIFE).addInstance();
+    fmwk::PowerUpCube(glm::vec3(39.0f,0.5f,-81.0f), fmwk::ADD_LIFE).addInstance();
+    fmwk::PowerUpCube(glm::vec3(51.0f,0.5f,-39.0f), fmwk::ADD_LIFE).addInstance();
+
+    fmwk::PowerUpCube(glm::vec3(108.0f,0.5f,-102.0f), fmwk::DECREASE_BULLET_COOL_DOWN).addInstance();
+
+    fmwk::PowerUpCube(glm::vec3(27.0f,0.5f,-27.0f), fmwk::INCREASE_SPEED).addInstance();
+
     fmwk::PowerUpCube(glm::vec3(81.0f,0.5f, -87.0f), fmwk::SPAWN_BOSS_ENEMY).addInstance();
 
     fmwk::BasicEnemy(e1).addInstance();

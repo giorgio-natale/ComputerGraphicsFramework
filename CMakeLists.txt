@@ -105,8 +105,6 @@ demo/MovingCube.cpp
         framework/components/scripts/PowerUpIncreaseSpeed.h
         framework/components/scripts/PowerUpDecreaseBulletCoolDown.cpp
         framework/components/scripts/PowerUpDecreaseBulletCoolDown.h
-        framework/components/scripts/PowerUpMoveCameraUp.cpp
-        framework/components/scripts/PowerUpMoveCameraUp.h
         framework/components/scripts/PowerUpSpawnBossEnemy.cpp
         framework/components/scripts/PowerUpSpawnBossEnemy.h
         framework/blueprints/Shield.cpp

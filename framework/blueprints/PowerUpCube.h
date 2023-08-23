@@ -10,7 +10,7 @@
 namespace fmwk {
 
     enum PowerUpType {
-        SET_SHIELD, INCREASE_SPEED, DECREASE_BULLET_COOL_DOWN, MOVE_CAMERA_UP, ADD_LIFE, SPAWN_BOSS_ENEMY
+        SET_SHIELD, INCREASE_SPEED, DECREASE_BULLET_COOL_DOWN, ADD_LIFE, SPAWN_BOSS_ENEMY
     };
 
     class PowerUpCube : public Blueprint {

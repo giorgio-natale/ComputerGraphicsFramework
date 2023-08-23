@@ -19,10 +19,10 @@ namespace fmwk {
 
         auto shieldEntity = std::make_unique<fmwk::Entity>("Shield",
                                                            characterTransform.getPosition(), glm::quat(1, 0, 0, 0));
-        shieldEntity->addComponent(std::make_unique<fmwk::Collider>(2.0f, "CHARACTER", glm::vec3(0, 0, 0)));
+        shieldEntity->addComponent(std::make_unique<fmwk::Collider>(1.5f, "CHARACTER", glm::vec3(0, 0, 0)));
         shieldEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("shieldSphere")));
         shieldEntity->addComponent(
-                std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("sphereTexture")));
+                std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("white")));
         shieldEntity->addComponent(std::make_unique<fmwk::DefaultTransparent>(1.0f, 0.8f));
         shieldEntity->addComponent(std::make_unique<fmwk::Health>(10.0f,2.0f));
         shieldEntity->addComponent(std::make_unique<fmwk::FollowEntity>(characterTransform));
