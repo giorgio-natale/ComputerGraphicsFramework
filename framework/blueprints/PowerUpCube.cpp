@@ -48,6 +48,7 @@ namespace fmwk {
                 break;
             case SPAWN_BOSS_ENEMY:
                 powerUpEntity->addComponent(std::make_unique<fmwk::PowerUpSpawnBossEnemy>());
+                powerUpEntity->getTransform().setScale(glm::vec3(6));
                 powerUpEntity->setVisible(false);
                 break;
         }

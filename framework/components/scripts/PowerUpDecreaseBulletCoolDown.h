@@ -11,8 +11,6 @@ namespace fmwk {
 
     class PowerUpDecreaseBulletCoolDown : public PowerUp {
     public:
-        PowerUpDecreaseBulletCoolDown();
-
         void applyPowerUp() override;
     };
 

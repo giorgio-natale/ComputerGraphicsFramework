@@ -11,8 +11,6 @@ namespace fmwk {
 
     class PowerUpAddLife : public PowerUp {
     public:
-        PowerUpAddLife();
-
         void applyPowerUp() override;
 
     };

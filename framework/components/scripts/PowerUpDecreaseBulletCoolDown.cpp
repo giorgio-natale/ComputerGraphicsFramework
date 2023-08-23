@@ -8,8 +8,6 @@
 #include "CharacterBulletSpawner.h"
 
 namespace fmwk {
-    PowerUpDecreaseBulletCoolDown::PowerUpDecreaseBulletCoolDown() {}
-
     void PowerUpDecreaseBulletCoolDown::applyPowerUp() {
         std::cout << "POWER UP DECREASE BULLET COOL-DOWN" << std::endl;
         auto gameEngine = fmwk::GameEngine::getInstance();

@@ -28,6 +28,7 @@
 #include "framework/blueprints/HeartUI.h"
 #include "framework/blueprints/BossEnemy.h"
 #include "framework/blueprints/Decoration.h"
+#include "framework/blueprints/PowerUpCube.h"
 
 // The uniform buffer objects data structures
 // Remember to use the correct alignas(...) value
@@ -70,9 +71,11 @@ void MazeEscape::onWindowResize(int w, int h) {
 void MazeEscape::localInit() {
     auto gameEngine = fmwk::GameEngine::getInstance();
 
-    gameEngine->addModel("myCube", fmwk::VERTEX_WITH_NORMAL, "Models/Cube.obj");
+    gameEngine->addModel("myCube", fmwk::VERTEX_WITH_NORMAL, "Models/Cube.obj",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
     gameEngine->addModel("mySphere", fmwk::VERTEX_WITH_NORMAL_AND_TANGENT, "models/Sphere.gltf",
                          glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.195f));
+    gameEngine->addModel("shieldSphere", fmwk::VERTEX_WITH_NORMAL_AND_TANGENT, "models/Sphere.gltf");
     gameEngine->addModel("smoothPumpkin", fmwk::VERTEX_WITH_NORMAL, "models/pumpkin.007_Mesh.5391.mgcg",
                          glm::vec3(0, -0.1f, 0), fmwk::createQuat(fmwk::Y, 180), glm::vec3(1.5f));
     gameEngine->addModel("ghost", fmwk::VERTEX_WITH_NORMAL, "Models/cast_Mesh.6268.mgcg",
@@ -266,6 +269,13 @@ void MazeEscape::localInit() {
             glm::vec3(69, 0.5, -117)
     };
 
+//    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -18.0f), fmwk::SET_SHIELD).addInstance();
+//    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -21.0f), fmwk::ADD_LIFE).addInstance();
+//    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -24.0f), fmwk::DECREASE_BULLET_COOL_DOWN).addInstance();
+//    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -27.0f), fmwk::INCREASE_SPEED).addInstance();
+//    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -30.0f), fmwk::MOVE_CAMERA_UP).addInstance();
+    fmwk::PowerUpCube(glm::vec3(81.0f,0.5f, -87.0f), fmwk::SPAWN_BOSS_ENEMY).addInstance();
+
     fmwk::BasicEnemy(e1).addInstance();
     fmwk::BasicEnemy(e2).addInstance();
     fmwk::BasicEnemy(e3).addInstance();
@@ -284,16 +294,13 @@ void MazeEscape::localInit() {
     fmwk::BasicEnemy(e16).addInstance();
     fmwk::BasicEnemy(e17).addInstance();
 
-    fmwk::BossEnemy(gameEngine->getEntityByName("Character").getTransform()).addInstance();
-
+//    fmwk::BossEnemy(gameEngine->getEntityByName("Character").getTransform()).addInstance();
 
     auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(0,3,0), glm::rotate(glm::quat(1,0,0,0), glm::radians(-90.0f), fmwk::X));
     lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight", glm::normalize(glm::vec3(1, -1, 0)), glm::vec4(1)));
     lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight2", glm::normalize(glm::vec3(-1, -1, 0)), glm::vec4(1)));
     lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight3", glm::normalize(glm::vec3(0, -1, -1)), glm::vec4(1)));
     lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight4", glm::normalize(glm::vec3(0, -1, 1)), glm::vec4(1)));
-
-
 
     gameEngine->addEntity(std::move(lightEntity));
 

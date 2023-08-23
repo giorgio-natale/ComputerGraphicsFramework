@@ -11,8 +11,6 @@ namespace fmwk {
 
     class PowerUpMoveCameraUp : public PowerUp {
     public:
-        PowerUpMoveCameraUp();
-
         void applyPowerUp() override;
     };
 

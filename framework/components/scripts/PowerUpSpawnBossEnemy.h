@@ -11,8 +11,6 @@ namespace fmwk {
 
     class PowerUpSpawnBossEnemy : public PowerUp {
     public:
-        PowerUpSpawnBossEnemy();
-
         void applyPowerUp() override;
     };
 

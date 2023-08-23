@@ -4,11 +4,16 @@
 
 #include <iostream>
 #include "PowerUpSpawnBossEnemy.h"
+#include "../../GameEngine.h"
+#include "../../blueprints/BossEnemy.h"
 
 namespace fmwk {
-    PowerUpSpawnBossEnemy::PowerUpSpawnBossEnemy() {}
-
     void PowerUpSpawnBossEnemy::applyPowerUp() {
         std::cout << "POWER UP SPAWN BOSS ENEMY" << std::endl;
+        auto gameEngine = fmwk::GameEngine::getInstance();
+        if (!gameEngine->doesEntityExist("FinalBoss")) {
+            auto &characterTransform = gameEngine->getEntityByName("Character").getTransform();
+            BossEnemy(characterTransform).spawnInstance();
+        }
     }
 } // fmwk
