@@ -316,7 +316,6 @@ void MazeEscape::localInit() {
     fmwk::BasicEnemy(e16).addInstance();
     fmwk::BasicEnemy(e17).addInstance();
 
-    fmwk::BossEnemy(gameEngine->getEntityByName("Character").getTransform()).addInstance();
 
 
     /*auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(0,3,0), glm::rotate(glm::quat(1,0,0,0), glm::radians(-90.0f), fmwk::X));
