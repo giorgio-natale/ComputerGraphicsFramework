@@ -12,8 +12,8 @@
 
 namespace fmwk {
     Decoration::Decoration(std::string name, const glm::vec3 &position, const glm::quat &rotation, const glm::vec3 &scale,
-                           std::string textureName) : _name(std::move(name)), _position(position), _rotation(rotation), _scale(scale),
-                                                      _modelName(std::move(textureName)) {}
+                           std::string modelName) : _name(std::move(name)), _position(position), _rotation(rotation), _scale(scale),
+                                                      _modelName(std::move(modelName)) {}
 
     Decoration::Decoration(const glm::vec3 &position, const glm::quat &rotation, const glm::vec3 &scale,
                            std::string modelName) : Decoration("decoration" + std::to_string(getNewNumber()), position, rotation, scale, std::move(modelName)){}

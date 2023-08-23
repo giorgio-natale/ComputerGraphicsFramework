@@ -28,6 +28,7 @@
 #include "framework/blueprints/HeartUI.h"
 #include "framework/blueprints/BossEnemy.h"
 #include "framework/blueprints/Decoration.h"
+#include "framework/components/scripts/FollowEntity.h"
 #include "framework/blueprints/PowerUpCube.h"
 
 // The uniform buffer objects data structures
@@ -112,7 +113,9 @@ void MazeEscape::localInit() {
     gameEngine->addTexture("bushRoughness", "textures/Grass_001_ROUGH.jpg");
 
     gameEngine->addTexture("rockColor", "textures/Stylized_Stone_Floor_005_basecolor.jpg");
-    gameEngine->addTexture("rockNormal", "textures/Stylized_Stone_Floor_005_normal.jpg");
+    //gameEngine->addTexture("rockNormal", "textures/Stylized_Stone_Floor_005_normal.jpg");
+    gameEngine->addTexture("rockNormal", "textures/Metals_09_normal.png");
+
     gameEngine->addTexture("rockRoughness", "textures/Stylized_Stone_Floor_005_roughness.jpg");
     gameEngine->addTexture("death", "textures/death.png");
 
@@ -310,13 +313,22 @@ void MazeEscape::localInit() {
     fmwk::BasicEnemy(e16).addInstance();
     fmwk::BasicEnemy(e17).addInstance();
 
-//    fmwk::BossEnemy(gameEngine->getEntityByName("Character").getTransform()).addInstance();
+    fmwk::BossEnemy(gameEngine->getEntityByName("Character").getTransform()).addInstance();
 
-    auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(0,3,0), glm::rotate(glm::quat(1,0,0,0), glm::radians(-90.0f), fmwk::X));
-    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight", glm::normalize(glm::vec3(1, -1, 0)), glm::vec4(1)));
-    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight2", glm::normalize(glm::vec3(-1, -1, 0)), glm::vec4(1)));
-    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight3", glm::normalize(glm::vec3(0, -1, -1)), glm::vec4(1)));
-    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight4", glm::normalize(glm::vec3(0, -1, 1)), glm::vec4(1)));
+
+    /*auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(0,3,0), glm::rotate(glm::quat(1,0,0,0), glm::radians(-90.0f), fmwk::X));
+    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight", glm::normalize(glm::vec3(1, -1, 0)), glm::vec4(0.5)));
+    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight2", glm::normalize(glm::vec3(-1, 0, 0)), glm::vec4(0.5)));
+    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight3", glm::normalize(glm::vec3(0, -1, -1)), glm::vec4(0.5)));
+    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight4", glm::normalize(glm::vec3(0, -1, 1)), glm::vec4(0.5)));
+    */
+
+    auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(75.0f,0.5f, -87.0f), glm::quat(1,0,0,0));
+    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight", glm::normalize(glm::vec3(0, -1, 0)), glm::vec4(0.5)));
+    lightEntity->addComponent(std::make_unique<fmwk::FollowEntity>(gameEngine->getEntityByName("Character").getTransform()));
+    lightEntity->addComponent(std::make_unique<fmwk::SpotLightComponent>("characterTorch", glm::vec4(1.0f), 2.0f, 4.0f, 0.8f, 0.85f));
+    //lightEntity->addComponent(std::make_unique<fmwk::PointLightComponent>("characterTorch", glm::vec4(1.0f), 2.0f, 6.0f));
+
 
     gameEngine->addEntity(std::move(lightEntity));
 
