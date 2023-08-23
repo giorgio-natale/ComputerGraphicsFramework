@@ -6,6 +6,7 @@
 #include "../../Entity.h"
 #include "../texture/TextureComponent.h"
 #include "../../GameEngine.h"
+#include "Despawner.h"
 
 namespace fmwk {
     BossBarController::BossBarController(Health &bossHealth) : Component("BossHealthController"),
@@ -19,7 +20,7 @@ namespace fmwk {
             reinterpret_cast<TextureComponent &>(_parentEntity->getComponentByName("Texture")).setBoundTexture(
                     gameEngine->getBoundTextureByName("bossBar" + std::to_string(healthLevel)));
         }else{
-            _parentEntity->markForRemoval();
+            reinterpret_cast<Despawner&>(_parentEntity->getComponentByName("Despawner")).despawn();
         }
     }
 } // fmwk

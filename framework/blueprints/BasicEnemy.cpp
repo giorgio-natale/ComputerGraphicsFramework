@@ -10,6 +10,7 @@
 #include "../components/scripts/EnemyController.h"
 #include "../components/scripts/EnemyCollisionBehaviour.h"
 #include "../components/materials/SimplePhongColorBlendMaterial.h"
+#include "../components/scripts/DefaultDespawner.h"
 
 namespace fmwk {
     void BasicEnemy::buildEntity() {
@@ -22,6 +23,7 @@ namespace fmwk {
         enemyEntity->addComponent(std::make_unique<fmwk::SimplePhongColorBlendMaterial>(glm::vec3(1,0,0)));
         enemyEntity->addComponent(std::make_unique<fmwk::EnemyController>(_targetPoints, 6.0f, 6.0f, 0.4f));
         enemyEntity->addComponent(std::make_unique<fmwk::EnemyCollisionBehaviour>());
+        enemyEntity->addComponent(std::make_unique<fmwk::DefaultDespawner>());
         gameEngine->enqueueEntity(std::move(enemyEntity));
 
 

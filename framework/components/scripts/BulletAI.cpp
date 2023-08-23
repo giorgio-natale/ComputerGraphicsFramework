@@ -4,6 +4,7 @@
 
 #include "BulletAI.h"
 #include "../../GameEngine.h"
+#include "Despawner.h"
 
 namespace fmwk {
     BulletAI::BulletAI(const std::string &name, float bulletSpeed, const glm::vec3 &direction,
@@ -36,7 +37,7 @@ namespace fmwk {
         }
         if(!collidingEntities.empty() || _mazeRepresentation->isPositionInsideBlock(transform.getPosition())) {
             std::cout << "BULLET DESPAWNING" << std::endl;
-            _parentEntity->markForRemoval();
+            reinterpret_cast<Despawner&>(_parentEntity->getComponentByName("Despawner")).despawn();
         }
     }
 } // fmwk

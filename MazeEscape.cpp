@@ -269,7 +269,7 @@ void MazeEscape::localInit() {
             glm::vec3(69, 0.5, -117)
     };
 
-//    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -18.0f), fmwk::SET_SHIELD).addInstance();
+//    fmwk::PowerUpCube(glm::vec3(81.0f,0.5f, -87.0f), fmwk::SET_SHIELD).addInstance();
 //    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -21.0f), fmwk::ADD_LIFE).addInstance();
 //    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -24.0f), fmwk::DECREASE_BULLET_COOL_DOWN).addInstance();
 //    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -27.0f), fmwk::INCREASE_SPEED).addInstance();

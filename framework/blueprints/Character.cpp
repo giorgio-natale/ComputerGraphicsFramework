@@ -16,6 +16,7 @@
 #include "../components/materials/SimplePhongBlinkMaterial.h"
 #include "../components/scripts/MazeCharacterController.h"
 #include "HeartUI.h"
+#include "../components/scripts/CharacterDespawner.h"
 
 namespace fmwk {
     Character::Character(glm::vec3 position, MazeRepresentation &mazeRepresentation) : _position(position), _mazeRepresentation(mazeRepresentation){
@@ -39,6 +40,8 @@ namespace fmwk {
         std::unordered_set<std::string> characterBulletTags = std::unordered_set<std::string>{"ENEMY"};
         characterEntity->addComponent(std::make_unique<CharacterBulletSpawner>(glm::vec3(0,0,0), 12.0f, 1.0f, &characterBulletTags));
         characterEntity->addComponent(std::make_unique<fmwk::MazeCharacterController>(cameraEntity->getTransform(), _mazeRepresentation, 5.0f));
+        characterEntity->addComponent(std::make_unique<fmwk::CharacterDespawner>());
+
         cameraEntity->addComponent(std::make_unique<fmwk::CameraController>("CameraController", characterEntity->getTransform(), glm::radians(120.0f), 3.0f, 0.25f));
 
         HeartUI(0).addInstance();

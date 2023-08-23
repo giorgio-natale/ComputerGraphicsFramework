@@ -4,6 +4,7 @@
 
 #include "Health.h"
 #include "../../GameEngine.h"
+#include "Despawner.h"
 
 namespace fmwk {
     Health::Health(float initialLifeQuantity, float gracePeriod) :
@@ -29,9 +30,8 @@ namespace fmwk {
         _timeout -= gameEngine->getInput().deltaTime;
         if (_timeout < 0)
             _timeout = 0;
-        // TODO add Despawner method
         if (_currentLifeQuantity <= 0)
-            _parentEntity->markForRemoval();
+            reinterpret_cast<Despawner&>(_parentEntity->getComponentByName("Despawner")).despawn();
     }
 
     void Health::takeDamage(float damage) {
@@ -65,6 +65,14 @@ namespace fmwk {
 
     void Health::increaseLife(float lifeQuantity) {
         _currentLifeQuantity += lifeQuantity;
+    }
+
+    float Health::getGracePeriod() const {
+        return _gracePeriod;
+    }
+
+    void Health::setTimeout(float timeout) {
+        _timeout = timeout;
     }
 
 } // fmwk

@@ -10,6 +10,7 @@
 #include "../components/scripts/EntityDespawner.h"
 #include "../components/materials/DefaultTransparent.h"
 #include "../components/scripts/FollowEntity.h"
+#include "../components/scripts/ShieldDespawner.h"
 
 namespace fmwk {
     void Shield::buildEntity() {
@@ -25,6 +26,7 @@ namespace fmwk {
         shieldEntity->addComponent(std::make_unique<fmwk::DefaultTransparent>(1.0f, 0.8f));
         shieldEntity->addComponent(std::make_unique<fmwk::Health>(10.0f,2.0f));
         shieldEntity->addComponent(std::make_unique<fmwk::FollowEntity>(characterTransform));
+        shieldEntity->addComponent(std::make_unique<fmwk::ShieldDespawner>());
 
         shieldEntity->setPreferredRenderOrder(50);
         gameEngine->enqueueEntity(std::move(shieldEntity));
