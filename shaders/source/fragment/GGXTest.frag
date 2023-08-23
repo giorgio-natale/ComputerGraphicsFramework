@@ -93,11 +93,12 @@ vec3 BRDF(vec3 V, vec3 N, vec3 L, vec3 Md, float F0, float metallic, float rough
 void main() {
 
     vec3 Norm = normalize(fragNorm);
-    vec3 Tan = normalize(fragTan.xyz - Norm * dot(fragTan.xyz, Norm));
-    vec3 Bitan = cross(Norm, Tan) * fragTan.w;
-    mat3 tbn = mat3(Tan, Bitan, Norm);
-    vec4 nMap = texture(normMap, fragUV);
-    vec3 N = normalize(tbn * (nMap.rgb * 2.0 - 1.0));
+    //vec3 Tan = normalize(fragTan.xyz - Norm * dot(fragTan.xyz, Norm));
+    //vec3 Bitan = cross(Norm, Tan) * fragTan.w;
+    //mat3 tbn = mat3(Tan, Bitan, Norm);
+    //vec4 nMap = texture(normMap, fragUV);
+    //vec3 N = normalize(tbn * (nMap.rgb * 2.0 - 1.0));
+    vec3 N = Norm;
     vec3 albedo = texture(tex, fragUV).rgb;
 
     vec4 MRAO = texture(matMap, fragUV);
@@ -105,7 +106,7 @@ void main() {
     float ao = MRAO.b;
     float metallic = MRAO.r;
     vec3 V = normalize(gubo.eyePos - fragPos);
-    vec3 Ambient = albedo * 0.05f * ao;
+    vec3 Ambient = albedo * 0.3f * ao;
 
     vec3 DiffSpec = vec3(0,0,0);
 

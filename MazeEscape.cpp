@@ -28,6 +28,7 @@
 #include "framework/blueprints/HeartUI.h"
 #include "framework/blueprints/BossEnemy.h"
 #include "framework/blueprints/Decoration.h"
+#include "framework/components/scripts/FollowEntity.h"
 
 // The uniform buffer objects data structures
 // Remember to use the correct alignas(...) value
@@ -104,7 +105,9 @@ void MazeEscape::localInit() {
     gameEngine->addTexture("bushRoughness", "textures/Grass_001_ROUGH.jpg");
 
     gameEngine->addTexture("rockColor", "textures/Stylized_Stone_Floor_005_basecolor.jpg");
-    gameEngine->addTexture("rockNormal", "textures/Stylized_Stone_Floor_005_normal.jpg");
+    //gameEngine->addTexture("rockNormal", "textures/Stylized_Stone_Floor_005_normal.jpg");
+    gameEngine->addTexture("rockNormal", "textures/Metals_09_normal.png");
+
     gameEngine->addTexture("rockRoughness", "textures/Stylized_Stone_Floor_005_roughness.jpg");
     gameEngine->addTexture("death", "textures/death.png");
 
@@ -130,7 +133,7 @@ void MazeEscape::localInit() {
    fmwk::Character(glm::vec3(75.0f,0.5f, -87.0f),
               reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
 
-   //fmwk::Decoration(glm::vec3(75.0f,0.5f, -87.0f), glm::quat(1, 0, 0, 0), glm::vec3(1), "ghost").addInstance();
+   fmwk::Decoration(glm::vec3(75.0f,0.5f, -87.0f), glm::quat(1, 0, 0, 0), glm::vec3(1), "ghost").addInstance();
 
     std::vector<glm::vec3> e1 = {
           glm::vec3(9, 0.5, -9),
@@ -287,12 +290,18 @@ void MazeEscape::localInit() {
     fmwk::BossEnemy(gameEngine->getEntityByName("Character").getTransform()).addInstance();
 
 
-    auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(0,3,0), glm::rotate(glm::quat(1,0,0,0), glm::radians(-90.0f), fmwk::X));
-    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight", glm::normalize(glm::vec3(1, -1, 0)), glm::vec4(1)));
-    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight2", glm::normalize(glm::vec3(-1, -1, 0)), glm::vec4(1)));
-    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight3", glm::normalize(glm::vec3(0, -1, -1)), glm::vec4(1)));
-    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight4", glm::normalize(glm::vec3(0, -1, 1)), glm::vec4(1)));
+    /*auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(0,3,0), glm::rotate(glm::quat(1,0,0,0), glm::radians(-90.0f), fmwk::X));
+    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight", glm::normalize(glm::vec3(1, -1, 0)), glm::vec4(0.5)));
+    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight2", glm::normalize(glm::vec3(-1, 0, 0)), glm::vec4(0.5)));
+    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight3", glm::normalize(glm::vec3(0, -1, -1)), glm::vec4(0.5)));
+    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight4", glm::normalize(glm::vec3(0, -1, 1)), glm::vec4(0.5)));
+    */
 
+    auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(75.0f,0.5f, -87.0f), glm::quat(1,0,0,0));
+    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight", glm::normalize(glm::vec3(0, -1, 0)), glm::vec4(0.5)));
+    lightEntity->addComponent(std::make_unique<fmwk::FollowEntity>(gameEngine->getEntityByName("Character").getTransform()));
+    lightEntity->addComponent(std::make_unique<fmwk::SpotLightComponent>("characterTorch", glm::vec4(1.0f), 2.0f, 4.0f, 0.8f, 0.85f));
+    //lightEntity->addComponent(std::make_unique<fmwk::PointLightComponent>("characterTorch", glm::vec4(1.0f), 2.0f, 6.0f));
 
 
     gameEngine->addEntity(std::move(lightEntity));
