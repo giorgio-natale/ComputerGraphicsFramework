@@ -63,6 +63,8 @@ namespace fmwk {
 
         void enqueueEntityRemoval(std::string const &name);
 
+        void enqueueRemovalOfAllEntities();
+
         void flushEnqueuedEntityOperations();
 
 

@@ -429,5 +429,10 @@ namespace fmwk {
         return _entities.find(name) != _entities.end();
     }
 
+    void GameEngine::enqueueRemovalOfAllEntities() {
+        for(auto& [name, entity] : _entities)
+            enqueueEntityRemoval(name);
+    }
+
 
 } // fmwk

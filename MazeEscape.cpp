@@ -102,6 +102,9 @@ void MazeEscape::localInit() {
     gameEngine->addTexture("bossBar3", "textures/bossBar3.png");
     gameEngine->addTexture("bossBar4", "textures/bossBar4.png");
     gameEngine->addTexture("bossBar5", "textures/bossBar5.png");
+    gameEngine->addTexture("gameOver", "textures/gameOver.PNG");
+    gameEngine->addTexture("youWin", "textures/youWin.PNG");
+
 
     gameEngine->addTexture("dungeonTexture", "textures/Textures_Dungeon.png");
     gameEngine->addTexture("red", "textures/red.png");

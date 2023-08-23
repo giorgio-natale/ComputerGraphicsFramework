@@ -20,7 +20,7 @@ namespace fmwk {
             reinterpret_cast<TextureComponent &>(_parentEntity->getComponentByName("Texture")).setBoundTexture(
                     gameEngine->getBoundTextureByName("bossBar" + std::to_string(healthLevel)));
         }else{
-            reinterpret_cast<Despawner&>(_parentEntity->getComponentByName("Despawner")).despawn();
+            _parentEntity->markForRemoval();
         }
     }
 } // fmwk
