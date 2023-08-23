@@ -8,8 +8,6 @@
 #include "MazeCharacterController.h"
 
 namespace fmwk {
-    PowerUpIncreaseSpeed::PowerUpIncreaseSpeed() {}
-
     void PowerUpIncreaseSpeed::applyPowerUp() {
         std::cout << "POWER UP INCREASE SPEED" << std::endl;
         auto gameEngine = fmwk::GameEngine::getInstance();

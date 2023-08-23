@@ -11,8 +11,6 @@ namespace fmwk {
 
     class PowerUpIncreaseSpeed : public PowerUp {
     public:
-        PowerUpIncreaseSpeed();
-
         void applyPowerUp() override;
     };
 

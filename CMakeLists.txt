@@ -113,7 +113,17 @@ demo/MovingCube.cpp
         framework/blueprints/Shield.h
         framework/components/scripts/FollowEntity.cpp
         framework/components/scripts/FollowEntity.h
-        framework/blueprints/Decoration.cpp framework/blueprints/Decoration.h)
+        framework/blueprints/Decoration.cpp framework/blueprints/Decoration.h
+        framework/components/scripts/Despawner.cpp
+        framework/components/scripts/Despawner.h
+        framework/components/scripts/CharacterDespawner.cpp
+        framework/components/scripts/CharacterDespawner.h
+        framework/components/scripts/BossEnemyDespawner.cpp
+        framework/components/scripts/BossEnemyDespawner.h
+        framework/components/scripts/ShieldDespawner.cpp
+        framework/components/scripts/ShieldDespawner.h
+        framework/components/scripts/DefaultDespawner.cpp
+        framework/components/scripts/DefaultDespawner.h)
 target_link_libraries(${PROJECT_NAME})
 find_package(Vulkan REQUIRED)
 foreach(dir IN LISTS Vulkan_INCLUDE_DIR INCLUDE_DIRS)

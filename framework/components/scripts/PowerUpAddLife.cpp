@@ -7,8 +7,6 @@
 #include "../../GameEngine.h"
 
 namespace fmwk {
-    PowerUpAddLife::PowerUpAddLife() {};
-
     void PowerUpAddLife::applyPowerUp() {
         std::cout << "POWER UP ADD LIFE" << std::endl;
         auto gameEngine = fmwk::GameEngine::getInstance();

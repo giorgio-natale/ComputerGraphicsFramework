@@ -29,6 +29,7 @@
 #include "framework/blueprints/BossEnemy.h"
 #include "framework/blueprints/Decoration.h"
 #include "framework/components/scripts/FollowEntity.h"
+#include "framework/blueprints/PowerUpCube.h"
 
 // The uniform buffer objects data structures
 // Remember to use the correct alignas(...) value
@@ -71,9 +72,11 @@ void MazeEscape::onWindowResize(int w, int h) {
 void MazeEscape::localInit() {
     auto gameEngine = fmwk::GameEngine::getInstance();
 
-    gameEngine->addModel("myCube", fmwk::VERTEX_WITH_NORMAL, "Models/Cube.obj");
+    gameEngine->addModel("myCube", fmwk::VERTEX_WITH_NORMAL, "Models/Cube.obj",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
     gameEngine->addModel("mySphere", fmwk::VERTEX_WITH_NORMAL_AND_TANGENT, "models/Sphere.gltf",
                          glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.195f));
+    gameEngine->addModel("shieldSphere", fmwk::VERTEX_WITH_NORMAL_AND_TANGENT, "models/Sphere.gltf");
     gameEngine->addModel("smoothPumpkin", fmwk::VERTEX_WITH_NORMAL, "models/pumpkin.007_Mesh.5391.mgcg",
                          glm::vec3(0, -0.1f, 0), fmwk::createQuat(fmwk::Y, 180), glm::vec3(1.5f));
     gameEngine->addModel("ghost", fmwk::VERTEX_WITH_NORMAL, "Models/cast_Mesh.6268.mgcg",
@@ -133,7 +136,7 @@ void MazeEscape::localInit() {
    fmwk::Character(glm::vec3(75.0f,0.5f, -87.0f),
               reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
 
-   fmwk::Decoration(glm::vec3(75.0f,0.5f, -87.0f), glm::quat(1, 0, 0, 0), glm::vec3(1), "ghost").addInstance();
+   //fmwk::Decoration(glm::vec3(75.0f,0.5f, -87.0f), glm::quat(1, 0, 0, 0), glm::vec3(1), "ghost").addInstance();
 
     std::vector<glm::vec3> e1 = {
           glm::vec3(9, 0.5, -9),
@@ -268,6 +271,13 @@ void MazeEscape::localInit() {
             glm::vec3(75, 0.5, -117),
             glm::vec3(69, 0.5, -117)
     };
+
+//    fmwk::PowerUpCube(glm::vec3(81.0f,0.5f, -87.0f), fmwk::SET_SHIELD).addInstance();
+//    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -21.0f), fmwk::ADD_LIFE).addInstance();
+//    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -24.0f), fmwk::DECREASE_BULLET_COOL_DOWN).addInstance();
+//    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -27.0f), fmwk::INCREASE_SPEED).addInstance();
+//    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f, -30.0f), fmwk::MOVE_CAMERA_UP).addInstance();
+    fmwk::PowerUpCube(glm::vec3(81.0f,0.5f, -87.0f), fmwk::SPAWN_BOSS_ENEMY).addInstance();
 
     fmwk::BasicEnemy(e1).addInstance();
     fmwk::BasicEnemy(e2).addInstance();

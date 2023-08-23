@@ -31,6 +31,10 @@ namespace fmwk {
 
         [[nodiscard]] float getCurrentLifePercentage() const;
 
+        [[nodiscard]] float getGracePeriod() const;
+
+        void setTimeout(float timeout);
+
     private:
         const float _totalLifeQuantity;
         float _currentLifeQuantity;

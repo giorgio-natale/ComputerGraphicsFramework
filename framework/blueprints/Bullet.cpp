@@ -8,6 +8,7 @@
 #include "../components/texture/TextureComponent.h"
 #include "../components/materials/DefaultMaterial.h"
 #include "../components/scripts/BulletAI.h"
+#include "../components/scripts/DefaultDespawner.h"
 
 namespace fmwk {
     void Bullet::buildEntity() {
@@ -26,9 +27,9 @@ namespace fmwk {
                 std::make_unique<fmwk::DefaultMaterial>(2.5f));
         bulletEntity->addComponent(std::make_unique<fmwk::Collider>(0.195f, "BULLET", glm::vec3(0, 0, 0)));
         bulletEntity->addComponent(std::make_unique<fmwk::BulletAI>("bulletAI", _bulletSpeed, _direction, &_targetTags));
+        bulletEntity->addComponent(std::make_unique<fmwk::DefaultDespawner>());
 
         gameEngine->enqueueEntity(std::move(bulletEntity));
-
     }
 
     Bullet::Bullet(const glm::vec3 &spawnPosition, const glm::vec3 &centerOffset, float bulletSpeed,

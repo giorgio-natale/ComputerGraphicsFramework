@@ -6,8 +6,6 @@
 #include "PowerUpMoveCameraUp.h"
 
 namespace fmwk {
-    PowerUpMoveCameraUp::PowerUpMoveCameraUp() {}
-
     void PowerUpMoveCameraUp::applyPowerUp() {
         std::cout << "POWER UP MOVE CAMERA UP" << std::endl;
     }

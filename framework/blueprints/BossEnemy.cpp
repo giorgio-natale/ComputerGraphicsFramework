@@ -13,6 +13,7 @@
 #include "../components/scripts/EnemyCollisionBehaviour.h"
 #include "../components/materials/GGXMaterial.h"
 #include "BossBarUI.h"
+#include "../components/scripts/BossEnemyDespawner.h"
 
 namespace fmwk {
     BossEnemy::BossEnemy(Transform &characterTransform) : _characterTransform(characterTransform) {}
@@ -34,6 +35,7 @@ namespace fmwk {
         std::unordered_set<std::string> targetTags = std::unordered_set<std::string>({"CHARACTER"});
         boss->addComponent(std::make_unique<EnemyBulletSpawner>(glm::vec3(0,0,0), 12.0f, 1.5f, _characterTransform, &targetTags));
         boss->addComponent(std::make_unique<fmwk::EnemyCollisionBehaviour>());
+        boss->addComponent(std::make_unique<fmwk::BossEnemyDespawner>());
 
         gameEngine->enqueueEntity(std::move(boss));
 
