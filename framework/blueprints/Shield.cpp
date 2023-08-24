@@ -23,7 +23,7 @@ namespace fmwk {
         shieldEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("shieldSphere")));
         shieldEntity->addComponent(
                 std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("white")));
-        shieldEntity->addComponent(std::make_unique<fmwk::DefaultTransparent>(1.0f, 0.8f));
+        shieldEntity->addComponent(std::make_unique<fmwk::DefaultTransparent>(1.0f, 0.1f));
         shieldEntity->addComponent(std::make_unique<fmwk::Health>(10.0f,2.0f));
         shieldEntity->addComponent(std::make_unique<fmwk::FollowEntity>(characterTransform));
         shieldEntity->addComponent(std::make_unique<fmwk::ShieldDespawner>());
