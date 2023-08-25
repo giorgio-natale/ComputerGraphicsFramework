@@ -82,9 +82,44 @@ void MazeEscape::localInit() {
                          glm::vec3(0, -0.1f, 0), fmwk::createQuat(fmwk::Y, 180), glm::vec3(1.5f));
     gameEngine->addModel("ghost", fmwk::VERTEX_WITH_NORMAL, "Models/cast_Mesh.6268.mgcg",
                          glm::vec3(0, 0.5f, 0), fmwk::createQuat(fmwk::Y, 180), glm::vec3(1.5f));
-
     gameEngine->addModel("death", fmwk::VERTEX_WITH_NORMAL, "Models/death.obj",
                          glm::vec3(0, 0.5f, 0), glm::quat(1,0,0,0), glm::vec3(0.01f));
+
+    // Decorations
+    gameEngine->addModel("streetLamp", fmwk::VERTEX_WITH_NORMAL, "models/decoration.002_Mesh.7105.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+    gameEngine->addModel("crucifiedSkeleton", fmwk::VERTEX_WITH_NORMAL, "models/bones.001_Mesh.7532.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+    gameEngine->addModel("hangingSkeleton", fmwk::VERTEX_WITH_NORMAL, "models/bones.033_Mesh.700.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+    gameEngine->addModel("chain", fmwk::VERTEX_WITH_NORMAL, "models/decoration.005_Mesh.6547.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+    gameEngine->addModel("woodBeam", fmwk::VERTEX_WITH_NORMAL, "models/decoration.015_Mesh.6804.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+    gameEngine->addModel("crossX", fmwk::VERTEX_WITH_NORMAL, "models/decoration.019_Mesh.4909.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+    gameEngine->addModel("crossT", fmwk::VERTEX_WITH_NORMAL, "models/decoration.020_Mesh.4906.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+    gameEngine->addModel("bossTotem", fmwk::VERTEX_WITH_NORMAL, "models/decoration.026_Mesh.6000.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+    gameEngine->addModel("wallDecor", fmwk::VERTEX_WITH_NORMAL, "models/tunnel.033_Mesh.6508.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+    gameEngine->addModel("wallLamp", fmwk::VERTEX_WITH_NORMAL, "models/light.009_Mesh.6851.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+    gameEngine->addModel("wallChains", fmwk::VERTEX_WITH_NORMAL, "models/decoration.025_Mesh.5810.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+    gameEngine->addModel("wallCircle", fmwk::VERTEX_WITH_NORMAL, "models/decoration.021_Mesh.268.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+    gameEngine->addModel("wallShield", fmwk::VERTEX_WITH_NORMAL, "models/prop.014_Mesh.7789.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+    gameEngine->addModel("shelf1", fmwk::VERTEX_WITH_NORMAL, "models/prop.016_Mesh.6779.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+    gameEngine->addModel("shelf2", fmwk::VERTEX_WITH_NORMAL, "models/prop.034_Mesh.7986.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+    gameEngine->addModel("shelf3", fmwk::VERTEX_WITH_NORMAL, "models/prop.035_Mesh.6860.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
+    gameEngine->addModel("closedWindow", fmwk::VERTEX_WITH_NORMAL, "models/prop.032_Mesh.7038.mgcg",
+                         glm::vec3(0, 0, 0), glm::quat(1,0,0,0), glm::vec3(0.5f));
 
     gameEngine->addTexture("cubeTexture", "textures/Checker.png");
     gameEngine->addTexture("powerUpBullet", "textures/powerUpBullet.png");
@@ -137,14 +172,112 @@ void MazeEscape::localInit() {
 
     fmwk::BlockMaze().addInstance();
 
-   fmwk::Character(glm::vec3(87.0f,0.5f, -15.0f),
+   fmwk::Character(glm::vec3(87.0f,0.5f, -47.0f),
                     reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
 
 
 //   fmwk::Character(glm::vec3(75.0f,0.5f, -87.0f),
 //              reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
 
-   //fmwk::Decoration(glm::vec3(75.0f,0.5f, -87.0f), glm::quat(1, 0, 0, 0), glm::vec3(1), "ghost").addInstance();
+    fmwk::Decoration(glm::vec3(84.5f,2, -47.5f), fmwk::createQuat(fmwk::Y, 135), glm::vec3(2), "streetLamp").addInstance();
+    fmwk::Decoration(glm::vec3(108.5f,2, -15.0f), fmwk::createQuat(fmwk::Y, 180), glm::vec3(2), "streetLamp").addInstance();
+    fmwk::Decoration(glm::vec3(51.0f,2, -30.5f), fmwk::createQuat(fmwk::Y, 270), glm::vec3(2), "streetLamp").addInstance();
+    fmwk::Decoration(glm::vec3(21.0f,2, -35.5f), fmwk::createQuat(fmwk::Y, 90), glm::vec3(2), "streetLamp").addInstance();
+    fmwk::Decoration(glm::vec3(53.5f,2, -99.0f), fmwk::createQuat(fmwk::Y, 0), glm::vec3(2), "streetLamp").addInstance();
+
+    fmwk::Decoration(glm::vec3(117,3, -96.5f), fmwk::createQuat(fmwk::Y, 180), glm::vec3(3), "wallLamp").addInstance();
+    fmwk::Decoration(glm::vec3(99,3, -107.5), fmwk::createQuat(fmwk::Y, 0), glm::vec3(3), "wallLamp").addInstance();
+
+    fmwk::Decoration(glm::vec3(95.7f,2.7, -92.2f), fmwk::createQuat(fmwk::Y, -90), glm::vec3(3), "crucifiedSkeleton").addInstance();
+    fmwk::Decoration(glm::vec3(95.9f,3.5, -92.2f), fmwk::createQuat(fmwk::Y, -90, fmwk::X, 90), glm::vec3(3), "crossT").addInstance();
+    fmwk::Decoration(glm::vec3(95.7f,1, -96.0f), fmwk::createQuat(fmwk::Y, -90), glm::vec3(2.5), "hangingSkeleton").addInstance();
+    fmwk::Decoration(glm::vec3(96.0f,4, -96.0f), fmwk::createQuat(fmwk::Y, -90), glm::vec3(2), "woodBeam").addInstance();
+    fmwk::Decoration(glm::vec3(95.7f,3.4, -99.8f), fmwk::createQuat(fmwk::Y, -90,  fmwk::Z, 180), glm::vec3(3), "crucifiedSkeleton").addInstance();
+    fmwk::Decoration(glm::vec3(95.9f,2.5, -99.8f), fmwk::createQuat(fmwk::Y, -90, fmwk::X, 270, fmwk::Z, 180), glm::vec3(3), "crossT").addInstance();
+    fmwk::Decoration(glm::vec3(113.7f,2.7, -104.2f), fmwk::createQuat(fmwk::Y, -90), glm::vec3(3), "crucifiedSkeleton").addInstance();
+    fmwk::Decoration(glm::vec3(113.9f,3.5, -104.2f), fmwk::createQuat(fmwk::Y, -90, fmwk::X, 90), glm::vec3(3), "crossT").addInstance();
+    fmwk::Decoration(glm::vec3(113.7f,1, -108.0f), fmwk::createQuat(fmwk::Y, -90), glm::vec3(2.5), "hangingSkeleton").addInstance();
+    fmwk::Decoration(glm::vec3(114.0f,4, -108.0f), fmwk::createQuat(fmwk::Y, -90), glm::vec3(2), "woodBeam").addInstance();
+    fmwk::Decoration(glm::vec3(113.7f,3.4, -111.8f), fmwk::createQuat(fmwk::Y, -90, fmwk::Z, 180), glm::vec3(3), "crucifiedSkeleton").addInstance();
+    fmwk::Decoration(glm::vec3(113.9f,2.5, -111.8f), fmwk::createQuat(fmwk::Y, -90, fmwk::X, 270, fmwk::Z, 180), glm::vec3(3), "crossT").addInstance();
+
+    fmwk::Decoration(glm::vec3(105.0f,0, -45.0f), fmwk::createQuat(fmwk::Y, 90), glm::vec3(2), "chain").addInstance();
+    fmwk::Decoration(glm::vec3(129.0f,0, -21.0f), fmwk::createQuat(fmwk::Y, 180), glm::vec3(2), "chain").addInstance();
+    fmwk::Decoration(glm::vec3(69.0f,0, -75.0f), fmwk::createQuat(fmwk::Y, 270), glm::vec3(2), "chain").addInstance();
+    fmwk::Decoration(glm::vec3(57.0f,0, -63.0f), fmwk::createQuat(fmwk::Y, 90), glm::vec3(2), "chain").addInstance();
+    fmwk::Decoration(glm::vec3(75.0f,0, -33.0f), fmwk::createQuat(fmwk::Y, 90), glm::vec3(2), "chain").addInstance();
+    fmwk::Decoration(glm::vec3(21.0f,0, -9.0f), fmwk::createQuat(fmwk::Y, -90), glm::vec3(2), "chain").addInstance();
+    fmwk::Decoration(glm::vec3(9.0f,0, -69.0f), fmwk::createQuat(fmwk::Y, 0), glm::vec3(2), "chain").addInstance();
+
+    fmwk::Decoration(glm::vec3(113.5,1.5, -90.0f), fmwk::createQuat(fmwk::Y, -90), glm::vec3(2), "bossTotem").addInstance();
+    fmwk::Decoration(glm::vec3(108,3, -119.8f), fmwk::createQuat(fmwk::Y, 0), glm::vec3(4), "crossX").addInstance();
+
+    fmwk::Decoration(glm::vec3(87,0, -59.9f), fmwk::createQuat(fmwk::Y, 0), glm::vec3(5,5,4), "wallDecor").addInstance();
+    fmwk::Decoration(glm::vec3(66.1f,0, -45), fmwk::createQuat(fmwk::Y, 90), glm::vec3(4,5,5), "wallDecor").addInstance();
+    fmwk::Decoration(glm::vec3(36.1f,0, -51), fmwk::createQuat(fmwk::Y, 90), glm::vec3(4,5,5), "wallDecor").addInstance();
+    fmwk::Decoration(glm::vec3(24.1f,0, -81), fmwk::createQuat(fmwk::Y, 90), glm::vec3(4,5,5), "wallDecor").addInstance();
+    fmwk::Decoration(glm::vec3(111,0, -6.1), fmwk::createQuat(fmwk::Y, 0), glm::vec3(5,5,4), "wallDecor").addInstance();
+    fmwk::Decoration(glm::vec3(129,0, -29.9), fmwk::createQuat(fmwk::Y, 0), glm::vec3(4,5,4), "wallDecor").addInstance();
+    fmwk::Decoration(glm::vec3(108.1,0, -75), fmwk::createQuat(fmwk::Y, 90), glm::vec3(4,5,5), "wallDecor").addInstance();
+    fmwk::Decoration(glm::vec3(36.1,0, -21), fmwk::createQuat(fmwk::Y, 90), glm::vec3(4,5,5), "wallDecor").addInstance();
+    fmwk::Decoration(glm::vec3(27,0, -6.1), fmwk::createQuat(fmwk::Y, 0), glm::vec3(5,5,4), "wallDecor").addInstance();
+    fmwk::Decoration(glm::vec3(59.9,0, -117), fmwk::createQuat(fmwk::Y, 90), glm::vec3(4,5,5), "wallDecor").addInstance();
+    fmwk::Decoration(glm::vec3(9,0, -101.9), fmwk::createQuat(fmwk::Y, 0), glm::vec3(4,5,4), "wallDecor").addInstance();
+    fmwk::Decoration(glm::vec3(77.9f,0, -93), fmwk::createQuat(fmwk::Y, 90), glm::vec3(4,5,5), "wallDecor").addInstance();
+    fmwk::Decoration(glm::vec3(102.1f,0, -93), fmwk::createQuat(fmwk::Y, 90), glm::vec3(4, 5, 5), "wallDecor").addInstance();
+    fmwk::Decoration(glm::vec3(102.1f,0, -99), fmwk::createQuat(fmwk::Y, 90), glm::vec3(4, 5, 5), "wallDecor").addInstance();
+
+    fmwk::Decoration(glm::vec3(101.9f,2, -69), fmwk::createQuat(fmwk::Y, 90), glm::vec3(3), "wallChains").addInstance();
+    fmwk::Decoration(glm::vec3(89.9f,2, -33), fmwk::createQuat(fmwk::Y, 90), glm::vec3(3), "wallChains").addInstance();
+    fmwk::Decoration(glm::vec3(51,2, -53.9f), fmwk::createQuat(fmwk::Y, 0), glm::vec3(3), "wallChains").addInstance();
+    fmwk::Decoration(glm::vec3(51,2, -18.1f), fmwk::createQuat(fmwk::Y, 0), glm::vec3(3), "wallChains").addInstance();
+    fmwk::Decoration(glm::vec3(6.1f,2, -45), fmwk::createQuat(fmwk::Y, 90), glm::vec3(3), "wallChains").addInstance();
+    fmwk::Decoration(glm::vec3(131.9f,2, -45), fmwk::createQuat(fmwk::Y, 90), glm::vec3(3), "wallChains").addInstance();
+    fmwk::Decoration(glm::vec3(123,2, -77.9f), fmwk::createQuat(fmwk::Y, 0), glm::vec3(3), "wallChains").addInstance();
+    fmwk::Decoration(glm::vec3(51,2, -83.9), fmwk::createQuat(fmwk::Y, 0), glm::vec3(3), "wallChains").addInstance();
+    fmwk::Decoration(glm::vec3(29.9f,2, -111), fmwk::createQuat(fmwk::Y, 90), glm::vec3(3), "wallChains").addInstance();
+    fmwk::Decoration(glm::vec3(17.9f,2, -81), fmwk::createQuat(fmwk::Y, 90), glm::vec3(3), "wallChains").addInstance();
+
+    fmwk::Decoration(glm::vec3(108.1f,2, -33), fmwk::createQuat(fmwk::X, 90, fmwk::Z, -90), glm::vec3(3), "wallCircle").addInstance();
+    fmwk::Decoration(glm::vec3(24.1f,2, -57), fmwk::createQuat(fmwk::X, 90, fmwk::Z, -90), glm::vec3(3), "wallCircle").addInstance();
+    fmwk::Decoration(glm::vec3(72.1f,2, -21), fmwk::createQuat(fmwk::X, 90, fmwk::Z, -90), glm::vec3(3), "wallCircle").addInstance();
+    fmwk::Decoration(glm::vec3(6.1f,2, -15), fmwk::createQuat(fmwk::X, 90, fmwk::Z, -90), glm::vec3(3), "wallCircle").addInstance();
+    fmwk::Decoration(glm::vec3(54.1f,2, -105), fmwk::createQuat(fmwk::X, 90, fmwk::Z, -90), glm::vec3(3), "wallCircle").addInstance();
+    fmwk::Decoration(glm::vec3(126.1f,2, -69), fmwk::createQuat(fmwk::X, 90, fmwk::Z, -90), glm::vec3(3), "wallCircle").addInstance();
+    fmwk::Decoration(glm::vec3(72.1f,2, -69), fmwk::createQuat(fmwk::X, 90, fmwk::Z, -90), glm::vec3(3), "wallCircle").addInstance();
+
+    fmwk::Decoration(glm::vec3(12.1f,2, -27), fmwk::createQuat(fmwk::Y, 90), glm::vec3(3), "wallShield").addInstance();
+    fmwk::Decoration(glm::vec3(27,2, -119.9), fmwk::createQuat(fmwk::Y, 0), glm::vec3(3), "wallShield").addInstance();
+    fmwk::Decoration(glm::vec3(63,2, -6.1f), fmwk::createQuat(fmwk::Y, 180), glm::vec3(3), "wallShield").addInstance();
+    fmwk::Decoration(glm::vec3(75,2, -47.9), fmwk::createQuat(fmwk::Y, 0), glm::vec3(3), "wallShield").addInstance();
+    fmwk::Decoration(glm::vec3(123,2, -12.1), fmwk::createQuat(fmwk::Y, 180), glm::vec3(3), "wallShield").addInstance();
+    fmwk::Decoration(glm::vec3(93,2, -77.9), fmwk::createQuat(fmwk::Y, 0), glm::vec3(3), "wallShield").addInstance();
+    fmwk::Decoration(glm::vec3(84.1f,2, -27), fmwk::createQuat(fmwk::Y, 90), glm::vec3(3), "wallShield").addInstance();
+
+    fmwk::Decoration(glm::vec3(84.1f,2.5, -115), fmwk::createQuat(fmwk::Y, 90), glm::vec3(5), "shelf1").addInstance();
+    fmwk::Decoration(glm::vec3(90,2.5, -119.9f), fmwk::createQuat(fmwk::Y, 0), glm::vec3(5), "shelf2").addInstance();
+    fmwk::Decoration(glm::vec3(126,2.5, -84.1f), fmwk::createQuat(fmwk::Y, 180), glm::vec3(5), "shelf1").addInstance();
+    fmwk::Decoration(glm::vec3(131.9f,2.5, -90), fmwk::createQuat(fmwk::Y, -90), glm::vec3(5), "shelf2").addInstance();
+
+    fmwk::Decoration(glm::vec3(99,3, -47.9f), fmwk::createQuat(fmwk::X, 90), glm::vec3(3), "closedWindow").addInstance();
+    fmwk::Decoration(glm::vec3(57,3, -36.9f), fmwk::createQuat(fmwk::X, 90), glm::vec3(3), "closedWindow").addInstance();
+    fmwk::Decoration(glm::vec3(33,3, -90.1f), fmwk::createQuat(fmwk::Y, 180, fmwk::Z, 90, fmwk::X, 90), glm::vec3(3), "closedWindow").addInstance();
+    fmwk::Decoration(glm::vec3(42.1f,3, -9), fmwk::createQuat(fmwk::Z, 180, fmwk::Y, -90), glm::vec3(3), "closedWindow").addInstance();
+
+
+
+
+//    auto sphereEntity = std::make_unique<fmwk::Entity>("Sphere", glm::vec3(87.0f,2.7f, -46.1f),glm::quat(1, 0, 0, 0));
+//    sphereEntity->getTransform().setScale(glm::vec3(0.5f));
+//    sphereEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("mySphere")));
+//    sphereEntity->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("sphereTexture")));
+//    sphereEntity->addComponent(std::make_unique<fmwk::DefaultMaterial>(100.0));
+//    gameEngine->addEntity(std::move(sphereEntity));
+//
+//   fmwk::Decoration(glm::vec3(87.0f,2.7f, -46.1f), fmwk::createQuat(fmwk::Y, 270), glm::vec3(0.5), "mySphere").addInstance();
+//    auto streetLight = std::make_unique<fmwk::Entity>("streetLight", glm::vec3(87.0f, 0.7f, -46.1f),
+//                                                      glm::quat(1, 0, 0, 0));
+//    streetLight->addComponent(std::make_unique<fmwk::PointLightComponent>("streetLight1", glm::vec4(1,1,1,1), 0.0f, 4));
 
     std::vector<glm::vec3> e1 = {
           glm::vec3(9, 0.5, -9),
@@ -280,23 +413,36 @@ void MazeEscape::localInit() {
             glm::vec3(69, 0.5, -117)
     };
 
-    fmwk::PowerUpCube(glm::vec3(90.0f,0.5f,-114.0f), fmwk::SET_SHIELD).addInstance();
-    fmwk::PowerUpCube(glm::vec3(123.0f,0.5f,-99.0f), fmwk::SET_SHIELD).addInstance();
-    fmwk::PowerUpCube(glm::vec3(111.0f,0.5f,-21.0f), fmwk::SET_SHIELD).addInstance();
-    fmwk::PowerUpCube(glm::vec3(75.0f,0.5f,-9.0f), fmwk::SET_SHIELD).addInstance();
-    fmwk::PowerUpCube(glm::vec3(85.0f,0.5f, -18.0f), fmwk::SET_SHIELD).addInstance();
-    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f,-69.0f), fmwk::SET_SHIELD).addInstance();
-    fmwk::PowerUpCube(glm::vec3(9.0f,0.5f,-111.0f), fmwk::SET_SHIELD).addInstance();
+    std::vector<glm::vec3> e18 = {
+            glm::vec3(15, 0.5, -99),
+            glm::vec3(15, 0.5, -117),
+            glm::vec3(57, 0.5, -117)
+    };
 
-    fmwk::PowerUpCube(glm::vec3(87.0f,0.5f,-87.0f), fmwk::ADD_LIFE).addInstance();
-    fmwk::PowerUpCube(glm::vec3(39.0f,0.5f,-81.0f), fmwk::ADD_LIFE).addInstance();
-    fmwk::PowerUpCube(glm::vec3(51.0f,0.5f,-39.0f), fmwk::ADD_LIFE).addInstance();
+    std::vector<glm::vec3> e19 = {
+            glm::vec3(27, 0.5, -63),
+            glm::vec3(27, 0.5, -81),
+            glm::vec3(63, 0.5, -81)
+    };
 
-    fmwk::PowerUpCube(glm::vec3(108.0f,0.5f,-102.0f), fmwk::DECREASE_BULLET_COOL_DOWN).addInstance();
+    fmwk::PowerUpCube(glm::vec3(87.0f,0.5,-111.0f), fmwk::SET_SHIELD).addInstance();
+    fmwk::PowerUpCube(glm::vec3(123.0f,0.5,-99.0f), fmwk::SET_SHIELD).addInstance();
+    fmwk::PowerUpCube(glm::vec3(111.0f,0.5,-21.0f), fmwk::SET_SHIELD).addInstance();
+    fmwk::PowerUpCube(glm::vec3(9.0f,0.5,-9.0f), fmwk::SET_SHIELD).addInstance();
+    fmwk::PowerUpCube(glm::vec3(75.0f,0.5,-9.0f), fmwk::SET_SHIELD).addInstance();
+    fmwk::PowerUpCube(glm::vec3(85.0f,0.5, -18.0f), fmwk::SET_SHIELD).addInstance();
+    fmwk::PowerUpCube(glm::vec3(87.0f,0.5,-69.0f), fmwk::SET_SHIELD).addInstance();
+    fmwk::PowerUpCube(glm::vec3(9.0f,0.5,-111.0f), fmwk::SET_SHIELD).addInstance();
 
-    fmwk::PowerUpCube(glm::vec3(27.0f,0.5f,-27.0f), fmwk::INCREASE_SPEED).addInstance();
+    fmwk::PowerUpCube(glm::vec3(87.0f,0.5,-87.0f), fmwk::ADD_LIFE).addInstance();
+    fmwk::PowerUpCube(glm::vec3(39.0f,0.5,-81.0f), fmwk::ADD_LIFE).addInstance();
+    fmwk::PowerUpCube(glm::vec3(51.0f,0.5,-39.0f), fmwk::ADD_LIFE).addInstance();
 
-    fmwk::PowerUpCube(glm::vec3(81.0f,0.5f, -87.0f), fmwk::SPAWN_BOSS_ENEMY).addInstance();
+    fmwk::PowerUpCube(glm::vec3(108.0f,0.5,-102.0f), fmwk::DECREASE_BULLET_COOL_DOWN).addInstance();
+
+    fmwk::PowerUpCube(glm::vec3(27.0f,0.5,-27.0f), fmwk::INCREASE_SPEED).addInstance();
+
+    fmwk::PowerUpCube(glm::vec3(81.0f,0.5, -87.0f), fmwk::SPAWN_BOSS_ENEMY).addInstance();
 
     fmwk::BasicEnemy(e1).addInstance();
     fmwk::BasicEnemy(e2).addInstance();
@@ -315,6 +461,8 @@ void MazeEscape::localInit() {
     fmwk::BasicEnemy(e15).addInstance();
     fmwk::BasicEnemy(e16).addInstance();
     fmwk::BasicEnemy(e17).addInstance();
+    fmwk::BasicEnemy(e18).addInstance();
+    fmwk::BasicEnemy(e19).addInstance();
 
 
 

@@ -42,7 +42,7 @@ namespace fmwk {
         characterEntity->addComponent(std::make_unique<fmwk::MazeCharacterController>(cameraEntity->getTransform(), _mazeRepresentation, 5.0f));
         characterEntity->addComponent(std::make_unique<fmwk::CharacterDespawner>());
 
-        cameraEntity->addComponent(std::make_unique<fmwk::CameraController>("CameraController", characterEntity->getTransform(), glm::radians(120.0f), 3.0f, 0.25f));
+        cameraEntity->addComponent(std::make_unique<fmwk::CameraController>("CameraController", characterEntity->getTransform(), glm::radians(120.0f), 4.0f, 1.0f));
 
         HeartUI(0).addInstance();
         HeartUI(1).addInstance();

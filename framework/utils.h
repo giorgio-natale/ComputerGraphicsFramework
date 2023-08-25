@@ -46,6 +46,14 @@ namespace fmwk {
         return glm::rotate(glm::quat(1,0,0,0), glm::radians(angleDegrees), glm::normalize(direction));
     }
 
+    inline glm::quat createQuat(glm::vec3 direction1, float angleDegrees1, glm::vec3 direction2, float angleDegrees2){
+        return glm::rotate(glm::rotate(glm::quat(1,0,0,0), glm::radians(angleDegrees1), glm::normalize(direction1)), glm::radians(angleDegrees2), glm::normalize(direction2));
+    }
+
+    inline glm::quat createQuat(glm::vec3 direction1, float angleDegrees1, glm::vec3 direction2, float angleDegrees2, glm::vec3 direction3, float angleDegrees3){
+        return glm::rotate(glm::rotate(glm::rotate(glm::quat(1,0,0,0), glm::radians(angleDegrees1), glm::normalize(direction1)), glm::radians(angleDegrees2), glm::normalize(direction2)), glm::radians(angleDegrees3), glm::normalize(direction3));
+    }
+
 
 }
 

@@ -23,6 +23,7 @@ namespace fmwk {
         auto powerUpEntity = std::make_unique<fmwk::Entity>("powerUpEntity" + std::to_string(getNewNumber()), _position,
                                                             glm::quat(1, 0, 0, 0));
         powerUpEntity->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("myCube")));
+        powerUpEntity->getTransform().setScale(glm::vec3(0.8f, 0.8f, 0.8f));
         powerUpEntity->addComponent(std::make_unique<fmwk::SimplePhongMaterial>());
         powerUpEntity->addComponent(std::make_unique<fmwk::Collider>(1.0f, "POWER_UP", glm::vec3(0, 0, 0)));
         powerUpEntity->addComponent(std::make_unique<fmwk::TriggerPowerUp>());
