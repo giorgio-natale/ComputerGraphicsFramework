@@ -24,7 +24,7 @@ namespace fmwk {
         auto boss = std::make_unique<fmwk::Entity>("FinalBoss");
 
         boss->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("death")));
-        auto bossHealth = std::make_unique<fmwk::Health>(50.0f,1.0f);
+        auto bossHealth = std::make_unique<fmwk::Health>(100.0f,1.0f);
         BossBarUI(*bossHealth.get()).spawnInstance();
         boss->addComponent(std::move(bossHealth));
         boss->addComponent(std::make_unique<fmwk::Collider>(1.0f, "ENEMY", glm::vec3(0,0,0)));
