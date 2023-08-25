@@ -19,7 +19,7 @@ namespace fmwk {
         bossBar->setPreferredRenderOrder(1000);
         bossBar->addComponent(std::make_unique<BossBarController>(_bossHealth));
         bossBar->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("spriteModel")));
-        bossBar->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("bossBar5")));
+        bossBar->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("bossBar10")));
         bossBar->addComponent(std::make_unique<fmwk::DefaultSprite>(1.0f));
         gameEngine->enqueueEntity(std::move(bossBar));
     }
