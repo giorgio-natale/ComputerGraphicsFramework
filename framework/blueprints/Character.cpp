@@ -25,7 +25,7 @@ namespace fmwk {
     void Character::buildEntity() {
         auto gameEngine = GameEngine::getInstance();
         auto cameraEntity = std::make_unique<fmwk::Entity>("Camera", glm::vec3(0, 0, 10), glm::quat(1, 0, 0, 0));
-        auto cameraComponent = std::make_unique<fmwk::PerspectiveCamera>(0.1f, 60.0f, glm::radians(45.0f));
+        auto cameraComponent = std::make_unique<fmwk::PerspectiveCamera>(0.001f, 60.0f, glm::radians(45.0f));
         cameraEntity->addComponent(std::move(cameraComponent));
 
         auto characterEntity = std::make_unique<fmwk::Entity>("Character", _position, glm::quat(1,0,0,0));

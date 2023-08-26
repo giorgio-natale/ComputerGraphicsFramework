@@ -62,7 +62,7 @@ namespace fmwk {
         }
 
         //adding floor
-
+        /*
         std::vector<VertexWithNormalAndTan> floorVertices{};
         floorVertices.push_back({{0,0,0}, {0, (float)_maze.getHeight() * _unit},fmwk::Y , {fmwk::X, 1.0f}}); //00
         floorVertices.push_back({{(float)_maze.getWidth() * _unit,0,0}, {(float)_maze.getWidth() * _unit, (float)_maze.getHeight() * _unit},fmwk::Y , {fmwk::X, 1.0f}}); //10
@@ -79,7 +79,7 @@ namespace fmwk {
         indices.push_back(nextFreeIndex+3);
         indices.push_back(nextFreeIndex);
 
-
+        */
 
         return {vertexes, indices};
     }
@@ -100,7 +100,32 @@ namespace fmwk {
 
         return nearestBlockSquares;
     }
+
+    std::vector<Square> MazeRepresentation::getBlockOfPoint(glm::vec3 point) const {
+        std::vector<Square> currentBlockSquare{};
+
+        mgen::Position mazePosition = mgen::fromGlm(point, _unit);
+        if(_maze.isBlock(mazePosition)){
+            glm::vec3 bottomLeftFloorPosition = mgen::toGlm(mazePosition, _unit);
+            bottomLeftFloorPosition.y = point.y;
+            currentBlockSquare.push_back({bottomLeftFloorPosition, _unit});
+        }
+
+        return currentBlockSquare;
+    }
     bool MazeRepresentation::isPositionInsideBlock(glm::vec3 point) const {
         return _maze.isBlock(mgen::fromGlm(point, _unit));
+    }
+
+    int MazeRepresentation::getRowCount() const {
+        return _rowCount;
+    }
+
+    int MazeRepresentation::getColCount() const {
+        return _colCount;
+    }
+
+    float MazeRepresentation::getUnit() const {
+        return _unit;
     }
 } // fmwk

@@ -7,6 +7,7 @@
 
 #include "Component.h"
 #include "../transform/Transform.h"
+#include "MazeRepresentation.h"
 
 namespace fmwk {
 
@@ -27,6 +28,10 @@ namespace fmwk {
         float const _cameraDistance;
         float const _cameraHeight;
         glm::vec3 _rotationAboutCenter = {0,0,0};
+        MazeRepresentation* _mazeRepresentation;
+
+        static float getLambda(Square &square, glm::vec3 characterPosition, glm::vec3 cameraPosition);
+        static glm::vec3 getPointClosestToBoxFace(Square &square, glm::vec3 characterPosition, glm::vec3 cameraPosition);
     };
 
 } // fmwk

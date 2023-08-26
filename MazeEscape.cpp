@@ -30,6 +30,7 @@
 #include "framework/blueprints/Decoration.h"
 #include "framework/components/scripts/FollowEntity.h"
 #include "framework/blueprints/PowerUpCube.h"
+#include "framework/blueprints/Floor.h"
 
 // The uniform buffer objects data structures
 // Remember to use the correct alignas(...) value
@@ -176,13 +177,16 @@ void MazeEscape::localInit() {
 
 
     fmwk::BlockMaze().addInstance();
+    auto& mazeRepresentationComponent = reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"));
+    fmwk::Floor((float)mazeRepresentationComponent.getColCount() * mazeRepresentationComponent.getUnit(), (float)mazeRepresentationComponent.getRowCount() * mazeRepresentationComponent.getUnit()).addInstance();
+    /*fmwk::Character(glm::vec3(9.0f,0.5f, -9.0f),
+                   mazeRepresentationComponent).addInstance(); */
 
-   fmwk::Character(glm::vec3(87.0f,0.5f, -47.0f),
-                    reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
+   //fmwk::Character(glm::vec3(87.0f,0.5f, -47.0f),
+     //               reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
 
-
-//   fmwk::Character(glm::vec3(75.0f,0.5f, -87.0f),
-//              reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
+   fmwk::Character(glm::vec3(75.0f,0.5f, -87.0f),
+              reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
 
     fmwk::Decoration(glm::vec3(84.5f,2, -47.5f), fmwk::createQuat(fmwk::Y, 135), glm::vec3(2), "streetLamp").addInstance();
     fmwk::Decoration(glm::vec3(108.5f,2, -15.0f), fmwk::createQuat(fmwk::Y, 180), glm::vec3(2), "streetLamp").addInstance();

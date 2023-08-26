@@ -38,7 +38,7 @@ namespace fmwk {
 
         glm::vec3 constrainedDirection = localDirection;
 
-        if(localDirection != glm::vec3(0)){
+        /*if(localDirection != glm::vec3(0)){
             if(localDirection.x > 0) {
                 auto info = _mazeRepresentation.getMazeCollisions(characterTransform.getPosition(), X);
                 if(info.isNear && info.distance < 0.5) {
@@ -62,7 +62,7 @@ namespace fmwk {
                 }
             }
         }
-
+        */
         characterTransform.translate(input.deltaTime * _maxSpeed * constrainedDirection);
         auto blocksAround = _mazeRepresentation.getBlocksAroundPoint(characterTransform.getPosition());
         for (auto &square: blocksAround) {

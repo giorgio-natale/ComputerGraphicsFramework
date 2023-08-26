@@ -14,6 +14,7 @@
 #include "../components/materials/GGXMaterial.h"
 #include "BossBarUI.h"
 #include "../components/scripts/BossEnemyDespawner.h"
+#include "../components/materials/SimplePhongMaterial.h"
 
 namespace fmwk {
     BossEnemy::BossEnemy(Transform &characterTransform) : _characterTransform(characterTransform) {}
@@ -29,7 +30,7 @@ namespace fmwk {
         boss->addComponent(std::move(bossHealth));
         boss->addComponent(std::make_unique<fmwk::Collider>(1.0f, "ENEMY", glm::vec3(0,0,0)));
         boss->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("death")));
-        boss->addComponent(std::make_unique<fmwk::SimplePhongColorBlendMaterial>(glm::vec3(1,0,0)));
+        boss->addComponent(std::make_unique<fmwk::SimplePhongMaterial>());
 
         boss->addComponent(std::make_unique<fmwk::FinalBossController>(glm::vec3(108.0f,0.5f,-102.0f), _characterTransform));
         std::unordered_set<std::string> targetTags = std::unordered_set<std::string>({"CHARACTER"});
