@@ -123,4 +123,9 @@ namespace fmwk {
     std::unordered_map<EffectType, Effect> &MaterialSystem::getAllEffects() {
         return _effects;
     }
+
+    void MaterialSystem::destroyDescriptorSetLayouts() {
+        for(auto& [effectType, descriptorLayout] : _effects)
+            descriptorLayout.layout.cleanup();
+    }
 } // fmwk

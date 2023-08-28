@@ -180,4 +180,13 @@ namespace fmwk {
         _globalOverlayDescriptorSet.cleanup();
     }
 
+    void RenderSystem::destroyDescriptorSetLayouts() {
+        _globalDescriptorSetLayout.cleanup();
+        _textureDescriptorSetLayout.cleanup();
+        _modelDescriptorSetLayout.cleanup();
+
+        _globalOverlayDescriptorSetLayout.cleanup();
+        _modelOverlayDescriptorSetLayout.cleanup();
+    }
+
 } // fmwk

@@ -59,6 +59,7 @@ namespace fmwk {
         VertexType getType();
         BaseModel& getTypedModel();
         Transform& getModelTransform();
+        void destroyModel();
     };
 
     class ModelSystem {
@@ -99,6 +100,8 @@ namespace fmwk {
         TModel& getModelByName(std::string const& name);
 
         std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>>& getAllVertexDescriptors();
+
+        void destroyModels();
 
     };
 

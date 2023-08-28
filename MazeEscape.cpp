@@ -498,17 +498,17 @@ void MazeEscape::localInit() {
 
 // Here you create your pipelines and Descriptor Sets!
 void MazeEscape::pipelinesAndDescriptorSetsInit() {
-auto gameEngine = fmwk::GameEngine::getInstance();
-gameEngine->rebuildResources();
+    auto gameEngine = fmwk::GameEngine::getInstance();
+    gameEngine->rebuildResources();
 
 }
 
 // Here you destroy your pipelines and Descriptor Sets!
 // All the object classes defined in Starter.hpp have a method .cleanup() for this purpose
 void MazeEscape::pipelinesAndDescriptorSetsCleanup() {
-std::cout << "PIPELINES AND DESCRIPTOR SETS CLEANUP CALLED" << std::endl;
-auto gameEngine = fmwk::GameEngine::getInstance();
-gameEngine->cleanupResources();
+    std::cout << "PIPELINES AND DESCRIPTOR SETS CLEANUP CALLED" << std::endl;
+    auto gameEngine = fmwk::GameEngine::getInstance();
+    gameEngine->cleanupResources();
 
 }
 
@@ -517,8 +517,7 @@ gameEngine->cleanupResources();
 // You also have to destroy the pipelines: since they need to be rebuilt, they have two different
 // methods: .cleanup() recreates them, while .destroy() delete them completely
 void MazeEscape::localCleanup() {
-std::cout << "LOCAL CLEANUP CALLED" << std::endl;
-
+    fmwk::GameEngine::getInstance()->destroyResources();
 }
 
 // Here it is the creation of the command buffer:

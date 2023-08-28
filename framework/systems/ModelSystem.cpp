@@ -142,8 +142,6 @@ namespace fmwk {
     }
 
 
-
-
     TModel::TModel(std::unique_ptr<BaseModel> model, VertexType type, glm::vec3 position, glm::quat quaternion, glm::vec3 scale){
          _model = std::move(model);
          _type = type;
@@ -160,5 +158,15 @@ namespace fmwk {
 
     Transform &TModel::getModelTransform() {
         return *_modelTransform;
+    }
+
+    void TModel::destroyModel() {
+        _model->cleanup();
+    }
+
+    void ModelSystem::destroyModels() {
+        for(auto& [name, model] : _models){
+            model.destroyModel();
+        }
     }
 } // fmwk

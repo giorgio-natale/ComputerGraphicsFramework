@@ -105,6 +105,9 @@ namespace fmwk {
 
         void rebuildGlobalDescriptorSet();
         void cleanupGlobalDescriptorSet();
+
+        void destroyDescriptorSetLayouts();
+
     };
 
 } // fmwk

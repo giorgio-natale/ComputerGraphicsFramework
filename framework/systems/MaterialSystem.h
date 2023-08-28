@@ -29,6 +29,7 @@ namespace fmwk {
         void bootSystem();
         Effect& getEffectByType(EffectType type);
         std::unordered_map<EffectType, Effect>& getAllEffects();
+        void destroyDescriptorSetLayouts();
     };
 
 } // fmwk

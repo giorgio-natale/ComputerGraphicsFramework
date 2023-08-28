@@ -335,7 +335,11 @@ namespace fmwk {
     }
 
     void GameEngine::destroyResources() {
-
+        _textureSystem.destroyTextures();
+        _modelSystem.destroyModels();
+        _renderSystem.destroyDescriptorSetLayouts();
+        _materialSystem.destroyDescriptorSetLayouts();
+        _renderSystem.destroyPipelines();
     }
 
     void GameEngine::removeResourcesOfComponent(Component *component) {
