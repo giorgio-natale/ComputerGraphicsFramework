@@ -9,16 +9,14 @@
 #include "Despawner.h"
 
 namespace fmwk {
-    BossBarController::BossBarController(Health &bossHealth) : Component("BossHealthController"),
-                                                               _bossHealth(bossHealth) {}
+    BossBarController::BossBarController(Health &bossHealth, int index) : Component("BossHealthController"),
+                                                               _bossHealth(bossHealth),
+                                                               _index(index){}
 
     void BossBarController::postUpdate() {
-        auto gameEngine = GameEngine::getInstance();
-
         if(_bossHealth.getCurrentLifeQuantity() > 0) {
             int healthLevel = (int) (_bossHealth.getCurrentLifeQuantity() / 10.0f);
-            reinterpret_cast<TextureComponent &>(_parentEntity->getComponentByName("Texture")).setBoundTexture(
-                    gameEngine->getBoundTextureByName("bossBar" + std::to_string(healthLevel)));
+            _parentEntity->setVisible(healthLevel == _index);
         }else{
             _parentEntity->markForRemoval();
         }

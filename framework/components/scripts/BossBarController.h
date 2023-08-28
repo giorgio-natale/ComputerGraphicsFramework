@@ -12,12 +12,13 @@ namespace fmwk {
 
     class BossBarController : public Component{
     public:
-        explicit BossBarController(Health &bossHealth);
+        explicit BossBarController(Health &bossHealth, int index);
 
         void postUpdate() override;
 
     private:
         Health& _bossHealth;
+        int _index;
     };
 
 } // fmwk

@@ -14,14 +14,18 @@ namespace fmwk {
 
     void BossBarUI::buildEntity() {
         auto gameEngine = GameEngine::getInstance();
-        auto bossBar = std::make_unique<fmwk::Entity>("bossBar", glm::vec2(1, 1), std::vector<fmwk::UiAnchor>{
-            {fmwk::BOTTOM, 1.0f}, {fmwk::LEFT, 5.0f}, {fmwk::RIGHT, 5.0f}}, true);
-        bossBar->setPreferredRenderOrder(1000);
-        bossBar->addComponent(std::make_unique<BossBarController>(_bossHealth));
-        bossBar->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("spriteModel")));
-        bossBar->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("bossBar10")));
-        bossBar->addComponent(std::make_unique<fmwk::DefaultSprite>(1.0f));
-        gameEngine->enqueueEntity(std::move(bossBar));
+
+        for(int i = 1; i <= 10; i++) {
+            auto bossBar = std::make_unique<fmwk::Entity>("bossBar" + std::to_string(i), glm::vec2(1, 1), std::vector<fmwk::UiAnchor>{
+                    {fmwk::BOTTOM, 1.0f}, {fmwk::LEFT, 5.0f}, {fmwk::RIGHT, 5.0f}}, true);
+            bossBar->setPreferredRenderOrder(1000);
+            bossBar->addComponent(std::make_unique<BossBarController>(_bossHealth, i));
+            bossBar->addComponent(std::make_unique<fmwk::MeshComponent>(gameEngine->getModelByName("spriteModel")));
+            bossBar->addComponent(std::make_unique<fmwk::TextureComponent>(gameEngine->getBoundTextureByName("bossBar" + std::to_string(i))));
+            bossBar->addComponent(std::make_unique<fmwk::DefaultSprite>(1.0f));
+            gameEngine->enqueueEntity(std::move(bossBar));
+        }
+
     }
 
 } // fmwk
