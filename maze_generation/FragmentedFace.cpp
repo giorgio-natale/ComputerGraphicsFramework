@@ -95,17 +95,17 @@ namespace mgen {
         glm::vec3 normal = glm::normalize(toGlm(_side, 1.0f));
 
         vertex00.pos = points[0];
-        vertex00.UV = {0,1*_unit};
+        vertex00.UV = {0,glm::distance(points[0], points[2]) / _unit};
         vertex00.norm = normal;
         vertex00.tan = tangent;
 
         vertex10.pos = points[1];
-        vertex10.UV = {glm::distance(points[0], points[3]),1*_unit};
+        vertex10.UV = {glm::distance(points[1], points[0]) / _unit ,glm::distance(points[3], points[1]) / _unit};
         vertex10.norm = normal;
         vertex10.tan = tangent;
 
         vertex11.pos = points[3];
-        vertex11.UV = {glm::distance(points[0], points[3]),0};
+        vertex11.UV = {glm::distance(points[2], points[3]) / _unit,0};
         vertex11.norm = normal;
         vertex11.tan = tangent;
 
