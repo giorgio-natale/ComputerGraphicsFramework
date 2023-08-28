@@ -132,6 +132,9 @@ void MazeEscape::localInit() {
     gameEngine->addTexture("sphereMaterial", "textures/Metals_09_met_rough_ao.png");
     gameEngine->addTexture("mainMazeTexture", "textures/maze_main.png");
     gameEngine->addTexture("heart", "textures/heart.png");
+    gameEngine->addTexture("speedPowerUpIcon", "textures/powerUpSpeedUpIcon.png");
+    gameEngine->addTexture("bulletPowerUpIcon", "textures/powerUpBulletIcon.png");
+
     gameEngine->addTexture("bossBar0", "textures/bossBar0.png");
     gameEngine->addTexture("bossBar1", "textures/bossBar1.png");
     gameEngine->addTexture("bossBar2", "textures/bossBar2.png");
