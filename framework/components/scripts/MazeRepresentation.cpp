@@ -40,7 +40,7 @@ namespace fmwk {
         return {true, distance};
     }
 
-    std::pair<std::vector<fmwk::VertexWithNormalAndTan>, std::vector<uint32_t>> MazeRepresentation::buildMesh() const {
+    std::pair<std::vector<fmwk::VertexWithNormal>, std::vector<uint32_t>> MazeRepresentation::buildMesh() const {
         auto vertexDict = mgen::VertexDictionary();
         for(auto const& box : _maze.getBoxes()){
             for(auto& r : box->buildRectangles()){
@@ -48,12 +48,12 @@ namespace fmwk {
             }
         }
 
-        std::vector<fmwk::VertexWithNormalAndTan> vertexes{};
+        std::vector<fmwk::VertexWithNormal> vertexes{};
         std::vector<uint32_t> indices{};
 
 
         for(auto& vertex : vertexDict.getVertices()){
-            vertexes.push_back({vertex.pos, vertex.UV, vertex.norm, vertex.tan});
+            vertexes.push_back({vertex.pos, vertex.UV, vertex.norm});
         }
 
         for(auto& triangle : vertexDict.getTriangles()){

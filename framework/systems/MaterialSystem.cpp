@@ -111,6 +111,21 @@ namespace fmwk {
         defaultSpriteEffect.isTransparent = true;
         _effects.insert({defaultSpriteEffect.type, defaultSpriteEffect});
 
+        DescriptorSetLayout ggxNoNormalLayout{};
+
+        //default sprite
+        ggxNoNormalLayout.init(_bp, {
+                {0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT},
+                {1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT},
+        });
+        Effect ggxNoNormalEffect;
+        ggxNoNormalEffect.type = GGX_NO_NORMAL;
+        ggxNoNormalEffect.layout = ggxNoNormalLayout;
+        ggxNoNormalEffect.shaderName = "shaders/compiled/GGXNoNormal.spv";
+        ggxNoNormalEffect.requiredFeatures = {FRAG_POSITION, FRAG_UV, FRAG_NORMAL};
+        ggxNoNormalEffect.isTransparent = false;
+        _effects.insert({ggxNoNormalEffect.type, ggxNoNormalEffect});
+
 
     }
 

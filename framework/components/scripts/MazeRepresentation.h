@@ -27,7 +27,7 @@ namespace fmwk {
                            char **mazeCharRepresentation);
 
         [[nodiscard]] DirectionCollisionInfo getMazeCollisions(glm::vec3 position, glm::vec3 direction) const;
-        [[nodiscard]] std::pair<std::vector<fmwk::VertexWithNormalAndTan>, std::vector<uint32_t>> buildMesh() const;
+        [[nodiscard]] std::pair<std::vector<fmwk::VertexWithNormal>, std::vector<uint32_t>> buildMesh() const;
         [[nodiscard]] std::vector<Square> getBlocksAroundPoint(glm::vec3 point) const;
         [[nodiscard]] std::vector<Square> getBlockOfPoint(glm::vec3 point) const;
         [[nodiscard]] bool isPositionInsideBlock(glm::vec3 point) const;

@@ -97,22 +97,22 @@ namespace mgen {
         vertex00.pos = points[0];
         vertex00.UV = {0,glm::distance(points[0], points[2]) / _unit};
         vertex00.norm = normal;
-        vertex00.tan = tangent;
+        //vertex00.tan = tangent;
 
         vertex10.pos = points[1];
         vertex10.UV = {glm::distance(points[1], points[0]) / _unit ,glm::distance(points[3], points[1]) / _unit};
         vertex10.norm = normal;
-        vertex10.tan = tangent;
+        //vertex10.tan = tangent;
 
         vertex11.pos = points[3];
         vertex11.UV = {glm::distance(points[2], points[3]) / _unit,0};
         vertex11.norm = normal;
-        vertex11.tan = tangent;
+        //vertex11.tan = tangent;
 
         vertex01.pos = points[2];
         vertex01.UV = {0,0};
         vertex01.norm = normal;
-        vertex01.tan = tangent;
+        //vertex01.tan = tangent;
 
 
         return {vertex00, vertex10, vertex11, vertex01};

@@ -197,14 +197,14 @@ void MazeEscape::localInit() {
     fmwk::Decoration(glm::vec3(21.0f,2, -35.5f), fmwk::createQuat(fmwk::Y, 90), glm::vec3(2), "streetLamp").addInstance();
     fmwk::Decoration(glm::vec3(53.5f,2, -99.0f), fmwk::createQuat(fmwk::Y, 0), glm::vec3(2), "streetLamp").addInstance();
 
-    auto streetLightA = std::make_unique<fmwk::Entity>("streetLightA", glm::vec3(86.0f, 2.5f, -46.1f),glm::quat(1, 0, 0, 0));
+    /*auto streetLightA = std::make_unique<fmwk::Entity>("streetLightA", glm::vec3(86.0f, 2.5f, -46.1f),glm::quat(1, 0, 0, 0));
     streetLightA->addComponent(std::make_unique<fmwk::PointLightComponent>("streetLightA1", glm::vec4(1,1,1,1), 1.0f, 2));
     gameEngine->addEntity(std::move(streetLightA));
 
     auto streetLightB = std::make_unique<fmwk::Entity>("streetLightB", glm::vec3(109.5f, 2.5f, -47.5f),glm::quat(1, 0, 0, 0));
     streetLightB->addComponent(std::make_unique<fmwk::PointLightComponent>("streetLightB1", glm::vec4(1,1,1,1), 1.0f, 2));
     gameEngine->addEntity(std::move(streetLightB));
-
+    */
 
     fmwk::Decoration(glm::vec3(117,3, -96.5f), fmwk::createQuat(fmwk::Y, 180), glm::vec3(3), "wallLamp").addInstance();
     fmwk::Decoration(glm::vec3(99,3, -107.5), fmwk::createQuat(fmwk::Y, 0), glm::vec3(3), "wallLamp").addInstance();

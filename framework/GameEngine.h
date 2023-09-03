@@ -122,6 +122,7 @@ namespace fmwk {
         void cleanupResources();
 
         void flushPendingResources();
+        void destroyPendingResources();
 
         void destroyResources();
 

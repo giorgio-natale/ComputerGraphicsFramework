@@ -121,7 +121,7 @@ demo/MovingCube.cpp
         framework/components/scripts/ShieldDespawner.cpp
         framework/components/scripts/ShieldDespawner.h
         framework/components/scripts/DefaultDespawner.cpp
-        framework/components/scripts/DefaultDespawner.h framework/blueprints/SplashScreen.cpp framework/blueprints/SplashScreen.h framework/blueprints/Floor.cpp framework/blueprints/Floor.h framework/blueprints/PowerupIcon.cpp framework/blueprints/PowerupIcon.h)
+        framework/components/scripts/DefaultDespawner.h framework/blueprints/SplashScreen.cpp framework/blueprints/SplashScreen.h framework/blueprints/Floor.cpp framework/blueprints/Floor.h framework/blueprints/PowerupIcon.cpp framework/blueprints/PowerupIcon.h framework/components/materials/GGXNoNormalMaterial.cpp framework/components/materials/GGXNoNormalMaterial.h)
 target_link_libraries(${PROJECT_NAME})
 find_package(Vulkan REQUIRED)
 foreach(dir IN LISTS Vulkan_INCLUDE_DIR INCLUDE_DIRS)

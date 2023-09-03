@@ -15,7 +15,6 @@ namespace mgen{
         glm::vec3 pos;
         glm::vec2 UV;
         glm::vec3 norm;
-        glm::vec4 tan;
     };
     typedef std::array<MazeVertex, 4> Rectangle;
     typedef std::array<int, 3> IndexedTriangle;

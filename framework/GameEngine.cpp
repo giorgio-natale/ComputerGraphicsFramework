@@ -335,6 +335,7 @@ namespace fmwk {
     }
 
     void GameEngine::destroyResources() {
+        destroyPendingResources();
         _textureSystem.destroyTextures();
         _modelSystem.destroyModels();
         _renderSystem.destroyDescriptorSetLayouts();
@@ -436,6 +437,12 @@ namespace fmwk {
     void GameEngine::enqueueRemovalOfAllEntities() {
         for(auto& [name, entity] : _entities)
             enqueueEntityRemoval(name);
+    }
+
+    void GameEngine::destroyPendingResources() {
+        for(auto& [descriptorSet, val] : _descriptorSetsToClear)
+            descriptorSet.cleanup();
+        _descriptorSetsToClear.clear();
     }
 
 
