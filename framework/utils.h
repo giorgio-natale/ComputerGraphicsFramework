@@ -12,7 +12,6 @@
 #include <GLFW/glfw3.h>
 #include <chrono>
 
-
 namespace fmwk {
     
     /*
@@ -23,14 +22,6 @@ namespace fmwk {
     const glm::vec3 X = glm::vec3(1, 0, 0);
     const glm::vec3 Y = glm::vec3(0, 1, 0);
     const glm::vec3 Z = glm::vec3(0, 0, 1);
-
-
-
-    /*
-     * ACTUAL UTILS
-     */
-
-
 
     /*
      * TRANSFORMATION FUNCTIONS
@@ -53,7 +44,6 @@ namespace fmwk {
     inline glm::quat createQuat(glm::vec3 direction1, float angleDegrees1, glm::vec3 direction2, float angleDegrees2, glm::vec3 direction3, float angleDegrees3){
         return glm::rotate(glm::rotate(glm::rotate(glm::quat(1,0,0,0), glm::radians(angleDegrees1), glm::normalize(direction1)), glm::radians(angleDegrees2), glm::normalize(direction2)), glm::radians(angleDegrees3), glm::normalize(direction3));
     }
-
 
 }
 

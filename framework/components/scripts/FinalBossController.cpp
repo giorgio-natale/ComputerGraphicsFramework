@@ -1,7 +1,3 @@
-//
-// Created by Leonardo on 17/08/2023.
-//
-
 #include "FinalBossController.h"
 #include "../transform/Transform.h"
 #include "../../GameEngine.h"

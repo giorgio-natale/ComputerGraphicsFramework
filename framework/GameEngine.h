@@ -1,7 +1,3 @@
-//
-// Created by drgio on 02/05/2023.
-//
-
 #ifndef A07_GAMEENGINE_H
 #define A07_GAMEENGINE_H
 
@@ -15,8 +11,6 @@
 #include <algorithm>
 #include "Entity.h"
 #include "GameEngineApi.h"
-
-//#include "systems/ModelSystem.h"
 #include "../Starter.hpp"
 #include "systems/ModelSystem.h"
 #include "systems/TextureSystem.h"
@@ -25,6 +19,7 @@
 #include "systems/InputSystem.h"
 #include "systems/CollisionSystem.h"
 #include "components/materials/MaterialComponent.h"
+//#include "systems/ModelSystem.h"
 
 namespace fmwk {
 
@@ -97,7 +92,6 @@ namespace fmwk {
 
         Entity const *getCharacterCollidingEntity(Collider *collider);
 
-        //TODO: remove these
         std::unordered_map<VertexType, std::pair<VertexDescriptor, std::set<VertexShader>>> &getAllVertexDescriptors();
 
         DescriptorSetLayout &getTextureDescriptorSetLayout();
@@ -112,7 +106,6 @@ namespace fmwk {
 
         void renderFrame(VkCommandBuffer commandBuffer, int currentImage);
 
-        //TODO: put this in a separate centralized system responsible for resource allocation
         void buildStaticResources();
 
         void provisionResources(bool initializeDescriptorSets);

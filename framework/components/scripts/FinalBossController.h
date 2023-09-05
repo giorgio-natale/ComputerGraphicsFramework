@@ -1,7 +1,3 @@
-//
-// Created by Leonardo on 17/08/2023.
-//
-
 #ifndef DEMO_FINALBOSSCONTROLLER_H
 #define DEMO_FINALBOSSCONTROLLER_H
 

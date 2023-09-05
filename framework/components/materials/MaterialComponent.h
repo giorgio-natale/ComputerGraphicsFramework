@@ -11,7 +11,6 @@
 
 namespace fmwk {
 
-    //TODO: maybe group this definition and in general descriptor set creation in a separate module
     typedef std::vector<DescriptorSetElement> DescriptorSetClaim;
 
     class MaterialComponent : public Component{

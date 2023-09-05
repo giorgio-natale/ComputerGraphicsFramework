@@ -1,7 +1,3 @@
-//
-// Created by drgio on 02/05/2023.
-//
-
 #include "GameEngine.h"
 #include "components/materials/MaterialComponent.h"
 #include "components/mesh/MeshComponent.h"
@@ -74,9 +70,6 @@ namespace fmwk {
 
     void GameEngine::logicUpdate() {
         _inputSystem.captureInputs();
-
-        //std::cout << "Frame rate:" << 1 / getInput().deltaTime << " Entities: " << _entities.size() << std::endl;
-
 
         std::vector<Component *> components = getAllComponents();
         for (Component *component: components) {
@@ -369,7 +362,6 @@ namespace fmwk {
     }
 
     void GameEngine::enqueueEntityRemoval(const std::string &name) {
-        //TODO: decide if making the application crash if the entity is not found or do nothing (in this case it crashes)
         Entity &entity = getEntityByName(name);
         entity.markForRemoval();
     }
@@ -378,7 +370,6 @@ namespace fmwk {
         auto entities = getAllEntities();
 
         //removing entities and the components marked for removal
-        //TODO: provision the components with a lambda that will allow them to free themselves
         for (auto entity: entities) {
             if (entity->isMarkedForRemoval())
                 removeEntity(entity->getName());

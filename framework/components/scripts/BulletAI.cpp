@@ -31,12 +31,9 @@ namespace fmwk {
                 &_parentEntity->getCollider(),
                 &_targetTags);
         for (Entity *entity: collidingEntities) {
-            std::cout << "BULLET " << _parentEntity->getName() << " COLLIDED WITH " << entity->getName() << std::endl;
             entity->getHealth().takeDamage(10);
-            std::cout << entity->getName() << " LIFE IS NOW " << entity->getHealth().getCurrentLifeQuantity() << std::endl;
         }
         if(!collidingEntities.empty() || _mazeRepresentation->isPositionInsideBlock(transform.getPosition())) {
-            std::cout << "BULLET DESPAWNING" << std::endl;
             reinterpret_cast<Despawner&>(_parentEntity->getComponentByName("Despawner")).despawn();
         }
     }

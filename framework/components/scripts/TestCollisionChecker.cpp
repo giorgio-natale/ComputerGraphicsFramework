@@ -12,9 +12,6 @@ namespace fmwk {
         GameEngine *gameEngine = GameEngine::getInstance();
         std::vector<Entity *> collidingEntities = gameEngine->getCollidingEntities(
                 &_parentEntity->getCollider(), nullptr);
-        for (Entity *entity: collidingEntities) {
-            std::cout << "COLLISION WITH " << entity->getName() << std::endl;
-        }
     }
 
 } // fmwk

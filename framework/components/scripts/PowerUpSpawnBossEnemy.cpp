@@ -9,7 +9,6 @@
 
 namespace fmwk {
     void PowerUpSpawnBossEnemy::applyPowerUp() {
-        std::cout << "POWER UP SPAWN BOSS ENEMY" << std::endl;
         auto gameEngine = fmwk::GameEngine::getInstance();
         if (!gameEngine->doesEntityExist("FinalBoss")) {
             auto &characterTransform = gameEngine->getEntityByName("Character").getTransform();
