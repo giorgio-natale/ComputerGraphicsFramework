@@ -17,6 +17,5 @@ namespace fmwk {
         cameraEntity->addComponent(std::move(cameraComponent));
         gameEngine->enqueueEntity(std::move(cameraEntity));
         SplashScreen("gameOver").spawnInstance();
-        std::cout << "CHARACTER DESPAWNER" << std::endl;
     }
 } // fmwk

@@ -8,7 +8,6 @@
 
 namespace fmwk {
     void DefaultDespawner::despawn() {
-        std::cout << "DEFAULT DESPAWNER" << std::endl;
         _parentEntity->markForRemoval();
     }
 } // fmwk

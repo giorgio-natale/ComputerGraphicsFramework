@@ -16,7 +16,6 @@ namespace fmwk {
             //gameEngine->enqueueEntityRemoval(_parentEntity->getName());
             _parentEntity->enqueueComponentRemoval("Collider");
             _parentEntity->enqueueComponentRemoval(_name);
-            std::cout << "COLLIDER REMOVED" << std::endl;
         }
     }
 } // fmwk

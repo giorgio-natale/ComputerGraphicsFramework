@@ -9,7 +9,6 @@
 
 namespace fmwk {
     void ShieldDespawner::despawn() {
-        std::cout << "SHIELD DESPAWNER" << std::endl;
         auto gameEngine = fmwk::GameEngine::getInstance();
         auto&  health = gameEngine->getEntityByName("Character").getHealth();
         health.setShield(false);

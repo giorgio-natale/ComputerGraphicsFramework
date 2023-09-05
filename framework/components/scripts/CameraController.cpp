@@ -68,8 +68,6 @@ namespace fmwk {
 
         square.bottomLeftCorner.y = 0;
         glm::vec3 p = square.bottomLeftCorner;
-        if(glm::dot(n, v) == 0)
-            std::cout << "n and v perpendicular" << std::endl;
         float lambda = glm::dot(n, v) == 0 ? 1000 : (glm::dot(n, p) - glm::dot(n, characterPosition)) / glm::dot(n, v);
         if(lambda >= 0)
             lambdas.push_back(lambda);
@@ -77,8 +75,6 @@ namespace fmwk {
         //WEST FACE
         n = -X;
         p = square.bottomLeftCorner;
-        if(glm::dot(n, v) == 0)
-            std::cout << "n and v perpendicular" << std::endl;
         lambda = glm::dot(n, v) == 0 ? 1000 : (glm::dot(n, p) - glm::dot(n, characterPosition)) / glm::dot(n, v);
         if(lambda >= 0)
             lambdas.push_back(lambda);
@@ -86,8 +82,6 @@ namespace fmwk {
         //NORTH FACE
         n = -Z;
         p = square.bottomLeftCorner + glm::vec3(square.edgeSize, 0, -square.edgeSize);
-        if(glm::dot(n, v) == 0)
-            std::cout << "n and v perpendicular" << std::endl;
         lambda = glm::dot(n, v) == 0 ? 1000 : (glm::dot(n, p) - glm::dot(n, characterPosition)) / glm::dot(n, v);
         if(lambda >= 0)
             lambdas.push_back(lambda);
@@ -95,8 +89,6 @@ namespace fmwk {
         //EAST FACE
         n = X;
         p = square.bottomLeftCorner + glm::vec3(square.edgeSize, 0, -square.edgeSize);
-        if(glm::dot(n, v) == 0)
-            std::cout << "n and v perpendicular" << std::endl;
         lambda = glm::dot(n, v) == 0 ? 1000 : (glm::dot(n, p) - glm::dot(n, characterPosition)) / glm::dot(n, v);
         if(lambda >= 0)
             lambdas.push_back(lambda);

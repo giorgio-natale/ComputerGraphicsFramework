@@ -62,7 +62,6 @@ namespace fmwk {
     }
 
     void Entity::enqueueComponentRemoval(const std::string &name) const {
-        //TODO: decide if making the application crash if the component is not found or do nothing (in this case it crashes)
         auto& component = getComponentByName(name);
         component.markForRemoval();
     }

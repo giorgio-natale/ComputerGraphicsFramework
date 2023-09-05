@@ -24,13 +24,9 @@ namespace fmwk {
             _spacePressConsidered = true;
         if(input.spacePressed && _spacePressConsidered){
             auto info1 = _mazeRepresentation.getMazeCollisions(characterTransform.getPosition(), X);
-            std::cout << "[->] Is near: " << std::boolalpha << info1.isNear << " distance: " << info1.distance << std::endl;
             auto info2 = _mazeRepresentation.getMazeCollisions(characterTransform.getPosition(), -X);
-            std::cout << "[<-] Is near: " << std::boolalpha << info2.isNear << " distance: " << info2.distance << std::endl;
             auto info3 = _mazeRepresentation.getMazeCollisions(characterTransform.getPosition(), -Z);
-            std::cout << "[^] Is near: " << std::boolalpha << info3.isNear << " distance: " << info3.distance << std::endl;
             auto info4 = _mazeRepresentation.getMazeCollisions(characterTransform.getPosition(), Z);
-            std::cout << "[v] Is near: " << std::boolalpha << info4.isNear << " distance: " << info4.distance << std::endl;
 
             auto nearSquares = _mazeRepresentation.getBlocksAroundPoint(characterTransform.getPosition());
             _spacePressConsidered = false;

@@ -42,14 +42,11 @@
 //        mat4  : alignas(16)
 
 
-// The vertices data structures
-// Example
-
 void MazeEscape::setWindowParameters() {
-    // window size, titile and initial background
+    // window size, title and initial background
     windowWidth = 800;
     windowHeight = 600;
-    windowTitle = "Simple Cube";
+    windowTitle = "Maze Escape";
     windowResizable = GLFW_TRUE;
     //initialBackgroundColor = {2.0f/255.0f,204.0f/255.0f,254.0f/255.0f, 1.0f};
     initialBackgroundColor = {17.0f/255.0f,17.0f/255.0f,61.0f/255.0f, 1.0f};
@@ -182,8 +179,6 @@ void MazeEscape::localInit() {
     fmwk::BlockMaze().addInstance();
     auto& mazeRepresentationComponent = reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"));
     fmwk::Floor((float)mazeRepresentationComponent.getColCount() * mazeRepresentationComponent.getUnit(), (float)mazeRepresentationComponent.getRowCount() * mazeRepresentationComponent.getUnit()).addInstance();
-    /*fmwk::Character(glm::vec3(9.0f,0.5f, -9.0f),
-                   mazeRepresentationComponent).addInstance(); */
 
    //fmwk::Character(glm::vec3(87.0f,0.5f, -47.0f),
      //               reinterpret_cast<fmwk::MazeRepresentation&>(gameEngine->getEntityByName("Maze").getComponentByName("MazeRepresentation"))).addInstance();
@@ -470,24 +465,12 @@ void MazeEscape::localInit() {
     fmwk::BasicEnemy(e18).addInstance();
     fmwk::BasicEnemy(e19).addInstance();
 
-
-
-    /*auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(0,3,0), glm::rotate(glm::quat(1,0,0,0), glm::radians(-90.0f), fmwk::X));
-    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight", glm::normalize(glm::vec3(1, -1, 0)), glm::vec4(0.5)));
-    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight2", glm::normalize(glm::vec3(-1, 0, 0)), glm::vec4(0.5)));
-    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight3", glm::normalize(glm::vec3(0, -1, -1)), glm::vec4(0.5)));
-    lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight4", glm::normalize(glm::vec3(0, -1, 1)), glm::vec4(0.5)));
-    */
-
     auto lightEntity = std::make_unique<fmwk::Entity>("LightEntity", glm::vec3(75.0f,0.5f, -87.0f), glm::quat(1,0,0,0));
     lightEntity->addComponent(std::make_unique<fmwk::DirectLightComponent>("DirectLight", glm::normalize(glm::vec3(0, -1, 0)), glm::vec4(0.5)));
     lightEntity->addComponent(std::make_unique<fmwk::FollowEntity>(gameEngine->getEntityByName("Character").getTransform()));
     lightEntity->addComponent(std::make_unique<fmwk::SpotLightComponent>("characterTorch", glm::vec4(1.0f), 2.0f, 4.0f, 0.8f, 0.85f));
-    //lightEntity->addComponent(std::make_unique<fmwk::PointLightComponent>("characterTorch", glm::vec4(1.0f), 2.0f, 6.0f));
-
 
     gameEngine->addEntity(std::move(lightEntity));
-
 
     // Init local variables
     gameEngine->provisionResources(false);
@@ -497,7 +480,6 @@ void MazeEscape::localInit() {
 void MazeEscape::pipelinesAndDescriptorSetsInit() {
     auto gameEngine = fmwk::GameEngine::getInstance();
     gameEngine->rebuildResources();
-
 }
 
 // Here you destroy your pipelines and Descriptor Sets!
@@ -506,7 +488,6 @@ void MazeEscape::pipelinesAndDescriptorSetsCleanup() {
     std::cout << "PIPELINES AND DESCRIPTOR SETS CLEANUP CALLED" << std::endl;
     auto gameEngine = fmwk::GameEngine::getInstance();
     gameEngine->cleanupResources();
-
 }
 
 // Here you destroy all the Models, Texture and Desc. Set Layouts you created!
@@ -520,27 +501,22 @@ void MazeEscape::localCleanup() {
 // Here it is the creation of the command buffer:
 // You send to the GPU all the objects you want to draw,
 // with their buffers and textures
-
 void MazeEscape::populateCommandBuffer(VkCommandBuffer commandBuffer, int currentImage) {
-auto gameEngine = fmwk::GameEngine::getInstance();
-gameEngine->renderFrame(commandBuffer, currentImage);
+    auto gameEngine = fmwk::GameEngine::getInstance();
+    gameEngine->renderFrame(commandBuffer, currentImage);
 }
 
 // Here is where you update the uniforms.
 // Very likely this will be where you will be writing the logic of your application.
 void MazeEscape::updateUniformBuffer(uint32_t currentImage) {
-auto gameEngine = fmwk::GameEngine::getInstance();
-gameEngine->logicUpdate();
-gameEngine->provisionResources(true);
+    auto gameEngine = fmwk::GameEngine::getInstance();
+    gameEngine->logicUpdate();
+    gameEngine->provisionResources(true);
 
-// Standard procedure to quit when the ESC key is pressed
-if(glfwGetKey(window, GLFW_KEY_ESCAPE)) {
-  glfwSetWindowShouldClose(window, GL_TRUE);
-}
+    // Standard procedure to quit when the ESC key is pressed
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE)) {
+      glfwSetWindowShouldClose(window, GL_TRUE);
+    }
 
-gameEngine->updateGraphicResources(currentImage);
-// the .map() method of a DataSet object, requires the current image of the swap chain as first parameter
-// the second parameter is the pointer to the C++ data structure to transfer to the GPU
-// the third parameter is its size
-// the fourth parameter is the location inside the descriptor set of this uniform block
+    gameEngine->updateGraphicResources(currentImage);
 }

@@ -1,7 +1,3 @@
-//
-// Created by Leonardo on 08/08/2023.
-//
-
 #ifndef DEMO_ENEMYCONTROLLER_H
 #define DEMO_ENEMYCONTROLLER_H
 

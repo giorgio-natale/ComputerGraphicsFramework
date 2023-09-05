@@ -10,7 +10,6 @@
 namespace fmwk {
 
     void PowerUpSetShield::applyPowerUp() {
-        std::cout << "POWER UP SET SHIELD" << std::endl;
         auto gameEngine = fmwk::GameEngine::getInstance();
         if (!gameEngine->doesEntityExist("Shield")) {
             auto &health = gameEngine->getEntityByName("Character").getHealth();
